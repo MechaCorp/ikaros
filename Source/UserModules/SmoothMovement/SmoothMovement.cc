@@ -26,7 +26,6 @@
 
 #include "SmoothMovement.h"
 #include <cmath>
-#include <time.h>
 
 // use the ikaros namespace to access the math library
 // this is preferred to using math.h
@@ -85,40 +84,49 @@ float CosineInterpolate(float start, float stop, float mu) {
    return (start * (1-mu2) + stop * mu2);
 }
 
-int i = 0;
+int tick = 0;
+int duration = 10;
 
 void SmoothMovement::Tick() {
 
     if(active[0] == 1) {
-        i = i + 1;
-        // printf("%i\n", i);
-        if(i == 1) {
+        tick = tick + 1;
+
+        if(tick == 1) {
             copy_array(starting_position, current_position, current_position_size);
             copy_array(final_goal_position, goal_position, goal_position_size);
+
             printf("Start: %f", starting_position[0]);
             printf(" End: %f\n", final_goal_position[0]);
+
+            duration = floor(labs( (final_goal_position[0] - starting_position[0]) / 7.5));
+            printf("%i\n", duration);
         }
 
-        // printf( "%f : ", floor(final_goal_position[0] + 0.5) );
-        // printf( "%f\n", floor(current_position[0] + 0.5) );
+        if(tick < duration) {
 
-        if( floor(current_position[0] + 0.5) >= floor(final_goal_position[0] + 0.5) - 1 && floor(current_position[0] + 0.5) <= floor(final_goal_position[0] + 0.5) + 1 ) {
-            // printf("Goal = Current\n");
-            movement_speed[0] = 0.01;
-        }
-        else {
-            // copy_array(final_final_goal_position, final_goal_position, final_goal_position_size);
-            if(movement_speed[0] <= 0.95) {
-                // printf("%f\n", current_position[0]/(starting_position[0]+final_goal_position[0]));
-                printf("Interpolated value: %f\n", ::CosineInterpolate(starting_position[0], final_goal_position[0], current_position[0]/(starting_position[0]+final_goal_position[0]) ) / (starting_position[0]+final_goal_position[0]) );
-                movement_speed[0] = ::CosineInterpolate(starting_position[0], final_goal_position[0], current_position[0]/(starting_position[0]+final_goal_position[0]) ) / (starting_position[0]+final_goal_position[0]);
+            // Reached the goal position, reset the speed
+            if( floor(current_position[0] + 0.5) >= floor(final_goal_position[0] + 0.5) - 1 && floor(current_position[0] + 0.5) <= floor(final_goal_position[0] + 0.5) + 1 ) {
+                movement_speed[0] = 0.01;
             }
 
+            else {
+                if(movement_speed[0] <= 0.95) {
+                    // Increase the speed for each tock
+                    printf("%i av ", tick);
+                    printf("%i", duration);
+                    printf(" = %i\n", (float)tick/(float)duration);
+                    printf("Interpolated value: %f\n", ::CosineInterpolate(starting_position[0], final_goal_position[0], (float)tick/(float)duration ) / (starting_position[0]+final_goal_position[0]) );
+                    movement_speed[0] = ::CosineInterpolate(starting_position[0], final_goal_position[0], (float)tick/(float)duration ) / (starting_position[0]+final_goal_position[0]);
+                }
+
+            }
         }
 
     }
     else {
-        i = 0;
+        tick = 0;
+        duration = 10;
     }
 }
 
