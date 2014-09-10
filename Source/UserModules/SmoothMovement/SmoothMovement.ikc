@@ -1,0 +1,41 @@
+<?xml version="1.0"?>
+
+<group name="SmoothMovement" description="Smoothens movements">
+
+	<description type="text">
+		Makes smooth
+	</description>
+
+	<example description="A simple example">
+		<module
+			class = "SmoothMovement"
+			name = "SmoothMovement"
+			overall_speed = "0.5"
+		/>
+	</example>
+
+	<parameter name="overall_speed" type="float" default="0.5" description="The overall speed of movement" />
+
+	<input name="goal_position" description="The goal position" />
+	<input name="current_position" description="The current position" />
+
+	<output name="final_goal_positon" description="The goal position" size_set="goal_position" />
+	<output name="movement_speed" description="The speed of movement" size="1" />
+
+	<module class="SmoothMovement" />
+
+	<author>
+		<name>MechaCorp</name>
+		<email>mecacorp@lucs.lu.se</email>
+		<affiliation>Lund University Cognitive Science</affiliation>
+		<homepage>http://www.lucs.lu.se/</homepage>
+	</author>
+
+   <files>
+   		<file>SmoothMovement.h</file>
+   		<file>SmoothMovement.cc</file>
+   		<file>SmoothMovement.ikc</file>
+   </files>
+
+</group>
+
