@@ -109,9 +109,9 @@ void SmoothMovement::Tick() {
         else {
             // copy_array(final_final_goal_position, final_goal_position, final_goal_position_size);
             if(movement_speed[0] <= 0.95) {
-                printf("%f\n", current_position[0]/(starting_position[0]+final_goal_position[0]));
-                printf("Interpolated value: %f\n", ::CosineInterpolate(starting_position[0], final_goal_position[0], current_position[0]/(starting_position[0]+final_goal_position[0]) ));
-                movement_speed[0] += 0.05;
+                // printf("%f\n", current_position[0]/(starting_position[0]+final_goal_position[0]));
+                printf("Interpolated value: %f\n", ::CosineInterpolate(starting_position[0], final_goal_position[0], current_position[0]/(starting_position[0]+final_goal_position[0]) ) / (starting_position[0]+final_goal_position[0]) );
+                movement_speed[0] = ::CosineInterpolate(starting_position[0], final_goal_position[0], current_position[0]/(starting_position[0]+final_goal_position[0]) ) / (starting_position[0]+final_goal_position[0]);
             }
 
         }
