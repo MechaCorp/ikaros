@@ -14,12 +14,13 @@
 		/>
 	</example>
 
-	<parameter name="overall_speed" type="float" default="0.5" description="The overall speed of movement" />
+	<parameter name="overall_speed" type="float" default="0.05" description="The overall speed of movement" />
 
 	<input name="goal_position" description="The goal position" />
 	<input name="current_position" description="The current position" />
+	<input name="active" description="A bool that decides if the movement will happen or not" />
 
-	<output name="final_goal_positon" description="The goal position" size_set="goal_position" />
+	<output name="final_goal_position" description="The goal position" size="3" />
 	<output name="movement_speed" description="The speed of movement" size="1" />
 
 	<module class="SmoothMovement" />

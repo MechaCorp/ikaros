@@ -44,7 +44,10 @@ public:
     float *     current_position;
     int         current_position_size;
 
-    // Outpus
+    float *     active;
+    int         active_size;
+
+    // Outputs
 
     float *     final_goal_position;
     int         final_goal_position_size;
@@ -55,6 +58,10 @@ public:
     // Parameters
 
     float       overall_speed;
+
+    // Junk
+
+    float *     starting_position;
 };
 
 #endif
