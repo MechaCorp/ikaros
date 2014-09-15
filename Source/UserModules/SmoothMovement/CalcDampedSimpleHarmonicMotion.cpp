@@ -74,6 +74,7 @@ void CalcDampedSimpleHarmonicMotion(
         float c1 = (initialVel - initialPos*z2) / (-2.0f*zb); // z1 - z2 = -2*zb
         float c2 = initialPos - c1;
         *pPos = equilibriumPos + c1*expTerm1 + c2*expTerm2;
+        // Hack to make this number be sort of between 0 and 1
         *pVel = fabs( (c1*z1*expTerm1 + c2*z2*expTerm2) / 50 );
     }
     // else if critically damped
@@ -89,6 +90,7 @@ void CalcDampedSimpleHarmonicMotion(
         float c2 = initialPos;
         float c3 = (c1*deltaTime + c2) * expTerm;
         *pPos = equilibriumPos + c3;
+        // Hack to make this number be sort of between 0 and 1
         *pVel = fabs( ((c1*expTerm) - (c3*angularFrequency)) / 50 );
     }
     // else under-damped
@@ -107,6 +109,7 @@ void CalcDampedSimpleHarmonicMotion(
         float c1 = initialPos;
         float c2 = (initialVel + omegaZeta*initialPos) / alpha;
         *pPos = equilibriumPos + expTerm*(c1*cosTerm + c2*sinTerm);
+        // Hack to make this number be sort of between 0 and 1
         *pVel = fabs( (-expTerm*( (c1*omegaZeta - c2*alpha)*cosTerm +
                            (c1*alpha + c2*omegaZeta)*sinTerm)) / 50);
     }

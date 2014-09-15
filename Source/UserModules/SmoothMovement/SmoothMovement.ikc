@@ -18,7 +18,6 @@
 
 	<input name="goal_position" description="The goal position" />
 	<input name="current_position" description="The current position" />
-	<input name="active" description="A bool that decides if the movement will happen or not" />
 
 	<output name="POSITION_OUT" description="The goal position" size="3" />
 	<output name="VELOCITY" description="The speed of movement" size="1" />

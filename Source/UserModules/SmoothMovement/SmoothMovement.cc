@@ -51,9 +51,6 @@ void SmoothMovement::Init() {
     current_position           = GetInputArray("current_position");
     current_position_size      = GetInputSize("current_position");
 
-    active                     = GetInputArray("active");
-    active_size                = GetInputSize("active");
-
     // Outputs
 
     POSITION_OUT        = GetOutputArray("POSITION_OUT");
@@ -66,7 +63,8 @@ void SmoothMovement::Init() {
     // Init
 
     starting_position          = create_array(3);
-    set_array(POSITION_OUT, 0.0, POSITION_OUT_SIZE);
+    set_array(POSITION_OUT, 45.0, POSITION_OUT_SIZE);
+    set_array(goal_position, 45.0, goal_position_size);
 
 }
 
@@ -79,80 +77,28 @@ SmoothMovement::~SmoothMovement() {
     // kernel with GetInputArray, GetInputMatrix etc.
 }
 
-
-
-// float CosineInterpolate(float start, float stop, float mu) {
-//    float mu2;
-//    mu2 = (1 - cos(mu*3.14) ) / 2;
-//    return (start * (1-mu2) + stop * mu2);
-// }
-
-// double SPRING_CONSTANT = 2.0;
-// float VELOCITY = 2.0;
-
-// float CriticallyDampedSpring( float a_Target, float a_Current, float & a_Velocity, float a_TimeStep ) {
-//     float currentToTarget = a_Target - a_Current;
-//     float springForce = currentToTarget * SPRING_CONSTANT;
-//     float dampingForce = -a_Velocity * 2 * sqrt( SPRING_CONSTANT );
-//     float force = springForce + dampingForce;
-//     a_Velocity += force * a_TimeStep;
-//     float displacement = a_Velocity * a_TimeStep;
-//     return a_Current + displacement;
-// }
-
-int tick = 0;
-int duration = 10;
 float percent = 0.0;
 
 void SmoothMovement::Tick() {
+    // This should be better
+    percent = 1-fabs(current_position[0] - goal_position[0]) / (300);
+    //percent = 1 - ( current_position[0] / fabs(current_position[0] - goal_position[0]) );
+    printf("%f\t", current_position[0]);
+    printf("%f\t", goal_position[0]);
+    printf("%f\t", percent);
 
-    if(active[0] == 1) {
-        tick = tick + 1;
-
-        // Initialize movement
-        if(tick == 1) {
-            copy_array(starting_position, current_position, current_position_size);
-            copy_array(POSITION_OUT, current_position, current_position_size);
-
-            duration = floor(labs( (goal_position[0] - starting_position[0]) / 7.5));
-
-            printf("From %f", starting_position[0]);
-            printf(" to %f", goal_position[0]);
-            printf(" in %i ticks\n", duration);
-        }
-
-        // Calculate movement
-        if(tick < duration) {
-            percent = (float)tick / (float)duration;
-
-            // Reached the goal position, reset the speed
-            if(percent > 0.9) {
-                printf("Reached goal position\n");
-                VELOCITY[0] = 0.01;
-            }
-
-            else {
-                if(VELOCITY[0] <= 0.95) {
-                    // Increase the speed for each tick
-                    printf("%i", tick);
-                    printf(" (%f)", percent);
-                    ::CalcDampedSimpleHarmonicMotion(&POSITION_OUT[0], &VELOCITY[0], goal_position[0], percent, 1.0, 1.0);
-                    printf("\tp %f", POSITION_OUT[0]);
-                    printf("\tv %f\n", VELOCITY[0]);
-                    // printf("%f\n", ::CosineInterpolate(starting_position[0], final_goal_position[0], percent ) / (starting_position[0]+final_goal_position[0]) );
-                    // movement_speed[0] = ::CosineInterpolate(starting_position[0], final_goal_position[0], percent ) / (starting_position[0]+final_goal_position[0]);
-
-                    // printf("%f\n", ::CriticallyDampedSpring(starting_position[0], final_goal_position[0], VELOCITY, percent ) / (starting_position[0]+final_goal_position[0]) );
-                    // movement_speed[0] = ::CriticallyDampedSpring(starting_position[0], final_goal_position[0], VELOCITY, percent ) / (starting_position[0]+final_goal_position[0]);
-                }
-
-            }
-        }
-
+    //Reached the goal position, reset the speed
+    if(percent > 0.99) {
+        printf("Reached goal position\n");
+        VELOCITY[0] = 0.01;
     }
     else {
-        tick = 0;
-        duration = 10;
+        if(VELOCITY[0] <= 0.99) {
+            // Increase the speed for each tick
+            ::CalcDampedSimpleHarmonicMotion(&POSITION_OUT[0], &VELOCITY[0], goal_position[0], percent, 1.0, 1.0);
+            printf("%f\t", POSITION_OUT[0]);
+            printf("%f\n", VELOCITY[0]);
+        }
     }
 }
 

@@ -44,9 +44,6 @@ public:
     float *     current_position;
     int         current_position_size;
 
-    float *     active;
-    int         active_size;
-
     // Outputs
 
     float *     POSITION_OUT;
