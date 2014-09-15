@@ -86,6 +86,7 @@ float CosineInterpolate(float start, float stop, float mu) {
 
 int tick = 0;
 int duration = 10;
+float percent = 0.0;
 
 void SmoothMovement::Tick() {
 
@@ -96,28 +97,29 @@ void SmoothMovement::Tick() {
             copy_array(starting_position, current_position, current_position_size);
             copy_array(final_goal_position, goal_position, goal_position_size);
 
-            printf("Start: %f", starting_position[0]);
-            printf(" End: %f\n", final_goal_position[0]);
+            duration = floor(labs( (final_goal_position[0] - starting_position[0]) / 0.75));
 
-            duration = floor(labs( (final_goal_position[0] - starting_position[0]) / 7.5));
-            printf("%i\n", duration);
+            printf("From %f", starting_position[0]);
+            printf(" to %f", final_goal_position[0]);
+            printf(" in %i ticks\n", duration);
         }
 
         if(tick < duration) {
+            percent = (float)tick / (float)duration;
 
             // Reached the goal position, reset the speed
-            if( floor(current_position[0] + 0.5) >= floor(final_goal_position[0] + 0.5) - 1 && floor(current_position[0] + 0.5) <= floor(final_goal_position[0] + 0.5) + 1 ) {
+            if(percent > 0.9) {
+                printf("Reached goal position\n");
                 movement_speed[0] = 0.01;
             }
 
             else {
                 if(movement_speed[0] <= 0.95) {
-                    // Increase the speed for each tock
-                    printf("%i av ", tick);
-                    printf("%i", duration);
-                    printf(" = %i\n", (float)tick/(float)duration);
-                    printf("Interpolated value: %f\n", ::CosineInterpolate(starting_position[0], final_goal_position[0], (float)tick/(float)duration ) / (starting_position[0]+final_goal_position[0]) );
-                    movement_speed[0] = ::CosineInterpolate(starting_position[0], final_goal_position[0], (float)tick/(float)duration ) / (starting_position[0]+final_goal_position[0]);
+                    // Increase the speed for each tick
+                    printf("%i: ", tick);
+                    printf("%f = ", percent);
+                    printf("%f\n", ::CosineInterpolate(starting_position[0], final_goal_position[0], percent ) / (starting_position[0]+final_goal_position[0]) );
+                    movement_speed[0] = ::CosineInterpolate(starting_position[0], final_goal_position[0], percent ) / (starting_position[0]+final_goal_position[0]);
                 }
 
             }
