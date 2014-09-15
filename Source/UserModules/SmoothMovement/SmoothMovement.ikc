@@ -20,8 +20,8 @@
 	<input name="current_position" description="The current position" />
 	<input name="active" description="A bool that decides if the movement will happen or not" />
 
-	<output name="final_goal_position" description="The goal position" size="3" />
-	<output name="movement_speed" description="The speed of movement" size="1" />
+	<output name="POSITION_OUT" description="The goal position" size="3" />
+	<output name="VELOCITY" description="The speed of movement" size="1" />
 
 	<module class="SmoothMovement" />
 

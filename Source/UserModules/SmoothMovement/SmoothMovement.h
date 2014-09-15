@@ -49,11 +49,11 @@ public:
 
     // Outputs
 
-    float *     final_goal_position;
-    int         final_goal_position_size;
+    float *     POSITION_OUT;
+    int         POSITION_OUT_SIZE;
 
-    float *     movement_speed;
-    int         movement_speed_size;
+    float *     VELOCITY;
+    int         VELOCITY_SIZE;
 
     // Parameters
 

@@ -25,6 +25,7 @@
 //
 
 #include "SmoothMovement.h"
+#include "CalcDampedSimpleHarmonicMotion.cpp"
 #include <cmath>
 
 // use the ikaros namespace to access the math library
@@ -55,15 +56,17 @@ void SmoothMovement::Init() {
 
     // Outputs
 
-    final_goal_position        = GetOutputArray("final_goal_position");
-    final_goal_position_size   = GetOutputSize("final_goal_position");
+    POSITION_OUT        = GetOutputArray("POSITION_OUT");
+    POSITION_OUT_SIZE   = GetOutputSize("POSITION_OUT");
 
-    movement_speed             = GetOutputArray("movement_speed");
-    movement_speed_size        = GetOutputSize("movement_speed");
+    VELOCITY            = GetOutputArray("VELOCITY");
+    VELOCITY_SIZE       = GetOutputSize("VELOCITY");
+
+
+    // Init
 
     starting_position          = create_array(3);
-
-    set_array(final_goal_position, 0.0, final_goal_position_size);
+    set_array(POSITION_OUT, 0.0, POSITION_OUT_SIZE);
 
 }
 
@@ -71,18 +74,31 @@ void SmoothMovement::Init() {
 
 SmoothMovement::~SmoothMovement() {
     // Destroy data structures that you allocated in Init.
-
+    // destroy_array("starting_position");
     // Do NOT destroy data structures that you got from the
     // kernel with GetInputArray, GetInputMatrix etc.
 }
 
 
 
-float CosineInterpolate(float start, float stop, float mu) {
-   float mu2;
-   mu2 = (1 - cos(mu*3.14) ) / 2;
-   return (start * (1-mu2) + stop * mu2);
-}
+// float CosineInterpolate(float start, float stop, float mu) {
+//    float mu2;
+//    mu2 = (1 - cos(mu*3.14) ) / 2;
+//    return (start * (1-mu2) + stop * mu2);
+// }
+
+// double SPRING_CONSTANT = 2.0;
+// float VELOCITY = 2.0;
+
+// float CriticallyDampedSpring( float a_Target, float a_Current, float & a_Velocity, float a_TimeStep ) {
+//     float currentToTarget = a_Target - a_Current;
+//     float springForce = currentToTarget * SPRING_CONSTANT;
+//     float dampingForce = -a_Velocity * 2 * sqrt( SPRING_CONSTANT );
+//     float force = springForce + dampingForce;
+//     a_Velocity += force * a_TimeStep;
+//     float displacement = a_Velocity * a_TimeStep;
+//     return a_Current + displacement;
+// }
 
 int tick = 0;
 int duration = 10;
@@ -93,33 +109,41 @@ void SmoothMovement::Tick() {
     if(active[0] == 1) {
         tick = tick + 1;
 
+        // Initialize movement
         if(tick == 1) {
             copy_array(starting_position, current_position, current_position_size);
-            copy_array(final_goal_position, goal_position, goal_position_size);
+            copy_array(POSITION_OUT, current_position, current_position_size);
 
-            duration = floor(labs( (final_goal_position[0] - starting_position[0]) / 0.75));
+            duration = floor(labs( (goal_position[0] - starting_position[0]) / 7.5));
 
             printf("From %f", starting_position[0]);
-            printf(" to %f", final_goal_position[0]);
+            printf(" to %f", goal_position[0]);
             printf(" in %i ticks\n", duration);
         }
 
+        // Calculate movement
         if(tick < duration) {
             percent = (float)tick / (float)duration;
 
             // Reached the goal position, reset the speed
             if(percent > 0.9) {
                 printf("Reached goal position\n");
-                movement_speed[0] = 0.01;
+                VELOCITY[0] = 0.01;
             }
 
             else {
-                if(movement_speed[0] <= 0.95) {
+                if(VELOCITY[0] <= 0.95) {
                     // Increase the speed for each tick
-                    printf("%i: ", tick);
-                    printf("%f = ", percent);
-                    printf("%f\n", ::CosineInterpolate(starting_position[0], final_goal_position[0], percent ) / (starting_position[0]+final_goal_position[0]) );
-                    movement_speed[0] = ::CosineInterpolate(starting_position[0], final_goal_position[0], percent ) / (starting_position[0]+final_goal_position[0]);
+                    printf("%i", tick);
+                    printf(" (%f)", percent);
+                    ::CalcDampedSimpleHarmonicMotion(&POSITION_OUT[0], &VELOCITY[0], goal_position[0], percent, 1.0, 1.0);
+                    printf("\tp %f", POSITION_OUT[0]);
+                    printf("\tv %f\n", VELOCITY[0]);
+                    // printf("%f\n", ::CosineInterpolate(starting_position[0], final_goal_position[0], percent ) / (starting_position[0]+final_goal_position[0]) );
+                    // movement_speed[0] = ::CosineInterpolate(starting_position[0], final_goal_position[0], percent ) / (starting_position[0]+final_goal_position[0]);
+
+                    // printf("%f\n", ::CriticallyDampedSpring(starting_position[0], final_goal_position[0], VELOCITY, percent ) / (starting_position[0]+final_goal_position[0]) );
+                    // movement_speed[0] = ::CriticallyDampedSpring(starting_position[0], final_goal_position[0], VELOCITY, percent ) / (starting_position[0]+final_goal_position[0]);
                 }
 
             }
