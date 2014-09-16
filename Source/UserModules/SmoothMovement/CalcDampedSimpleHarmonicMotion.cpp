@@ -83,15 +83,34 @@ void CalcDampedSimpleHarmonicMotion(
         // calculate constants based on motion parameters
         // Note: These could be cached off between multiple calls using the same
         //       parameters for deltaTime, angularFrequency and dampingRatio.
-        const float expTerm = expf( -angularFrequency * deltaTime );
 
-        // update motion
+        // deltaTime is max 1.0
+        // initialVel is max 1.0
+        // initialPos is max 330
+        // angularFrequency is constant
+
+        // this is max expf(-angularFrequency) = 1.0
+        const float expTerm = expf( -angularFrequency * deltaTime );
+        const float expTermMax = expf( -angularFrequency );
+
+        // this is max 1.0 + angularFrequency + 330
         float c1 = initialVel + angularFrequency * initialPos;
+        float c1max = 1.0f + angularFrequency + 330;
+
+        // this is max 330
         float c2 = initialPos;
-        float c3 = (c1*deltaTime + c2) * expTerm;
+
+        // this is max ( (1.0+angularFrequency+330) * 1.0 + 330 ) * expf(-angularFrequency) )
+        float c3 = (c1 * deltaTime + c2) * expTerm;
+        float c3max = ( c1max * 1.0f + 330 ) *  expTermMax;
+
         *pPos = equilibriumPos + c3;
+
         // Hack to make this number be sort of between 0 and 1
-        *pVel = fabs( ((c1*expTerm) - (c3*angularFrequency)) / 50 );
+        *pVel = fabs( ( (c1 * expTerm) - (c3 * angularFrequency) ) / ( (c1max * expTermMax) - (c3max * angularFrequency) ) ) + 0.5f * (1.0f - deltaTime);
+        //printf("%f\n", *pVel );
+
+        //*pVel = fabs( ((c1*expTerm) - (c3*angularFrequency)) / 51 );
     }
     // else under-damped
     else

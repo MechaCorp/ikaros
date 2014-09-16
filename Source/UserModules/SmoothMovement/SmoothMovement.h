@@ -56,7 +56,7 @@ public:
 
     float       overall_speed;
 
-    // Junk
+    // Internal
 
     float *     starting_position;
 };

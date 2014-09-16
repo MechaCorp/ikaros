@@ -43,6 +43,8 @@ void SmoothMovement::Init() {
 
     Bind(overall_speed, "overall_speed");
 
+    // We should bind parameters for Angular Frequency and Dampening
+
     // Inputs
 
     goal_position              = GetInputArray("goal_position");
@@ -63,8 +65,8 @@ void SmoothMovement::Init() {
     // Init
 
     starting_position          = create_array(3);
-    set_array(POSITION_OUT, 45.0, POSITION_OUT_SIZE);
-    set_array(goal_position, 45.0, goal_position_size);
+    set_array(POSITION_OUT, 180.0, POSITION_OUT_SIZE);
+    set_array(goal_position, 180.0, goal_position_size);
 
 }
 
@@ -80,26 +82,18 @@ SmoothMovement::~SmoothMovement() {
 float percent = 0.0;
 
 void SmoothMovement::Tick() {
-    // This should be better
-    percent = 1-fabs(current_position[0] - goal_position[0]) / (300);
-    //percent = 1 - ( current_position[0] / fabs(current_position[0] - goal_position[0]) );
+    // Calculate how much we have to move between two positions from 0 to 1
+    // where 1 means that we are there and 0 means that we have 300 (max) degrees to move
+    percent = 1 - fabs(current_position[0] - goal_position[0]) / (300);
+
+    // Change position and speed
+    ::CalcDampedSimpleHarmonicMotion(&POSITION_OUT[0], &VELOCITY[0], goal_position[0], percent, 1.0, 1.0);
+
     printf("%f\t", current_position[0]);
     printf("%f\t", goal_position[0]);
     printf("%f\t", percent);
-
-    //Reached the goal position, reset the speed
-    if(percent > 0.99) {
-        printf("Reached goal position\n");
-        VELOCITY[0] = 0.01;
-    }
-    else {
-        if(VELOCITY[0] <= 0.99) {
-            // Increase the speed for each tick
-            ::CalcDampedSimpleHarmonicMotion(&POSITION_OUT[0], &VELOCITY[0], goal_position[0], percent, 1.0, 1.0);
-            printf("%f\t", POSITION_OUT[0]);
-            printf("%f\n", VELOCITY[0]);
-        }
-    }
+    printf("%f\t", POSITION_OUT[0]);
+    printf("%f\n", VELOCITY[0]);
 }
 
 
