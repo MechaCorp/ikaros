@@ -36,17 +36,16 @@ public:
     void    Init();
     void    Tick();
 
-    // pointers to inputs and outputs
-    // and integers to represent their sizes
+    // Inputs
 
+    float **    FACES;
+    int         FACES_SIZE_X;
+    int         FACES_SIZE_Y;
 
-    float **    INPUT1;
-    int         INPUT1_size_x;
-    int         INPUT1_size_y;
+    // Outputs
 
-    // internal data storage
-
-
+    float *     TARGET_POSITION
+    int         TARGET_POSITION_SIZE
 
 };
 

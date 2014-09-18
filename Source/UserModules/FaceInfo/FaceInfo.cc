@@ -4,9 +4,12 @@
 using namespace ikaros;
 
 void FaceInfo::Init() {
-  INPUT1_size_x = GetInputSizeX("INPUT1");
-  INPUT1_size_y = GetInputSizeY("INPUT1");
-  INPUT1 = GetInputMatrix("INPUT1");
+  FACES_SIZE_X  = GetInputSizeX("FACES");
+  FACES_SIZE_Y  = GetInputSizeY("FACES");
+  FACES         = GetInputMatrix("FACES");
+
+  TARGET_POSITION        = GetOutputArray("TARGET_POSITION");
+  TARGET_POSITION_SIZE   = GetOutputSize("TARGET_POSITION");
 }
 
 FaceInfo::~FaceInfo() {
@@ -16,13 +19,17 @@ FaceInfo::~FaceInfo() {
 }
 
 void FaceInfo::Tick(){
-  for(int i=0; i<INPUT1_size_x; i++){
-    for(int j=0;j<INPUT1_size_y; j++){
+  for(int i = 0; i < INPUT1_SIZE_X; i++){
+
+    for(int j=0; j < INPUT1_SIZE_Y; j++){
         printf("%f\t", INPUT1[i][j]);
     }
+
     printf("\n");
   }
+
   printf("\n");
+
 }
 
 static InitClass init("FaceInfo", &FaceInfo::Create, "Source/UserModules/FaceInfo/");

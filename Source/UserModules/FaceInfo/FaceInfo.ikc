@@ -14,7 +14,9 @@
     />
   </example>
 
-  <input name="INPUT1" description="the matrix of all faces" />
+  <input name="FACES" description="the matrix of all faces" />
+
+  <output name="TARGET_POSITION" description="The face to target in degrees" size="1" />
 
   <module class="FaceInfo" />
 
