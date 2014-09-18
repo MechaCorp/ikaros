@@ -18,10 +18,10 @@
 	/>
 
     <module
-        class = "SmoothMovement"
-        name = "SmoothMovement"
+        class          = "SmoothMovement"
+        name           = "SmoothMovement"
         movement_speed = "0.5"
-        debug = "false"
+        debug          = "false"
     />
 
     <module
@@ -104,6 +104,13 @@
         source          = "FACES"
         targetmodule    = "FaceInfo"
         target          = "FACES"
+    />
+
+    <connection
+        sourcemodule    = "FaceInfo"
+        source          = "TARGET_POSITION"
+        targetmodule    = "SmoothMovement"
+        target          = "goal_position"
     />
 
 
@@ -199,7 +206,7 @@
           type   = "rgb"
           module = "Kinect"
           source = "RED+GREEN+BLUE"
-          x      = "6" y = "0"
+          x      = "0" y = "6"
           w      = "6" h = "5"
         />
 
@@ -209,7 +216,7 @@
           size   = "0.025"
           module = "FaceDetector"
           source = "FACES"
-          x      = "6" y = "0"
+          x      = "0" y = "6"
           w      = "6" h = "5"
         />
 
@@ -218,8 +225,8 @@
           size     = "0.05"
           module   = "FaceDetector"
           source   = "FACE_POSITION"
-          x = "6" y = "0"
-          w = "6" h = "5"
+          x      = "0" y = "6"
+          w      = "6" h = "5"
         />
 
     </view>

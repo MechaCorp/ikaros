@@ -1,16 +1,15 @@
 <?xml version="1.0"?>
 
-<group name="FaceInfo" description="minimal example module">
+<group name="FaceInfo" description="Face detection">
 
   <description type="text">
-    Module that prints the location of all faces in the input-image
+    Locates a face and outputs the face position in degrees
   </description>
 
-  <example description="location of faces in a picture">
+  <example description="Locates a face and outputs the face position in degrees">
     <module
       class="FaceInfo"
       name="FaceInfo"
-
     />
   </example>
 
@@ -24,7 +23,7 @@
     <name>MechaCorp</name>
     <email>mechacorp@lucs.lu.se</email>
     <affiliation>Lund University Cognitive Science</affiliation>
-    <homepage>http://www.lucs.lu.se/Christian.Balkenius</homepage>
+    <homepage>http://www.lucs.lu.se/</homepage>
   </author>
 
    <files>

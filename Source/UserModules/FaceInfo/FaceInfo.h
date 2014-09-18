@@ -44,8 +44,8 @@ public:
 
     // Outputs
 
-    float *     TARGET_POSITION
-    int         TARGET_POSITION_SIZE
+    float *     TARGET_POSITION;
+    int         TARGET_POSITION_SIZE;
 
 };
 
