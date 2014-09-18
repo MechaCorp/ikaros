@@ -95,7 +95,7 @@ void CalcDampedSimpleHarmonicMotion(
 
         // this is max 1.0 + angularFrequency + 330
         float c1 = initialVel + angularFrequency * initialPos;
-        float c1max = 1.0f + angularFrequency + 330;
+        float c1max = 1.0f + angularFrequency * 330;
 
         // this is max 330
         float c2 = initialPos;
@@ -108,9 +108,7 @@ void CalcDampedSimpleHarmonicMotion(
 
         // Hack to make this number be sort of between 0 and 1
         *pVel = fabs( ( (c1 * expTerm) - (c3 * angularFrequency) ) / ( (c1max * expTermMax) - (c3max * angularFrequency) ) ) + 0.5f * (1.0f - deltaTime);
-        //printf("%f\n", *pVel );
-
-        //*pVel = fabs( ((c1*expTerm) - (c3*angularFrequency)) / 51 );
+        //*pVel = fabs( ( (c1 * expTerm) - (c3 * angularFrequency) ) / ( (c1max * expTermMax) - (c3max * angularFrequency) ) );
     }
     // else under-damped
     else

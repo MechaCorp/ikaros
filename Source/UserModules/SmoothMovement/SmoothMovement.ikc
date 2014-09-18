@@ -11,10 +11,12 @@
 			class = "SmoothMovement"
 			name = "SmoothMovement"
 			overall_speed = "0.5"
+			debug = "false"
 		/>
 	</example>
 
 	<parameter name="overall_speed" type="float" default="0.05" description="The overall speed of movement" />
+	<parameter name="debug" type="bool" default="false" description="Print debug logs" />
 
 	<input name="goal_position" description="The goal position" />
 	<input name="current_position" description="The current position" />
@@ -26,7 +28,7 @@
 
 	<author>
 		<name>MechaCorp</name>
-		<email>mecacorp@lucs.lu.se</email>
+		<email>mechacorp@lucs.lu.se</email>
 		<affiliation>Lund University Cognitive Science</affiliation>
 		<homepage>http://www.lucs.lu.se/</homepage>
 	</author>

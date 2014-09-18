@@ -55,6 +55,7 @@ public:
     // Parameters
 
     float       overall_speed;
+    bool        debug;
 
     // Internal
 

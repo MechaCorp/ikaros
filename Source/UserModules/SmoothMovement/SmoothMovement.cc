@@ -19,10 +19,6 @@
 //
 //    See http://www.ikaros-project.org/ for more information.
 //
-//  This example is intended as a starting point for writing new Ikaros modules
-//  The example includes most of the calls that you may want to use in a module.
-//  If you prefer to start with a clean example, use he module MinimalModule instead.
-//
 
 #include "SmoothMovement.h"
 #include "CalcDampedSimpleHarmonicMotion.cpp"
@@ -42,6 +38,7 @@ void SmoothMovement::Init() {
     // set, the default value will be used instead.
 
     Bind(overall_speed, "overall_speed");
+    Bind(debug, "debug");
 
     // We should bind parameters for Angular Frequency and Dampening
 
@@ -87,13 +84,16 @@ void SmoothMovement::Tick() {
     percent = 1 - fabs(current_position[0] - goal_position[0]) / (300);
 
     // Change position and speed
-    ::CalcDampedSimpleHarmonicMotion(&POSITION_OUT[0], &VELOCITY[0], goal_position[0], percent, 1.0, 1.0);
+    ::CalcDampedSimpleHarmonicMotion(&POSITION_OUT[0], &VELOCITY[0], goal_position[0], percent, 2.0, 1.0);
 
-    printf("%f\t", current_position[0]);
-    printf("%f\t", goal_position[0]);
-    printf("%f\t", percent);
-    printf("%f\t", POSITION_OUT[0]);
-    printf("%f\n", VELOCITY[0]);
+    // Debug log
+    if(debug) {
+        printf("%f\t", current_position[0]);
+        printf("%f\t", goal_position[0]);
+        printf("%f\t", percent);
+        printf("%f\t", POSITION_OUT[0]);
+        printf("%f\n", VELOCITY[0]);
+    }
 }
 
 
