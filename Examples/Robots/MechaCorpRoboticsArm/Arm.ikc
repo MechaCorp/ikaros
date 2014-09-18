@@ -1,0 +1,227 @@
+<?xml version = "1.0"?>
+
+<group title = "Robot Arm Example">
+
+    <description>
+		This is an example file for using the LUCS MAMN10 Robot arm in ikaros.
+    </description>
+
+    <module
+  	    class = "Dynamixel"
+        name = "Dynamixel"
+        device = "/dev/cu.usbserial-A40129WB"
+		_device = "/dev/ttyUSB0"
+		index_mode = "indirect"
+		servo_id = "1 2 3"
+		angle_unit = "degrees"
+        start_up_delay = "10"
+	/>
+
+    <module
+        class = "SmoothMovement"
+        name = "SmoothMovement"
+        movement_speed = "0.5"
+        debug = "false"
+    />
+
+    <module
+        class = "Constant"
+        name  = "ServoPosition"
+        data  = "180 180 180"
+    />
+
+    <module
+        class   = "Kinect"
+        name    = "Kinect"
+        mode    = "mm"
+   />
+
+   <module
+       class        = "Scale"
+       name         = "Scale"
+       factor       = "0.00048851978505"
+       comment      = "This module could be removed if Image-object allowed scaling."
+   />
+
+   <module
+        class    = "MPIFaceDetector"
+        name     = "FaceDetector"
+        period   = "5"
+    />
+
+    <module
+         class    = "FaceInfo"
+         name     = "FaceInfo"
+     />
+
+
+	<!-- Order is important -->
+
+    <connection
+        sourcemodule = "ServoPosition"
+        source       = "OUTPUT"
+        targetmodule = "SmoothMovement"
+        target       = "goal_position"
+    />
+
+    <connection
+        sourcemodule = "Dynamixel"
+        source       = "FEEDBACK_PRESENT_POSITION"
+        targetmodule = "SmoothMovement"
+        target       = "current_position"
+    />
+
+    <connection
+        sourcemodule = "SmoothMovement"
+        source       = "VELOCITY"
+        targetmodule = "Dynamixel"
+        target       = "MOVING_SPEED"
+    />
+
+	<connection
+        sourcemodule = "SmoothMovement"
+        source       = "POSITION_OUT"
+        targetmodule = "Dynamixel"
+        target       = "GOAL_POSITION"
+    />
+
+    <connection
+        sourcemodule    = "Kinect"
+        source          = "DEPTH"
+        targetmodule    = "Scale"
+        target          = "INPUT"
+    />
+
+    <connection
+        sourcemodule    = "Kinect"
+        source          = "INTENSITY"
+        targetmodule    = "FaceDetector"
+        target          = "INPUT"
+    />
+
+    <connection
+        sourcemodule    = "FaceDetector"
+        source          = "FACES"
+        targetmodule    = "FaceInfo"
+        target          = "FACES"
+    />
+
+
+	<view name = "MechaCorp Robotic Arm" object_size = "50" >
+
+        <object
+            class     = "Slider"
+            module    = "ServoPosition"
+            parameter = "data"
+            select    = "0"
+            min       = "30"
+            max       = "330"
+            x         = "12"
+            y         = "1"
+            h         = "4"
+            w         = "2"
+        />
+
+        <object
+            class  = "Plot"
+            title  = "Velocity output from smoothing"
+            module = "SmoothMovement"
+            source = "VELOCITY"
+            x      = "6" 	y = "0"
+            w      = "4" 	h = "4"
+            color  = "yellow"
+        />
+
+        <object
+            class  = "Plot"
+            title  = "Position output from smoothing"
+            module = "SmoothMovement"
+            source = "POSITION_OUT"
+            min    = "0"
+            max    = "360"
+            x      = "6"    y = "4"
+            w      = "4"    h = "4"
+            color  = "green"
+        />
+
+        <object
+            class  = "Plot"
+            title  = "Actual Positions"
+            module = "Dynamixel"
+            source = "FEEDBACK_PRESENT_POSITION"
+            x      = "0" 	y = "0"
+            w      = "2" 	h = "2"
+            color  = "red, green, blue"
+            select = "0,1,2"
+            max    = "360"
+
+        />
+
+        <object
+            class  = "Plot"
+            title  = "Speed"
+            module = "Dynamixel"
+            source = "FEEDBACK_PRESENT_SPEED"
+            x      = "2" 	y = "0"
+            w      = "2" 	h = "2"
+            color  = "red, green, blue"
+            select = "0,1,2"
+            min    = "-1"
+            max    = "1"
+
+        />
+
+        <object
+            class  = "Plot"
+            title  = "Temperature (C)"
+            module = "Dynamixel"
+            source = "FEEDBACK_PRESENT_TEMPERATURE"
+            x      = "4" y = "0"
+            w      = "2" h = "2"
+            color  = "red, green, blue"
+            select = "0,1,2"
+            max    = "80"
+        />
+
+        <object
+            class    = "Image"
+            title    = " "
+            dragarea = "no"
+            type     = "file"
+            file     = "Arm.jpg"
+            x        = "0" y = "2"
+            w        = "4" h  = "4"
+    	/>
+
+        <object
+          class  = "Image"
+          title  = "Kinect camera"
+          type   = "rgb"
+          module = "Kinect"
+          source = "RED+GREEN+BLUE"
+          x      = "6" y = "0"
+          w      = "6" h = "5"
+        />
+
+        <object
+          class  = "Circle"
+          color  = "red"
+          size   = "0.025"
+          module = "FaceDetector"
+          source = "FACES"
+          x      = "6" y = "0"
+          w      = "6" h = "5"
+        />
+
+        <object
+          class    = "Cross"
+          size     = "0.05"
+          module   = "FaceDetector"
+          source   = "FACE_POSITION"
+          x = "6" y = "0"
+          w = "6" h = "5"
+        />
+
+    </view>
+</group>
+
