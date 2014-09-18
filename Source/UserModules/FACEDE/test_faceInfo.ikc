@@ -1,0 +1,46 @@
+<?xml version="1.0"?>
+<group>
+
+<module
+class ="Kinect"
+name="Kinect"
+/>
+
+<module
+class ="MPIFacedetector"
+name = "Facedetection"
+/>
+
+<module
+class = "FaceInfo"
+name = "FaceInfo"
+/>>
+
+<connection 
+sourcemodule = "Kinect"
+source = "DEPTH"
+targetmodule = "Facedetection"
+target = "INPUT"
+/>
+
+<connection
+sourcemodule = "Facedetection"
+source = "FACES"
+targetmodule = "FaceInfo"
+target="INPUT1"
+/>
+
+<connection
+sourcemodule = "Facedetection"
+source = "EYE_LEFT_POSITION"
+targetmodule = "FaceInfo"
+target="INPUT2"
+/>
+
+<connection
+sourcemodule = "Facedetection"
+source = "EYE_RIGHT_POSITION"
+targetmodule = "FaceInfo"
+target="INPUT3"
+/>
+</group>

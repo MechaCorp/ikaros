@@ -1,0 +1,11 @@
+<?xml version ="1.0">
+<module 
+class = "FaceInfo"
+name = "FaceInfo"
+/>
+
+<input name = "INPUT1" description = "array of all face positions"/>
+
+
+
+	

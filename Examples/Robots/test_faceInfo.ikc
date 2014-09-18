@@ -1,0 +1,124 @@
+<?xml version = "1.0"?>
+
+<group title = "Robot Arm Example">
+	
+    <description>
+		This is an example file for using the LUCS MAMN10 Robot arm in ikaros.
+    </description>
+    
+  <module
+		class 	 = "Kinect"
+		name 	 = "KINECT"
+		mode     = "mm"
+     />
+     <module
+		class 	 = "FaceInfo"
+		name 	 = "FaceInfo"
+		
+     />
+    <connection sourcemodule="KINECT" source="DEPTH" targetmodule="Scale" target="INPUT" />
+
+    <module
+        class 			= "Scale"
+        name 			= "Scale"
+        factor          = "0.00048851978505"
+        comment         = "This module could be removed if Image-object allowed scaling."
+    /> 
+    
+	<!-- Face detection part -->
+	<!-- This modules tries to find a face in a image -->
+	
+	 <module
+		class	 = "MPIFaceDetector"
+		name 	 = "FaceDetector"
+		period	 = "5"
+    />
+        
+    <connection sourcemodule  = "KINECT" source  = "INTENSITY" targetmodule  = "FaceDetector" target  = "INPUT" />
+    <connection
+	sourcemodule = "FaceDetector"
+	source = "FACES"
+	targetmodule = "FaceInfo"
+	target="INPUT1"
+	/>
+
+
+<view name = "Lucs Robotic Arm" object_size = "50" >
+		<object
+			class    = "Image"
+            title    = "Kinect camera"
+			type	 = "rgb"
+			module   = "KINECT"
+			source   = "RED+GREEN+BLUE"
+			x = "6" y = "0"
+			w = "6" h = "5"
+		/>
+
+		<object
+            class	 = "Circle"
+            color	 = "red"
+			size	 = "0.025"
+			module	 = "FaceDetector"
+            source	 = "FACES"
+			x = "6" y = "0"
+			w = "6" h = "5"
+		/>
+            
+		<object
+        	class    = "Cross"
+            size     = "0.05"
+            module   = "FaceDetector"
+            source   = "FACE_POSITION"
+			x = "6" y = "0"
+			w = "6" h = "5"
+			/>
+			
+		<object
+        	class    = "Image"
+			title    = "Left Eye"
+			type	 = "gray"
+			module   = "FaceDetector"
+			source   = "EYE_LEFT"
+			x = "10" y = "5"
+			w = "2" h = "2"
+			min  = "0"
+			max  = "1"
+		/>
+		
+		<object
+			class    = "Image"
+			title    = "Right Eye"
+			type	 = "gray"
+			module   = "FaceDetector"
+			source   = "EYE_RIGHT"
+			x = "6" y = "5"
+			w = "2" h = "2"
+			min  = "0"
+			max  = "1"
+		/>
+			
+		<!-- KINNECT objects -->
+        <object 
+        	class 	= "Image"
+        	type 	= "spectrum" 
+        	name 	= "Camera" 
+        	module  = "Scale" 
+        	source  = "OUTPUT" 
+        	x = "12" y = "0" 
+			w = "6" h = "5"
+        />
+
+       
+    </view>
+</group>
+ 
+
+
+
+
+
+
+
+
+
+

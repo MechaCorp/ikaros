@@ -1,0 +1,23 @@
+<?xml version="1.0"?>
+<group name = "FACEDETECTOR" description="">
+<description type="text">
+	----
+</description>
+
+<example description="---">
+	<module
+		class="MPIFaceDetector"
+		name="MPIFaceDetector"
+		/>
+</example>
+
+<input name =""
+<
+
+
+
+ <files>  
+ 	<file>ArmIm.h</file> 
+ 	<file>ArmIm.cc</file> 
+ 	<file>ArmIm.ikc</file> 
+ </files>

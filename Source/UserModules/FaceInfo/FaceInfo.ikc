@@ -1,0 +1,45 @@
+<?xml version="1.0"?>
+
+<group name="FaceInfo" description="minimal example module">
+
+	<description type="text">
+		Module that prints the location of all faces in the input-image
+	</description>
+
+	<example description="location of faces in a picture">
+		<module
+			class="FaceInfo"
+			name="FaceInfo"
+		
+		/>
+	</example>
+
+	
+	
+
+	<input name="INPUT1" description="the matrix of all faces" />
+	
+
+	
+
+	<module class="FaceInfo" />
+
+	<author>
+		<name>MechaCorp</name>
+		<email>mechacorp@lucs.lu.se</email>
+		<affiliation>Lund University Cognitive Science</affiliation>
+		<homepage>http://www.lucs.lu.se/Christian.Balkenius</homepage>
+	</author>
+
+   <files>
+   		<file>FaceInfo.h</file>
+   		<file>FaceInfo.cc</file>
+   		<file>FaceInfo.ikc</file>
+   </files>
+
+</group>
+
+
+
+
+	

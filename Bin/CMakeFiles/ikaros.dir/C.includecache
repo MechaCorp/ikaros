@@ -1,0 +1,38 @@
+#IncludeRegexLine: ^[ 	]*#[ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/Users/Tim/Desktop/Ikaros/ikaros/Source/Modules/VisionModules/ImageOperators/CurvatureDetectors/FASTDetector/fast-C-src-2.1/fast.c
+stdlib.h
+-
+fast.h
+/Users/Tim/Desktop/Ikaros/ikaros/Source/Modules/VisionModules/ImageOperators/CurvatureDetectors/FASTDetector/fast-C-src-2.1/fast.h
+
+/Users/Tim/Desktop/Ikaros/ikaros/Source/Modules/VisionModules/ImageOperators/CurvatureDetectors/FASTDetector/fast-C-src-2.1/fast.h
+
+/Users/Tim/Desktop/Ikaros/ikaros/Source/Modules/VisionModules/ImageOperators/CurvatureDetectors/FASTDetector/fast-C-src-2.1/fast_10.c
+stdlib.h
+-
+
+/Users/Tim/Desktop/Ikaros/ikaros/Source/Modules/VisionModules/ImageOperators/CurvatureDetectors/FASTDetector/fast-C-src-2.1/fast_11.c
+stdlib.h
+-
+
+/Users/Tim/Desktop/Ikaros/ikaros/Source/Modules/VisionModules/ImageOperators/CurvatureDetectors/FASTDetector/fast-C-src-2.1/fast_12.c
+stdlib.h
+-
+
+/Users/Tim/Desktop/Ikaros/ikaros/Source/Modules/VisionModules/ImageOperators/CurvatureDetectors/FASTDetector/fast-C-src-2.1/fast_9.c
+stdlib.h
+-
+
+/Users/Tim/Desktop/Ikaros/ikaros/Source/Modules/VisionModules/ImageOperators/CurvatureDetectors/FASTDetector/fast-C-src-2.1/nonmax.c
+stdlib.h
+-
+fast.h
+/Users/Tim/Desktop/Ikaros/ikaros/Source/Modules/VisionModules/ImageOperators/CurvatureDetectors/FASTDetector/fast-C-src-2.1/fast.h
+

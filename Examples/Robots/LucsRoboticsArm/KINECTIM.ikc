@@ -1,0 +1,27 @@
+<?xml version="1.0"?>
+<group name = "ArmKinect" description="connects Kinectdata with Arm">
+<description type="text">
+	----
+</description>
+
+<example description="---">
+	<module
+		class="Kinect"
+		name="Kinect"
+		/>
+</example>
+
+<connection
+sourcemodule = "Kinect"
+source = "DEPTH"
+targetmodule = "MPIFaceDetector"
+target = "INPUT"
+/>
+
+
+
+ <files>  
+ 	<file>ArmIm.h</file> 
+ 	<file>ArmIm.cc</file> 
+ 	<file>ArmIm.ikc</file> 
+ </files>
