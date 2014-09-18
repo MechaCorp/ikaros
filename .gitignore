@@ -7,7 +7,6 @@
 *.so
 *.obj
 /build
-/Examples
 /Bin
 
 # Packages #
