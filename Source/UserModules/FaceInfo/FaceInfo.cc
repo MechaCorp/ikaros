@@ -18,16 +18,19 @@ FaceInfo::~FaceInfo() {
     // kernel with GetInputArray, GetInputMatrix etc.
 }
 
-float target_degrees;
-float viewing_angle = 57.0;
+float horizontal_viewing_angle = 57.0;
+float vertical_viewing_angle = 43.0;
 
 void FaceInfo::Tick(){
 
   if(FACES[0][0] > 0) {
-    target_degrees = (180.0 + viewing_angle/2.0) - (FACES[0][0] * viewing_angle);
     // printf("%f ", FACES[0][0]);
     // printf("%f\n", target_degrees);
-    TARGET_POSITION[0] = target_degrees;
+    TARGET_POSITION[0] = (180.0 + horizontal_viewing_angle/2.0) - (FACES[0][0] * horizontal_viewing_angle);
+
+  }
+  if(FACES[0][1] > 0) {
+    TARGET_POSITION[1] = (FACES[0][1] * vertical_viewing_angle) - (180.0 + vertical_viewing_angle/2.0);
   }
 
 }

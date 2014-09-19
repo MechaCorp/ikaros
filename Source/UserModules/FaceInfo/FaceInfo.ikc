@@ -15,7 +15,7 @@
 
   <input name="FACES" description="the matrix of all faces" />
 
-  <output name="TARGET_POSITION" description="The face to target in degrees" size="1" />
+  <output name="TARGET_POSITION" description="An array with the face to target in x and y degrees" size="2" />
 
   <module class="FaceInfo" />
 

@@ -56,10 +56,6 @@ public:
 
     float       overall_speed;
     bool        debug;
-
-    // Internal
-
-    float *     starting_position;
 };
 
 #endif

@@ -61,10 +61,8 @@ void SmoothMovement::Init() {
 
     // Init
 
-    starting_position          = create_array(3);
     set_array(POSITION_OUT, 180.0, POSITION_OUT_SIZE);
     set_array(goal_position, 180.0, goal_position_size);
-
 }
 
 
@@ -77,14 +75,17 @@ SmoothMovement::~SmoothMovement() {
 }
 
 float percent = 0.0;
+float percent2 = 0.0;
 
 void SmoothMovement::Tick() {
     // Calculate how much we have to move between two positions from 0 to 1
     // where 1 means that we are there and 0 means that we have 300 (max) degrees to move
     percent = 1 - fabs(current_position[0] - goal_position[0]) / (300);
+    percent2 = 1 - fabs(current_position[1] - goal_position[1]) / (300);
 
     // Change position and speed
     ::CalcDampedSimpleHarmonicMotion(&POSITION_OUT[0], &VELOCITY[0], goal_position[0], percent, 2.0, 1.0);
+    ::CalcDampedSimpleHarmonicMotion(&POSITION_OUT[2], &VELOCITY[2], goal_position[1], percent2, 2.0, 1.0);
 
     // Debug log
     if(debug) {
