@@ -63,19 +63,39 @@ void CalcDampedSimpleHarmonicMotion(
         // calculate constants based on motion parameters
         // Note: These could be cached off between multiple calls using the same
         //       parameters for deltaTime, angularFrequency and dampingRatio.
-        const float za = -angularFrequency * dampingRatio;
-        const float zb = angularFrequency * sqrtf(dampingRatio*dampingRatio - 1.0f);
-        const float z1 = za - zb;
-        const float z2 = za + zb;
-        const float expTerm1 = expf( z1 * deltaTime );
-        const float expTerm2 = expf( z2 * deltaTime );
+        const float maxDampingRatio = 2.0;
+        const float deltaTimeMax = 1.0;
+        const float initialVelMax = 1.0;
+        const float initialPosMax = 330.0;
+
+        const float za          = -angularFrequency * dampingRatio;
+        const float zaMax       = -angularFrequency * maxDampingRatio;
+
+        const float zb          = angularFrequency * sqrtf(dampingRatio*dampingRatio - 1.0f);
+        const float zbMax       = angularFrequency * sqrtf(maxDampingRatio*maxDampingRatio - 1.0f);
+
+        const float z1          = za - zb;
+        const float z1Max       = zaMax - zbMax;
+
+        const float z2          = za + zb;
+        const float z2Max       = zaMax + zbMax;
+
+        const float expTerm1    = expf( z1 * deltaTime );
+        const float expTerm1Max = expf( z1Max * deltaTimeMax );
+
+        const float expTerm2    = expf( z2 * deltaTime );
+        const float expTerm2Max = expf( z2Max * deltaTimeMax );
 
         // update motion
-        float c1 = (initialVel - initialPos*z2) / (-2.0f*zb); // z1 - z2 = -2*zb
-        float c2 = initialPos - c1;
+        float c1                = (initialVel - initialPos * z2) / (-2.0f * zb); // z1 - z2 = -2*zb
+        float c1Max             = (initialVelMax - initialPosMax * z2Max) / (-2.0f * zbMax); // z1 - z2 = -2*zb
+
+        float c2                = initialPos - c1;
+        float c2Max             = initialPosMax - c1Max;
+
         *pPos = equilibriumPos + c1*expTerm1 + c2*expTerm2;
         // Hack to make this number be sort of between 0 and 1
-        *pVel = fabs( (c1*z1*expTerm1 + c2*z2*expTerm2) / 50 );
+        *pVel = fabs( ( (c1 * z1 * expTerm1) + (c2 * z2 * expTerm2) ) / ( (c1Max * z1Max * expTerm1Max) + (c2Max * z2Max * expTerm2Max) ) ) + 0.25f * (1.0f - deltaTime);
     }
     // else if critically damped
     else if (dampingRatio > 1.0f - epsilon)
@@ -107,7 +127,7 @@ void CalcDampedSimpleHarmonicMotion(
         *pPos = equilibriumPos + c3;
 
         // Hack to make this number be sort of between 0 and 1
-        *pVel = fabs( ( (c1 * expTerm) - (c3 * angularFrequency) ) / ( (c1max * expTermMax) - (c3max * angularFrequency) ) ) + 0.5f * (1.0f - deltaTime);
+        *pVel = fabs( ( (c1 * expTerm) - (c3 * angularFrequency) ) / ( (c1max * expTermMax) - (c3max * angularFrequency) ) ) + 0.25f * (1.0f - deltaTime);
         //*pVel = fabs( ( (c1 * expTerm) - (c3 * angularFrequency) ) / ( (c1max * expTermMax) - (c3max * angularFrequency) ) );
     }
     // else under-damped

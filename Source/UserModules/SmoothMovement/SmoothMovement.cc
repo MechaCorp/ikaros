@@ -84,8 +84,8 @@ void SmoothMovement::Tick() {
     percent2 = 1 - fabs(current_position[1] - goal_position[1]) / (300);
 
     // Change position and speed
-    ::CalcDampedSimpleHarmonicMotion(&POSITION_OUT[0], &VELOCITY[0], goal_position[0], percent, 2.0, 1.0);
-    ::CalcDampedSimpleHarmonicMotion(&POSITION_OUT[2], &VELOCITY[2], goal_position[1], percent2, 2.0, 1.0);
+    ::CalcDampedSimpleHarmonicMotion(&POSITION_OUT[0], &VELOCITY[0], goal_position[0], percent, 2.0, 2.0);
+    ::CalcDampedSimpleHarmonicMotion(&POSITION_OUT[2], &VELOCITY[2], goal_position[1], percent2, 2.0, 2.0);
 
     // Debug log
     if(debug) {
