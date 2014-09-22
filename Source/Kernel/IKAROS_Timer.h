@@ -25,8 +25,7 @@
 
 class TimerData;
 
-class Timer
-{
+class Timer {
 private:
     TimerData *	data;
 public:

@@ -1,0 +1,41 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE plist PUBLIC "-//Apple//DTD PLIST 1.0//EN" "http://www.apple.com/DTDs/PropertyList-1.0.dtd">
+<plist version="1.0">
+<dict>
+	<key>IDESourceControlProjectFavoriteDictionaryKey</key>
+	<false/>
+	<key>IDESourceControlProjectIdentifier</key>
+	<string>569C1A40-7474-49AE-AF69-E65EA397C197</string>
+	<key>IDESourceControlProjectName</key>
+	<string>head_pose_estimation_demo</string>
+	<key>IDESourceControlProjectOriginsDictionary</key>
+	<dict>
+		<key>241A1347AE7C773B7AA796846FE802EA79D4BD91</key>
+		<string>github.com:MechaCorp/ikaros.git</string>
+	</dict>
+	<key>IDESourceControlProjectPath</key>
+	<string>Source/UserModules/FaceInfo/head-pose-estimation/demo/head_pose_estimation_demo/head_pose_estimation_demo.xcodeproj</string>
+	<key>IDESourceControlProjectRelativeInstallPathDictionary</key>
+	<dict>
+		<key>241A1347AE7C773B7AA796846FE802EA79D4BD91</key>
+		<string>../../../../../../../..</string>
+	</dict>
+	<key>IDESourceControlProjectURL</key>
+	<string>github.com:MechaCorp/ikaros.git</string>
+	<key>IDESourceControlProjectVersion</key>
+	<integer>111</integer>
+	<key>IDESourceControlProjectWCCIdentifier</key>
+	<string>241A1347AE7C773B7AA796846FE802EA79D4BD91</string>
+	<key>IDESourceControlProjectWCConfigurations</key>
+	<array>
+		<dict>
+			<key>IDESourceControlRepositoryExtensionIdentifierKey</key>
+			<string>public.vcs.git</string>
+			<key>IDESourceControlWCCIdentifierKey</key>
+			<string>241A1347AE7C773B7AA796846FE802EA79D4BD91</string>
+			<key>IDESourceControlWCCName</key>
+			<string>ikaros</string>
+		</dict>
+	</array>
+</dict>
+</plist>

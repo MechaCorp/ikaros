@@ -1,7 +1,15 @@
 set(CMAKE_INCLUDE_CURRENT_DIR ON)
 
+set( OPENCV_INCLUDES /usr/local/Cellar/opencv/2.4.9/include/opencv2 )
+set( OPENCV_LIB /usr/local/Cellar/opencv/2.4.9/lib )
+
+INCLUDE_DIRECTORIES( . ${OPENCV_INCLUDES} )
+LINK_DIRECTORIES( ${OPENCV_LIB} )
+
 set(SOURCE
   ${SOURCE}
   ${CMAKE_CURRENT_SOURCE_DIR}/FaceInfo.cc
+  ${CMAKE_CURRENT_SOURCE_DIR}/CRForestEstimator.cpp
+  ${CMAKE_CURRENT_SOURCE_DIR}/CRTree.cpp
   PARENT_SCOPE
 )
