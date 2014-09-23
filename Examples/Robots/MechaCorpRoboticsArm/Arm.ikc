@@ -25,12 +25,6 @@
     />
 
     <module
-        class = "Constant"
-        name  = "ServoPosition"
-        data  = "180 180 180"
-    />
-
-    <module
         class   = "Kinect"
         name    = "Kinect"
         mode    = "mm"
@@ -56,13 +50,6 @@
 
 
 	<!-- Order is important -->
-
-    <connection
-        sourcemodule = "ServoPosition"
-        source       = "OUTPUT"
-        targetmodule = "SmoothMovement"
-        target       = "goal_position"
-    />
 
     <connection
         sourcemodule = "Dynamixel"
@@ -117,16 +104,16 @@
 	<view name = "MechaCorp Robotic Arm" object_size = "50" >
 
         <object
-            class     = "Slider"
-            module    = "ServoPosition"
-            parameter = "data"
-            select    = "0"
-            min       = "30"
-            max       = "330"
-            x         = "12"
-            y         = "1"
-            h         = "4"
-            w         = "2"
+            class  = "Plot"
+            title  = "Velocity output from smoothing"
+            module = "SmoothMovement"
+            source = "VELOCITY"
+            min    = "0"
+            max    = "1"
+            x      = "6" 	y = "0"
+            w      = "4" 	h = "4"
+            color  = "red, yellow, blue"
+            select = "0,1,2"
         />
 
         <object
@@ -134,9 +121,12 @@
             title  = "Velocity output from smoothing"
             module = "SmoothMovement"
             source = "VELOCITY"
-            x      = "6" 	y = "0"
-            w      = "4" 	h = "4"
+            min    = "0"
+            max    = "1"
+            x      = "10"    y = "0"
+            w      = "4"    h = "4"
             color  = "yellow"
+            select = "1"
         />
 
         <object
@@ -148,7 +138,8 @@
             max    = "360"
             x      = "6"    y = "4"
             w      = "4"    h = "4"
-            color  = "green"
+            color  = "red, yellow, blue"
+            select = "0,1,2"
         />
 
         <object

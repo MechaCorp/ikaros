@@ -30,7 +30,7 @@ void FaceInfo::Tick(){
 
   }
   if(FACES[0][1] > 0) {
-    TARGET_POSITION[1] = (FACES[0][1] * vertical_viewing_angle) - (180.0 + vertical_viewing_angle/2.0);
+    TARGET_POSITION[1] = (FACES[0][1] * vertical_viewing_angle) - (225.0 + vertical_viewing_angle/2.0) * -1.00f;
   }
 
 }
