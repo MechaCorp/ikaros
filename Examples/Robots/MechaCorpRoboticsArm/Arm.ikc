@@ -27,7 +27,7 @@
     <module
         class   = "Kinect"
         name    = "Kinect"
-        mode    = "mm"
+        mode    = "raw"
    />
 
    <module
@@ -98,6 +98,13 @@
         source          = "TARGET_POSITION"
         targetmodule    = "SmoothMovement"
         target          = "goal_position"
+    />
+
+    <connection
+        sourcemodule    = "Kinect"
+        source          = "DEPTH"
+        targetmodule    = "FaceInfo"
+        target          = "DEPTH"
     />
 
 

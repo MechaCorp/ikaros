@@ -42,6 +42,10 @@ public:
     int         FACES_SIZE_X;
     int         FACES_SIZE_Y;
 
+    float **    DEPTH;
+    int         DEPTH_SIZE_X;
+    int         DEPTH_SIZE_Y;
+
     // Outputs
 
     float *     TARGET_POSITION;

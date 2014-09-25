@@ -50,11 +50,11 @@ Kinect::Init()
     red			= GetOutputMatrix("RED");
     green		= GetOutputMatrix("GREEN");
     blue		= GetOutputMatrix("BLUE");
-    
+
     mode        = GetIntValueFromList("mode");
     index       = GetIntValue("index");
     xtion       = GetBoolValue("xtion");
-    
+
     if(!xtion) freenect_sync_set_led(LED_OFF, 0);
 }
 
@@ -74,11 +74,11 @@ Kinect::Tick()
         Notify(msg_warning, "Kinect device not found.");
         return;
     }
-    
+
     if(!xtion) // get video too
     {
         ret = freenect_sync_get_video((void**)(&rgb_data), &timestamp, index, FREENECT_VIDEO_RGB);
-        
+
         if(ret < 0)
         {
             Notify(msg_warning, "Kinect device not found.");
@@ -100,7 +100,7 @@ Kinect::Tick()
             }
         }
     }
-    
+
     if(mode == 0) // raw
     {
         int s = 0;
@@ -147,7 +147,7 @@ Kinect::Tick()
             else
                 freenect_sync_set_led(LED_OFF, 0);
         }
-        
+
         // Set tilt
 
         if(tilt)
