@@ -27,7 +27,7 @@
     <module
         class   = "Kinect"
         name    = "Kinect"
-        mode    = "raw"
+        mode    = "mm"
    />
 
    <module

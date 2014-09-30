@@ -105,6 +105,33 @@ bool read_data(){
     return false;
   }
 
+ int valid_pixels = 0;
+ float d = 0.f;
+
+ int ii = 0;
+
+ //generate 3D image
+ for(int y = 0; y < g_im3D.rows; y++) {
+   Vec3f* Mi = g_im3D.ptr<Vec3f>(y);
+   for(int x = 0; x < g_im3D.cols; x++){
+
+     d = (float)depth_mid[ii++];
+
+     if ( d < g_max_z && d > 0 ){
+
+       valid_pixels++;
+
+       Mi[x][0] = ( float(d * (x - 320)) * 0.0017505f );
+       Mi[x][1] = ( float(d * (y - 240)) * 0.0017505f );
+       Mi[x][2] = d;
+
+     }
+     else {
+       Mi[x] = 0;
+     }
+   }
+ }
+
   return true;
 }
 
@@ -121,12 +148,17 @@ void FaceInfo::Tick(){
     }
   }
 
+  // for(int i = 0; i < 307200; i++) {
+  //   printf("%i ", depth_mid[i]);
+  // }
+  // printf("\n");
+
   got_depth++;
 
   pthread_cond_signal(&gl_frame_cond);
   pthread_mutex_unlock(&gl_backbuf_mutex);
 
-  if( read_data() ){
+  if( read_data() ) {
     printf("Read data\n");
 
     g_means.clear();
