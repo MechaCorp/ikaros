@@ -91,7 +91,7 @@ FaceInfo::~FaceInfo() {
 float horizontal_viewing_angle = 57.0;
 float vertical_viewing_angle = 43.0;
 
-bool read_data( ){
+bool read_data(){
 
   uint16_t *tmp;
 
@@ -103,34 +103,6 @@ bool read_data( ){
   }
   else {
     return false;
-  }
-
-  int valid_pixels = 0;
-  float d = 0.f;
-
-  int ii = 0;
-
-  for(int y = 0; y < g_im3D.rows; y++) {
-
-    Vec3f* Mi = g_im3D.ptr<Vec3f>(y);
-
-    for(int x = 0; x < g_im3D.cols; x++) {
-
-      d = (float)depth_mid[ii++];
-
-      if ( d < g_max_z && d > 0 ){
-
-        valid_pixels++;
-
-        Mi[x][0] = ( float(d * (x - 320)) * 0.0017505f );
-        Mi[x][1] = ( float(d * (y - 240)) * 0.0017505f );
-        Mi[x][2] = d;
-
-      }
-      else {
-        Mi[x] = 0;
-      }
-    }
   }
 
   return true;
@@ -155,6 +127,7 @@ void FaceInfo::Tick(){
   pthread_mutex_unlock(&gl_backbuf_mutex);
 
   if( read_data() ){
+    printf("Read data\n");
 
     g_means.clear();
     g_votes.clear();
@@ -173,26 +146,25 @@ void FaceInfo::Tick(){
                          g_th
     );
 
-  }
+    printf("%lu ", g_means.size());
 
-  printf("%lu ", g_means.size());
+    if( g_means.size() > 0 ){
+      cout << "Estimated: " << g_means[0][0] << " " << g_means[0][1] << " " << g_means[0][2] << " " << g_means[0][3] << " " << g_means[0][4] << " " << g_means[0][5] <<endl;
 
-  if( g_means.size() > 0 ){
-    cout << "Estimated: " << g_means[0][0] << " " << g_means[0][1] << " " << g_means[0][2] << " " << g_means[0][3] << " " << g_means[0][4] << " " << g_means[0][5] <<endl;
-
-    cout << g_means.size() << " " << flush;
-    for(uint v=0;v<6;v++) {
-      cout << g_means[0][v] << " ";
+      cout << g_means.size() << " " << flush;
+      for(uint v=0;v<6;v++) {
+        cout << g_means[0][v] << " ";
+      }
+      cout << endl;
     }
-    cout << endl;
+
   }
+
 
   if(FACES[0][0] > 0) {
-    // printf("%f ", FACES[0][0]);
-    // printf("%f\n", target_degrees);
     TARGET_POSITION[0] = (180.0 + horizontal_viewing_angle/2.0) - (FACES[0][0] * horizontal_viewing_angle);
-
   }
+
   if(FACES[0][1] > 0) {
     TARGET_POSITION[1] = (FACES[0][1] * vertical_viewing_angle) - (225.0 + vertical_viewing_angle/2.0) * -1.00f;
   }
