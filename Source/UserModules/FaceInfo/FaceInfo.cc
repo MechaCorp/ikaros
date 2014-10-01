@@ -43,11 +43,6 @@ using namespace cv;
 // Kinect's frame rate
   int g_fps = 30;
 
-// Thread stuff
-  pthread_t freenect_thread;
-  pthread_mutex_t gl_backbuf_mutex = PTHREAD_MUTEX_INITIALIZER;
-  pthread_cond_t gl_frame_cond = PTHREAD_COND_INITIALIZER;
-
 // Depth stuff
   uint16_t *depth_mid, *depth_front;
   int got_depth = 0;
@@ -58,10 +53,6 @@ using namespace cv;
   std::vector< Vote > g_votes; //all votes returned by the forest
 
 void FaceInfo::Init() {
-  FACES_SIZE_X  = GetInputSizeX("FACES");
-  FACES_SIZE_Y  = GetInputSizeY("FACES");
-  FACES         = GetInputMatrix("FACES");
-
   DEPTH         = GetInputMatrix("DEPTH");
   DEPTH_SIZE_X  = GetInputSizeX("DEPTH");
   DEPTH_SIZE_Y  = GetInputSizeY("DEPTH");
@@ -92,10 +83,12 @@ float horizontal_viewing_angle = 57.0;
 float vertical_viewing_angle = 43.0;
 
 bool read_data(){
-
   uint16_t *tmp;
+  int valid_pixels = 0;
+  float d = 0.f;
+  int ii = 0;
 
-  if (got_depth) {
+  if(got_depth) {
     tmp = depth_front;
     depth_front = depth_mid;
     depth_mid = tmp;
@@ -105,32 +98,22 @@ bool read_data(){
     return false;
   }
 
- int valid_pixels = 0;
- float d = 0.f;
-
- int ii = 0;
-
- //generate 3D image
- for(int y = 0; y < g_im3D.rows; y++) {
-   Vec3f* Mi = g_im3D.ptr<Vec3f>(y);
-   for(int x = 0; x < g_im3D.cols; x++){
-
-     d = (float)depth_mid[ii++];
-
-     if ( d < g_max_z && d > 0 ){
-
+  // Generate 3D image
+  for(int y = 0; y < g_im3D.rows; y++) {
+    Vec3f* Mi = g_im3D.ptr<Vec3f>(y);
+    for(int x = 0; x < g_im3D.cols; x++){
+      d = (float)depth_mid[ii++];
+      if ( d < g_max_z && d > 0 ){
        valid_pixels++;
-
        Mi[x][0] = ( float(d * (x - 320)) * 0.0017505f );
        Mi[x][1] = ( float(d * (y - 240)) * 0.0017505f );
        Mi[x][2] = d;
-
-     }
-     else {
+      }
+      else {
        Mi[x] = 0;
-     }
-   }
- }
+      }
+    }
+  }
 
   return true;
 }
@@ -139,8 +122,6 @@ void FaceInfo::Tick(){
 
   int i = 0;
 
-  pthread_mutex_lock(&gl_backbuf_mutex);
-
   for (int y = 0; y < DEPTH_SIZE_Y; y++) {
     for (int x = 0; x < DEPTH_SIZE_X; x++) {
       depth_mid[i] = DEPTH[y][x];
@@ -148,19 +129,9 @@ void FaceInfo::Tick(){
     }
   }
 
-  // for(int i = 0; i < 307200; i++) {
-  //   printf("%i ", depth_mid[i]);
-  // }
-  // printf("\n");
-
   got_depth++;
 
-  pthread_cond_signal(&gl_frame_cond);
-  pthread_mutex_unlock(&gl_backbuf_mutex);
-
   if( read_data() ) {
-    printf("Read data\n");
-
     g_means.clear();
     g_votes.clear();
     g_clusters.clear();
@@ -178,28 +149,23 @@ void FaceInfo::Tick(){
                          g_th
     );
 
-    printf("%lu ", g_means.size());
-
     if( g_means.size() > 0 ){
-      cout << "Estimated: " << g_means[0][0] << " " << g_means[0][1] << " " << g_means[0][2] << " " << g_means[0][3] << " " << g_means[0][4] << " " << g_means[0][5] <<endl;
+      //cout << "Estimated: " << g_means[0][0] << " " << g_means[0][1] << " " << g_means[0][2] << " " << g_means[0][3] << " " << g_means[0][4] << " " << g_means[0][5] <<endl;
 
-      cout << g_means.size() << " " << flush;
-      for(uint v=0;v<6;v++) {
-        cout << g_means[0][v] << " ";
-      }
-      cout << endl;
+      TARGET_POSITION[0] = 180.0 - std::atan(g_means[0][0]/g_means[0][2]) * (180/pi);
+      TARGET_POSITION[1] = 270.0 + std::atan(g_means[0][1]/g_means[0][2]) * (180/pi);
+
+      //cout << "Target: " << TARGET_POSITION[0] << " " << std::atan(g_means[0][0]/g_means[0][2]) * (180/pi) << " " << g_means[0][0] <<  " / " << g_means[0][2] << endl;
+
+      // cout << g_means.size() << " " << flush;
+      // for(uint v=0;v<6;v++) {
+      //   cout << g_means[0][v] << " ";
+      // }
+      // cout << endl;
     }
 
   }
 
-
-  if(FACES[0][0] > 0) {
-    TARGET_POSITION[0] = (180.0 + horizontal_viewing_angle/2.0) - (FACES[0][0] * horizontal_viewing_angle);
-  }
-
-  if(FACES[0][1] > 0) {
-    TARGET_POSITION[1] = (FACES[0][1] * vertical_viewing_angle) - (225.0 + vertical_viewing_angle/2.0) * -1.00f;
-  }
 
 }
 

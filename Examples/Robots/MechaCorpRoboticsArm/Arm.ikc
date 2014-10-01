@@ -37,12 +37,6 @@
        comment      = "This module could be removed if Image-object allowed scaling."
    />
 
-   <module
-        class    = "MPIFaceDetector"
-        name     = "FaceDetector"
-        period   = "5"
-    />
-
     <module
          class    = "FaceInfo"
          name     = "FaceInfo"
@@ -80,20 +74,6 @@
     />
 
     <connection
-        sourcemodule    = "Kinect"
-        source          = "INTENSITY"
-        targetmodule    = "FaceDetector"
-        target          = "INPUT"
-    />
-
-    <connection
-        sourcemodule    = "FaceDetector"
-        source          = "FACES"
-        targetmodule    = "FaceInfo"
-        target          = "FACES"
-    />
-
-    <connection
         sourcemodule    = "FaceInfo"
         source          = "TARGET_POSITION"
         targetmodule    = "SmoothMovement"
@@ -121,19 +101,6 @@
             w      = "4" 	h = "4"
             color  = "red, yellow, blue"
             select = "0,1,2"
-        />
-
-        <object
-            class  = "Plot"
-            title  = "Velocity output from smoothing"
-            module = "SmoothMovement"
-            source = "VELOCITY"
-            min    = "0"
-            max    = "1"
-            x      = "10"    y = "0"
-            w      = "4"    h = "4"
-            color  = "yellow"
-            select = "1"
         />
 
         <object
@@ -204,25 +171,6 @@
           type   = "rgb"
           module = "Kinect"
           source = "RED+GREEN+BLUE"
-          x      = "0" y = "6"
-          w      = "6" h = "5"
-        />
-
-        <object
-          class  = "Circle"
-          color  = "red"
-          size   = "0.025"
-          module = "FaceDetector"
-          source = "FACES"
-          x      = "0" y = "6"
-          w      = "6" h = "5"
-        />
-
-        <object
-          class    = "Cross"
-          size     = "0.05"
-          module   = "FaceDetector"
-          source   = "FACE_POSITION"
           x      = "0" y = "6"
           w      = "6" h = "5"
         />
