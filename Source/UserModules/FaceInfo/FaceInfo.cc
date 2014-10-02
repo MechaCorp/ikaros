@@ -1,7 +1,6 @@
 
 #include "FaceInfo.h"
 #include "/usr/local/Cellar/libfreenect/0.5.0/include/libfreenect/libfreenect.h"
-#include <pthread.h>
 #include <string>
 #include <algorithm>
 #include <iostream>
@@ -57,8 +56,14 @@ void FaceInfo::Init() {
   DEPTH_SIZE_X  = GetInputSizeX("DEPTH");
   DEPTH_SIZE_Y  = GetInputSizeY("DEPTH");
 
+  HEADS         = GetOutputMatrix("HEADS");
+  HEADS_SIZE_X  = GetOutputSizeX("HEADS");
+  HEADS_SIZE_Y  = GetOutputSizeY("HEADS");
+
   TARGET_POSITION        = GetOutputArray("TARGET_POSITION");
   TARGET_POSITION_SIZE   = GetOutputSize("TARGET_POSITION");
+
+  set_matrix(HEADS, 0, HEADS_SIZE_X, HEADS_SIZE_Y);
 
   g_im3D.create(g_im_h, g_im_w, CV_32FC3);
 
@@ -150,10 +155,19 @@ void FaceInfo::Tick(){
     );
 
     if( g_means.size() > 0 ){
-      //cout << "Estimated: " << g_means[0][0] << " " << g_means[0][1] << " " << g_means[0][2] << " " << g_means[0][3] << " " << g_means[0][4] << " " << g_means[0][5] <<endl;
+      //cout << "Estimated: " << floor(g_means[0][0]) << "\t" << floor(g_means[0][1]) << "\t" << floor(g_means[0][2]) << "\t" << floor(g_means[0][3]) << "\t" << floor(g_means[0][4]) << "\t" << floor(g_means[0][5]) <<endl;
 
       TARGET_POSITION[0] = 180.0 - std::atan(g_means[0][0]/g_means[0][2]) * (180/pi);
       TARGET_POSITION[1] = 270.0 + std::atan(g_means[0][1]/g_means[0][2]) * (180/pi);
+
+      HEADS[0][0] = g_means[0][0];
+      HEADS[0][1] = g_means[0][1];
+      HEADS[0][2] = g_means[0][2];
+      HEADS[0][3] = g_means[0][3];
+      HEADS[0][4] = g_means[0][4];
+      HEADS[0][5] = g_means[0][5];
+
+      //::copy_matrix(HEADS, g_means, HEADS_SIZE_X, HEADS_SIZE_Y);
 
       //cout << "Target: " << TARGET_POSITION[0] << " " << std::atan(g_means[0][0]/g_means[0][2]) * (180/pi) << " " << g_means[0][0] <<  " / " << g_means[0][2] << endl;
 

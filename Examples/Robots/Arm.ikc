@@ -21,7 +21,7 @@
         class          = "SmoothMovement"
         name           = "SmoothMovement"
         movement_speed = "0.5"
-        debug          = "true"
+        debug          = "false"
     />
 
     <module
@@ -42,11 +42,6 @@
          name     = "FaceInfo"
      />
 
-     <module
-          class    = "GazeDirector"
-          name     = "GazeDirector"
-      />
-
 
 	<!-- Order is important -->
 
@@ -64,7 +59,7 @@
         target       = "MOVING_SPEED"
     />
 
-    <connection
+	<connection
         sourcemodule = "SmoothMovement"
         source       = "POSITION_OUT"
         targetmodule = "Dynamixel"
@@ -79,24 +74,17 @@
     />
 
     <connection
+        sourcemodule    = "FaceInfo"
+        source          = "TARGET_POSITION"
+        targetmodule    = "SmoothMovement"
+        target          = "goal_position"
+    />
+
+    <connection
         sourcemodule    = "Kinect"
         source          = "DEPTH"
         targetmodule    = "FaceInfo"
         target          = "DEPTH"
-    />
-
-    <connection
-        sourcemodule    = "FaceInfo"
-        source          = "HEADS"
-        targetmodule    = "GazeDirector"
-        target          = "HEADS"
-    />
-
-    <connection
-        sourcemodule    = "GazeDirector"
-        source          = "TARGET_POSITION"
-        targetmodule    = "SmoothMovement"
-        target          = "goal_position"
     />
 
 

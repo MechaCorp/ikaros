@@ -89,11 +89,11 @@ void SmoothMovement::Tick() {
 
     // Debug log
     if(debug) {
-        printf("%f\t", current_position[1]);
-        printf("%f\t", goal_position[1]);
-        printf("%f\t", percent2);
-        printf("%f\t", POSITION_OUT[1]);
-        printf("%f\n", VELOCITY[1]);
+        printf("%f\t", current_position[0]);
+        printf("%f\t", goal_position[0]);
+        printf("%f\t", percent);
+        printf("%f\t", POSITION_OUT[0]);
+        printf("%f\n", VELOCITY[0]);
     }
 }
 

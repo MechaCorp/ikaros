@@ -1,5 +1,5 @@
 //
-//  FaceInfo.h    This file is a part of the IKAROS project
+//  GazeDirector.h    This file is a part of the IKAROS project
 //
 //    Copyright (C) 2012 <Author Name>
 //
@@ -20,40 +20,32 @@
 //    See http://www.ikaros-project.org/ for more information.
 //
 
-#ifndef FaceInfo_
-#define FaceInfo_
+#ifndef GazeDirector_
+#define GazeDirector_
 
 #include "IKAROS.h"
 
-class FaceInfo: public Module
+class GazeDirector: public Module
 {
 public:
-    static Module * Create(Parameter * p) { return new FaceInfo(p); }
+    static Module * Create(Parameter * p) { return new GazeDirector(p); }
 
-    FaceInfo(Parameter * p) : Module(p) {}
-    virtual ~FaceInfo();
+    GazeDirector(Parameter * p) : Module(p) {}
+    virtual ~GazeDirector();
 
     void    Init();
     void    Tick();
 
     // Inputs
 
-    float **    FACES;
-    int         FACES_SIZE_X;
-    int         FACES_SIZE_Y;
-
-    float **    DEPTH;
-    int         DEPTH_SIZE_X;
-    int         DEPTH_SIZE_Y;
+    float **    HEADS;
+    int         HEADS_SIZE_X;
+    int         HEADS_SIZE_Y;
 
     // Outputs
 
     float *     TARGET_POSITION;
     int         TARGET_POSITION_SIZE;
-
-    float **    HEADS;
-    int         HEADS_SIZE_X;
-    int         HEADS_SIZE_Y;
 
 };
 

@@ -1,0 +1,59 @@
+<?xml version = "1.0"?>
+
+<group title = "Robot Arm Example">
+
+    <description>
+        This is an example file for using the LUCS MAMN10 Robot arm in ikaros.
+    </description>
+
+    <module
+        class   = "Kinect"
+        name    = "Kinect"
+        mode    = "mm"
+    />
+
+   <module
+       class        = "Scale"
+       name         = "Scale"
+       factor       = "0.00048851978505"
+       comment      = "This module could be removed if Image-object allowed scaling."
+   />
+
+    <module
+        class    = "FaceInfo"
+        name     = "FaceInfo"
+    />
+
+
+  <!-- Order is important -->
+
+    <connection
+        sourcemodule    = "Kinect"
+        source          = "DEPTH"
+        targetmodule    = "Scale"
+        target          = "INPUT"
+    />
+
+    <connection
+        sourcemodule    = "Kinect"
+        source          = "DEPTH"
+        targetmodule    = "FaceInfo"
+        target          = "DEPTH"
+    />
+
+
+  <view name = "MechaCorp Robotic Arm" object_size = "50" >
+
+        <object
+          class  = "Image"
+          title  = "Kinect video"
+          type   = "rgb"
+          module = "Kinect"
+          source = "RED+GREEN+BLUE"
+          x      = "0" y = "0"
+          w      = "10" h = "8"
+        />
+
+    </view>
+</group>
+

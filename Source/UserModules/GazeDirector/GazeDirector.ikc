@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+
+<group name="GazeDirector" description="Gaze follower">
+
+  <description type="text">
+    Uses head tracking data to follow gaze
+  </description>
+
+  <example description="Uses head tracking data to output target degrees for gaze following">
+    <module
+      class="GazeDirector"
+      name="GazeDirector"
+    />
+  </example>
+
+  <input name="HEADS" description="A matrix of recognized heads" />
+
+  <output name="TARGET_POSITION" description="An array with degrees to move to" size="2" />
+
+  <module class="GazeDirector" />
+
+  <author>
+    <name>MechaCorp</name>
+    <email>mechacorp@lucs.lu.se</email>
+    <affiliation>Lund University Cognitive Science</affiliation>
+    <homepage>http://www.lucs.lu.se/</homepage>
+  </author>
+
+   <files>
+      <file>GazeDirector.h</file>
+      <file>GazeDirector.cc</file>
+      <file>GazeDirector.ikc</file>
+   </files>
+
+</group>
+
+
+
+
