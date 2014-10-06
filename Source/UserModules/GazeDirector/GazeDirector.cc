@@ -27,31 +27,70 @@ GazeDirector::~GazeDirector() {
     // kernel with GetInputArray, GetInputMatrix etc.
 }
 
-float beta;
-float alpha;
-float r = 3000;
-float l;
+float const r = 5000;
+
 float x;
+float y;
 float z;
+
+float alphaX;
+float alphaY;
+
+float h;
+float H;
+float C;
+float A;
+float B;
+
+float hy;
+float Hy;
+float Cy;
+float Ay;
+float By;
 
 void GazeDirector::Tick() {
   x = HEADS[0][0];
   z = HEADS[0][2];
-  alpha = HEADS[0][4]; // Maybe 3 instead
+  alphaX = -HEADS[0][4];
+  alphaY = HEADS[0][3];
 
-  beta = atan( x / z );
-  l = x * tan(90.0 - (alpha + beta));
+  B = atan( x / z );
+  h = abs(sqrt( x * x + z * z ));
+  H = asin( ( h * sin(alphaX) ) / r );
+  C = 180 - (H + alphaX);
+  A = C + B;
 
-  TARGET_POSITION[0] = ( 180 - (alpha + beta) - asin( ( (z-l) * sin(alpha + beta) ) / r ) );
+  /* Horizontal */
+  By = atan( y / z );
+  hy = abs(sqrt( y * y + z * z ));
+  Hy = asin( ( hy * sin(alphaY) ) / r );
+  Cy = 180 - (Hy + alphaY);
+  Ay = Cy + By;
 
-  printf("%f\n", TARGET_POSITION[0]);
+  TARGET_POSITION[0] = A;
+  TARGET_POSITION[1] = 90 + Ay;
+  TARGET_POSITION[2] = 180.0;
 
-  // printf("%f\t", HEADS[0][0]);
-  // printf("%f\t", HEADS[0][1]);
-  // printf("%f\t", HEADS[0][2]);
-  // printf("%f\t", HEADS[0][3]);
-  // printf("%f\t", HEADS[0][4]);
-  // printf("%f\n", HEADS[0][5]);
+
+
+  // lx = x * tan(90.0 - (alphaX + betaX));
+
+  // TARGET_POSITION[0] = ( 180 - (alphaX + betaX) - asin( ( (z - lx) * sin(alphaX + betaX) ) / r ) );
+
+  //  Vertical
+  // y = HEADS[0][1];
+  // alphaY = -HEADS[0][3];
+
+  // betaY = atan( y / z );
+  // ly = x * tan(90.0 - (alphaY + betaY));
+
+  // TARGET_POSITION[1] = 90 + ( 180 - (alphaY + betaY) - asin( ( (z - ly) * sin(alphaY + betaY) ) / r ) );
+
+  // printf("%f ", TARGET_POSITION[0]);
+  // printf("(%f) ", alphaX);
+  // printf("%f ", TARGET_POSITION[1]);
+  // printf("(%f)\n", alphaY);
+
 }
 
 static InitClass init("GazeDirector", &GazeDirector::Create, "Source/UserModules/GazeDirector/");

@@ -16,7 +16,7 @@
   <input name="FACES" description="A matrix of recognized faces" />
   <input name="DEPTH" description="A matrix depth data from a Kinect" />
 
-  <output name="TARGET_POSITION" description="An array with the face to target in x and y degrees" size="2" />
+  <output name="TARGET_POSITION" description="An array with the face to target in x and y degrees" size="3" />
   <output name="HEADS" description="A matrix with tracked faces" size_x="6" size_y="3" />
 
   <module class="FaceInfo" />

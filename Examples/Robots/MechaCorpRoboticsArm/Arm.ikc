@@ -20,8 +20,7 @@
     <module
         class          = "SmoothMovement"
         name           = "SmoothMovement"
-        movement_speed = "0.5"
-        debug          = "true"
+        debug          = "false"
     />
 
     <module
@@ -54,7 +53,7 @@
         sourcemodule = "Dynamixel"
         source       = "FEEDBACK_PRESENT_POSITION"
         targetmodule = "SmoothMovement"
-        target       = "current_position"
+        target       = "CURRENT_POSITION"
     />
 
     <connection
@@ -96,7 +95,8 @@
         sourcemodule    = "GazeDirector"
         source          = "TARGET_POSITION"
         targetmodule    = "SmoothMovement"
-        target          = "goal_position"
+        target          = "GOAL_POSITION"
+
     />
 
 

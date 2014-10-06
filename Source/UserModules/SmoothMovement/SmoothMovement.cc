@@ -37,18 +37,17 @@ void SmoothMovement::Init() {
     // user interface while Ikaros is running. If the parameter is not
     // set, the default value will be used instead.
 
-    Bind(overall_speed, "overall_speed");
     Bind(debug, "debug");
 
     // We should bind parameters for Angular Frequency and Dampening
 
     // Inputs
 
-    goal_position              = GetInputArray("goal_position");
-    goal_position_size         = GetInputSize("goal_position");
+    GOAL_POSITION              = GetInputArray("GOAL_POSITION");
+    GOAL_POSITION_SIZE         = GetInputSize("GOAL_POSITION");
 
-    current_position           = GetInputArray("current_position");
-    current_position_size      = GetInputSize("current_position");
+    CURRENT_POSITION           = GetInputArray("CURRENT_POSITION");
+    CURRENT_POSITION_SIZE      = GetInputSize("CURRENT_POSITION");
 
     // Outputs
 
@@ -58,14 +57,12 @@ void SmoothMovement::Init() {
     VELOCITY            = GetOutputArray("VELOCITY");
     VELOCITY_SIZE       = GetOutputSize("VELOCITY");
 
-
     // Init
 
     set_array(POSITION_OUT, 180.0, POSITION_OUT_SIZE);
-    set_array(goal_position, 180.0, goal_position_size);
+    set_array(VELOCITY, 0.0, VELOCITY_SIZE);
+    set_array(GOAL_POSITION, 180.0, GOAL_POSITION_SIZE);
 }
-
-
 
 SmoothMovement::~SmoothMovement() {
     // Destroy data structures that you allocated in Init.
@@ -80,24 +77,35 @@ float percent2 = 0.0;
 void SmoothMovement::Tick() {
     // Calculate how much we have to move between two positions from 0 to 1
     // where 1 means that we are there and 0 means that we have 300 (max) degrees to move
-    percent = 1 - fabs(current_position[0] - goal_position[0]) / (300);
-    percent2 = 1 - fabs(current_position[1] - goal_position[1]) / (300);
 
-    // Change position and speed
-    ::CalcDampedSimpleHarmonicMotion(&POSITION_OUT[0], &VELOCITY[0], goal_position[0], percent, 1.0, 1.0);
-    ::CalcDampedSimpleHarmonicMotion(&POSITION_OUT[1], &VELOCITY[1], goal_position[1], percent2, 1.0, 1.0);
+    if(GOAL_POSITION[0] > 0.0 && GOAL_POSITION[1] > 0.0) {
+        percent = 1 - fabs(CURRENT_POSITION[0] - GOAL_POSITION[0]) / (300);
+        percent2 = 1 - fabs(CURRENT_POSITION[1] - GOAL_POSITION[1]) / (300);
+
+        // Change position and speed
+        ::CalcDampedSimpleHarmonicMotion(&POSITION_OUT[0], &VELOCITY[0], GOAL_POSITION[0], percent, 1.0, 1.0);
+        ::CalcDampedSimpleHarmonicMotion(&POSITION_OUT[1], &VELOCITY[1], GOAL_POSITION[1], percent2, 1.0, 1.0);
+    }
 
     // Debug log
     if(debug) {
-        printf("%f\t", current_position[0]);
-        printf("%f\t", goal_position[0]);
+        printf("\n");
+
+        printf("%f\t", CURRENT_POSITION[0]);
+        printf("%f\t", GOAL_POSITION[0]);
         printf("%f\t", percent);
         printf("%f\t", POSITION_OUT[0]);
         printf("%f\n", VELOCITY[0]);
+
+        printf("%f\t", CURRENT_POSITION[1]);
+        printf("%f\t", GOAL_POSITION[1]);
+        printf("%f\t", percent2);
+        printf("%f\t", POSITION_OUT[1]);
+        printf("%f", VELOCITY[1]);
+
+        printf("\n");
     }
 }
-
-
 
 // Install the module. This code is executed during start-up.
 

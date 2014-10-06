@@ -10,19 +10,17 @@
 		<module
 			class = "SmoothMovement"
 			name = "SmoothMovement"
-			overall_speed = "0.5"
 			debug = "false"
 		/>
 	</example>
 
-	<parameter name="overall_speed" type="float" default="0.05" description="The overall speed of movement" />
 	<parameter name="debug" type="bool" default="false" description="Print debug logs" />
 
-	<input name="goal_position" description="The goal position" />
-	<input name="current_position" description="The current position" />
+	<input name="GOAL_POSITION" description="The goal position" />
+	<input name="CURRENT_POSITION" description="The current position" />
 
 	<output name="POSITION_OUT" description="The goal position" size="3" />
-	<output name="VELOCITY" description="The speed of movement" size="2" />
+	<output name="VELOCITY" description="The speed of movement" size="3" />
 
 	<module class="SmoothMovement" />
 

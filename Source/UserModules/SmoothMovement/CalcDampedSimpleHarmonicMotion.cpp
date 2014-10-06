@@ -43,6 +43,7 @@ void CalcDampedSimpleHarmonicMotion(
     float angularFrequency, // angular frequency of motion
     float dampingRatio      // damping ratio of motion
 ) {
+
     const float epsilon = 0.0001f;
 
     // if there is no angular frequency, the spring will not move
@@ -115,20 +116,18 @@ void CalcDampedSimpleHarmonicMotion(
 
         // this is max 1.0 + angularFrequency + 330
         float c1 = initialVel + angularFrequency * initialPos;
-        float c1max = 1.0f + angularFrequency * 330;
+        float c1max = 1.0f + angularFrequency * 330.0f;
 
         // this is max 330
         float c2 = initialPos;
-
         // this is max ( (1.0+angularFrequency+330) * 1.0 + 330 ) * expf(-angularFrequency) )
         float c3 = (c1 * deltaTime + c2) * expTerm;
-        float c3max = ( c1max * 1.0f + 330 ) *  expTermMax;
 
+        float c3max = ( c1max * 1.0f + 330.0f ) *  expTermMax;
         *pPos = equilibriumPos + c3;
 
         // Hack to make this number be sort of between 0 and 1
         *pVel = fabs( ( (c1 * expTerm) - (c3 * angularFrequency) ) / ( (c1max * expTermMax) - (c3max * angularFrequency) ) ) + 0.25f * (1.0f - deltaTime);
-        //*pVel = fabs( ( (c1 * expTerm) - (c3 * angularFrequency) ) / ( (c1max * expTermMax) - (c3max * angularFrequency) ) );
     }
     // else under-damped
     else

@@ -38,11 +38,11 @@ public:
 
     // Inputs
 
-    float *     goal_position;
-    int         goal_position_size;
+    float *     GOAL_POSITION;
+    int         GOAL_POSITION_SIZE;
 
-    float *     current_position;
-    int         current_position_size;
+    float *     CURRENT_POSITION;
+    int         CURRENT_POSITION_SIZE;
 
     // Outputs
 
@@ -54,7 +54,6 @@ public:
 
     // Parameters
 
-    float       overall_speed;
     bool        debug;
 };
 

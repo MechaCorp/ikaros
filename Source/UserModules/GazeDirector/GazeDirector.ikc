@@ -15,7 +15,7 @@
 
   <input name="HEADS" description="A matrix of recognized heads" />
 
-  <output name="TARGET_POSITION" description="An array with degrees to move to" size="2" />
+  <output name="TARGET_POSITION" description="An array with degrees to move to" size="3" />
 
   <module class="GazeDirector" />
 
