@@ -3,7 +3,7 @@
 <group title = "Robot Arm Example">
 
     <description>
-		This is an example file for using the LUCS MAMN10 Robot arm in ikaros.
+		This is an example file for using the MechaCorp Robotics arm in ikaros.
     </description>
 
     <module
@@ -181,13 +181,13 @@
     	/>
 
         <object
-          class  = "Image"
-          title  = "Kinect camera"
-          type   = "rgb"
-          module = "Kinect"
-          source = "RED+GREEN+BLUE"
-          x      = "0" y = "6"
-          w      = "6" h = "5"
+            class  = "Image"
+            title  = "Kinect camera"
+            type   = "rgb"
+            module = "Kinect"
+            source = "RED+GREEN+BLUE"
+            x      = "0" y = "6"
+            w      = "6" h = "5"
         />
 
     </view>
