@@ -27,7 +27,21 @@ GazeDirector::~GazeDirector() {
     // kernel with GetInputArray, GetInputMatrix etc.
 }
 
-float const r = 5000;
+float CalculateRotation(float distance1, float distance2, float angle, float maxLength) {
+  float h;
+  float H;
+  float C;
+  float B;
+
+  B = atan( distance1 / distance2 );
+  h = abs( sqrt( distance1 * distance1 + distance2 * distance2 ) );
+
+  H = asin( ( h * sin(angle) ) / maxLength );
+  C = 180 - (H + angle);
+  return C + B;
+}
+
+float const r = 3000.0f;
 
 float x;
 float y;
@@ -36,61 +50,17 @@ float z;
 float alphaX;
 float alphaY;
 
-float h;
-float H;
-float C;
-float A;
-float B;
-
-float hy;
-float Hy;
-float Cy;
-float Ay;
-float By;
-
 void GazeDirector::Tick() {
-  x = HEADS[0][0];
-  z = HEADS[0][2];
+  x      = HEADS[0][0];
+  y      = HEADS[0][1];
+  z      = HEADS[0][2];
+
   alphaX = -HEADS[0][4];
-  alphaY = HEADS[0][3];
+  alphaY = -HEADS[0][3];
 
-  B = atan( x / z );
-  h = abs(sqrt( x * x + z * z ));
-  H = asin( ( h * sin(alphaX) ) / r );
-  C = 180 - (H + alphaX);
-  A = C + B;
-
-  /* Horizontal */
-  By = atan( y / z );
-  hy = abs(sqrt( y * y + z * z ));
-  Hy = asin( ( hy * sin(alphaY) ) / r );
-  Cy = 180 - (Hy + alphaY);
-  Ay = Cy + By;
-
-  TARGET_POSITION[0] = A;
-  TARGET_POSITION[1] = 90 + Ay;
+  TARGET_POSITION[0] = CalculateRotation(x, z, alphaX, r);
+  TARGET_POSITION[1] = 90 + CalculateRotation(y, z, alphaY, r);
   TARGET_POSITION[2] = 180.0;
-
-
-
-  // lx = x * tan(90.0 - (alphaX + betaX));
-
-  // TARGET_POSITION[0] = ( 180 - (alphaX + betaX) - asin( ( (z - lx) * sin(alphaX + betaX) ) / r ) );
-
-  //  Vertical
-  // y = HEADS[0][1];
-  // alphaY = -HEADS[0][3];
-
-  // betaY = atan( y / z );
-  // ly = x * tan(90.0 - (alphaY + betaY));
-
-  // TARGET_POSITION[1] = 90 + ( 180 - (alphaY + betaY) - asin( ( (z - ly) * sin(alphaY + betaY) ) / r ) );
-
-  // printf("%f ", TARGET_POSITION[0]);
-  // printf("(%f) ", alphaX);
-  // printf("%f ", TARGET_POSITION[1]);
-  // printf("(%f)\n", alphaY);
-
 }
 
 static InitClass init("GazeDirector", &GazeDirector::Create, "Source/UserModules/GazeDirector/");

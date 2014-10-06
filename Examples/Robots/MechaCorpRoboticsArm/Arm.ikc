@@ -21,6 +21,8 @@
         class          = "SmoothMovement"
         name           = "SmoothMovement"
         debug          = "false"
+        phase          = "0"
+        period         = "1"
     />
 
     <module
@@ -39,6 +41,8 @@
     <module
          class    = "FaceInfo"
          name     = "FaceInfo"
+         period   = "3"
+         phase    = "1"
      />
 
      <module
@@ -96,7 +100,6 @@
         source          = "TARGET_POSITION"
         targetmodule    = "SmoothMovement"
         target          = "GOAL_POSITION"
-
     />
 
 
