@@ -1,5 +1,5 @@
 
-#include "FaceInfo.h"
+#include "HeadPoseTracker.h"
 #include "/usr/local/Cellar/libfreenect/0.5.0/include/libfreenect/libfreenect.h"
 #include <string>
 #include <algorithm>
@@ -17,21 +17,21 @@ using namespace cv;
 //input 3D image
   Mat g_im3D;
 //maximum distance form the sensor - used to segment the person
-  int g_max_z = 2000;
+  int g_max_z = 2500;
 //head threshold - to classify a cluster of votes as a head
-  int g_th = 400;
+  int g_th = 300;
 //threshold for the probability of a patch to belong to a head
   float g_prob_th = 1.0f;
 //threshold on the variance of the leaves
-  float g_maxv = 400.f;
+  float g_maxv = 500.f;
 //stride (how densely to sample test patches - increase for higher speed)
-  int g_stride = 8;
+  int g_stride = 20;
 //radius used for clustering votes into possible heads
   float g_larger_radius_ratio = 1.f;
 //radius used for mean shift
   float g_smaller_radius_ratio = 5.f;
 // Path to trees
-  string g_treepath = "/Users/tobbe/Documents/Robot/ikaros/Source/UserModules/FaceInfo/HeadPose/trees/new_";
+  string g_treepath = "/Users/tobbe/Documents/Robot/ikaros/Source/UserModules/HeadPoseTracker/HeadPose/trees/new_";
 // Number of trees
   int g_ntrees = 10;
 // Frame nr
@@ -51,7 +51,7 @@ using namespace cv;
   std::vector< std::vector< const Vote* > > g_clusters; //full clusters of votes
   std::vector< Vote > g_votes; //all votes returned by the forest
 
-void FaceInfo::Init() {
+void HeadPoseTracker::Init() {
   DEPTH         = GetInputMatrix("DEPTH");
   DEPTH_SIZE_X  = GetInputSizeX("DEPTH");
   DEPTH_SIZE_Y  = GetInputSizeY("DEPTH");
@@ -59,9 +59,6 @@ void FaceInfo::Init() {
   HEADS         = GetOutputMatrix("HEADS");
   HEADS_SIZE_X  = GetOutputSizeX("HEADS");
   HEADS_SIZE_Y  = GetOutputSizeY("HEADS");
-
-  TARGET_POSITION        = GetOutputArray("TARGET_POSITION");
-  TARGET_POSITION_SIZE   = GetOutputSize("TARGET_POSITION");
 
   set_matrix(HEADS, 0, HEADS_SIZE_X, HEADS_SIZE_Y);
 
@@ -78,7 +75,7 @@ void FaceInfo::Init() {
   }
 }
 
-FaceInfo::~FaceInfo() {
+HeadPoseTracker::~HeadPoseTracker() {
     // Destroy data structures that you allocated in Init.
     // Do NOT destroy data structures that you got from the
     // kernel with GetInputArray, GetInputMatrix etc.
@@ -123,7 +120,7 @@ bool read_data(){
   return true;
 }
 
-void FaceInfo::Tick(){
+void HeadPoseTracker::Tick(){
 
   int i = 0;
 
@@ -164,6 +161,13 @@ void FaceInfo::Tick(){
       HEADS[0][4] = g_means[0][4];
       HEADS[0][5] = g_means[0][5];
 
+      HEADS[1][0] = g_means[1][0];
+      HEADS[1][1] = g_means[1][1];
+      HEADS[1][2] = g_means[1][2];
+      HEADS[1][3] = g_means[1][3];
+      HEADS[1][4] = g_means[1][4];
+      HEADS[1][5] = g_means[1][5];
+
       //::copy_matrix(HEADS, g_means, HEADS_SIZE_X, HEADS_SIZE_Y);
     }
 
@@ -172,4 +176,4 @@ void FaceInfo::Tick(){
 
 }
 
-static InitClass init("FaceInfo", &FaceInfo::Create, "Source/UserModules/FaceInfo/");
+static InitClass init("HeadPoseTracker", &HeadPoseTracker::Create, "Source/UserModules/HeadPoseTracker/");

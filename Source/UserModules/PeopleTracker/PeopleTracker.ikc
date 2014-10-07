@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+
+<group name="PeopleTracker" description="Takes head tracking data and keeps track of different people">
+
+	<description type="text">
+		Takes head tracking data and keeps track of different people
+	</description>
+
+	<example description="A simple example">
+		<module
+			class = "PeopleTracker"
+			name = "PeopleTracker"
+		/>
+	</example>
+
+	<input name="HEADS" description="A matrix of tracked heads" />
+
+	<output name="PEOPLE" description="Coordinates of the people in the room" size_x="3" size_y="3" />
+
+	<module class="PeopleTracker" />
+
+	<author>
+		<name>MechaCorp</name>
+		<email>mechacorp@lucs.lu.se</email>
+		<affiliation>Lund University Cognitive Science</affiliation>
+		<homepage>http://www.lucs.lu.se/</homepage>
+	</author>
+
+   <files>
+   		<file>PeopleTracker.h</file>
+   		<file>PeopleTracker.cc</file>
+   		<file>PeopleTracker.ikc</file>
+   </files>
+
+</group>
+

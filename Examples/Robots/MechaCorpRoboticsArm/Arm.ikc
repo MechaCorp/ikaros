@@ -39,8 +39,8 @@
    />
 
     <module
-         class    = "FaceInfo"
-         name     = "FaceInfo"
+         class    = "HeadPoseTracker"
+         name     = "HeadPoseTracker"
          period   = "3"
          phase    = "1"
      />
@@ -84,12 +84,12 @@
     <connection
         sourcemodule    = "Kinect"
         source          = "DEPTH"
-        targetmodule    = "FaceInfo"
+        targetmodule    = "HeadPoseTracker"
         target          = "DEPTH"
     />
 
     <connection
-        sourcemodule    = "FaceInfo"
+        sourcemodule    = "HeadPoseTracker"
         source          = "HEADS"
         targetmodule    = "GazeDirector"
         target          = "HEADS"

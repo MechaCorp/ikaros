@@ -1,5 +1,5 @@
 //
-//  FaceInfo.h    This file is a part of the IKAROS project
+//  HeadPoseTracker.h    This file is a part of the IKAROS project
 //
 //    Copyright (C) 2012 <Author Name>
 //
@@ -20,36 +20,29 @@
 //    See http://www.ikaros-project.org/ for more information.
 //
 
-#ifndef FaceInfo_
-#define FaceInfo_
+#ifndef HeadPoseTracker_
+#define HeadPoseTracker_
 
 #include "IKAROS.h"
 
-class FaceInfo: public Module
+class HeadPoseTracker: public Module
 {
 public:
-    static Module * Create(Parameter * p) { return new FaceInfo(p); }
+    static Module * Create(Parameter * p) { return new HeadPoseTracker(p); }
 
-    FaceInfo(Parameter * p) : Module(p) {}
-    virtual ~FaceInfo();
+    HeadPoseTracker(Parameter * p) : Module(p) {}
+    virtual ~HeadPoseTracker();
 
     void    Init();
     void    Tick();
 
     // Inputs
 
-    float **    FACES;
-    int         FACES_SIZE_X;
-    int         FACES_SIZE_Y;
-
     float **    DEPTH;
     int         DEPTH_SIZE_X;
     int         DEPTH_SIZE_Y;
 
     // Outputs
-
-    float *     TARGET_POSITION;
-    int         TARGET_POSITION_SIZE;
 
     float **    HEADS;
     int         HEADS_SIZE_X;

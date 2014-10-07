@@ -1,0 +1,39 @@
+<?xml version="1.0"?>
+
+<group name="HeadPoseTracker" description="Head pose detection and tracking">
+
+  <description type="text">
+    Locates a head and outputs the head location and pose in coordinates and degrees
+  </description>
+
+  <example description="Locates a head and outputs the head location and pose in coordinates and degrees">
+    <module
+      class="HeadPoseTracker"
+      name="HeadPoseTracker"
+    />
+  </example>
+
+  <input name="DEPTH" description="A matrix of depth data from a Kinect" />
+
+  <output name="HEADS" description="A matrix with tracked heads (x, y, z, pitch, yaw, roll)" size_x="6" size_y="3" />
+
+  <module class="HeadPoseTracker" />
+
+  <author>
+    <name>MechaCorp</name>
+    <email>mechacorp@lucs.lu.se</email>
+    <affiliation>Lund University Cognitive Science</affiliation>
+    <homepage>http://www.lucs.lu.se/</homepage>
+  </author>
+
+   <files>
+      <file>HeadPoseTracker.h</file>
+      <file>HeadPoseTracker.cc</file>
+      <file>HeadPoseTracker.ikc</file>
+   </files>
+
+</group>
+
+
+
+
