@@ -28,9 +28,6 @@
 
 using namespace ikaros;
 
-// Internal matrix to keep track of people
-float ** iPeople;
-
 void PeopleTracker::Init() {
     // Inputs
 
@@ -47,14 +44,6 @@ void PeopleTracker::Init() {
     // Init
 
     set_matrix(PEOPLE, 0.0, PEOPLE_SIZE_X, PEOPLE_SIZE_Y);
-
-    iPeople = create_matrix(PEOPLE_SIZE_X, PEOPLE_SIZE_Y);
-    set_matrix(iPeople, 0.0, PEOPLE_SIZE_X, PEOPLE_SIZE_Y);
-
-    // Save people as a hash with key sqrt(x*x + y*y + z*z)?
-
-    // arcsin(x/d) = vinkeln (d = avståndet till personen)
-    //people = create_matrix(4, 3);
 }
 
 PeopleTracker::~PeopleTracker() {
@@ -62,7 +51,7 @@ PeopleTracker::~PeopleTracker() {
     // destroy_array("starting_position");
     // Do NOT destroy data structures that you got from the
     // kernel with GetInputArray, GetInputMatrix etc.
-    // destroy_matrix("iPeople");
+    // destroy_matrix("PEOPLE");
 }
 
 void updatePerson(float * oldPerson, float * newPerson) {
@@ -93,13 +82,13 @@ void PeopleTracker::Tick() {
             // Calculate angle to kinect
             angle = asin( HEADS[i][0] / HEADS[i][6] );
 
-            // Loop through internal people matrix iPeople
+            // Loop through internal people matrix PEOPLE
             for (int j = 0; j < HEADS_SIZE_Y; ++j) {
 
                 // Update person if within boundaries
-                if( iPeople[j][2] > 10.0 && iPeople[j][7] >= (angle - 0.14) && iPeople[j][7] <= (angle + 0.14) ) {
+                if( PEOPLE[j][2] > 10.0 && PEOPLE[j][7] >= (angle - 0.14) && PEOPLE[j][7] <= (angle + 0.14) ) {
                     printf("Update person %i\n", j);
-                    updatePerson(iPeople[j], HEADS[i]);
+                    updatePerson(PEOPLE[j], HEADS[i]);
                     updated = true;
                     break;
                 }
@@ -110,29 +99,28 @@ void PeopleTracker::Tick() {
                 // Loop through internal people
                 for (int k = 0; k < HEADS_SIZE_Y; ++k) {
                     // Find empty spot
-                    if(iPeople[k][2] < 10.0 && HEADS[i][2] > 10.0) {
-                        // Add new head to iPeople
-                        updatePerson(iPeople[k], HEADS[i]);
+                    if(PEOPLE[k][2] < 10.0) {
+                        // Add new head to PEOPLE
+                        updatePerson(PEOPLE[k], HEADS[i]);
                         printf("New person %i!\n", k);
                         break;
                     }
+
                 }
             }
         }
     }
 
-    //printf("\n");
-
     for (int i = 0; i < PEOPLE_SIZE_Y; ++i) {
         printf("%i\t", i);
-        printf("%.0lf\t", floor(iPeople[i][0]));
-        printf("%.0lf\t", floor(iPeople[i][1]));
-        printf("%.0lf\t\t", floor(iPeople[i][2]));
-        printf("%.0lf\t", floor(iPeople[i][3]));
-        printf("%.0lf\t", floor(iPeople[i][4]));
-        printf("%.0lf\t\t", floor(iPeople[i][5]));
-        printf("%.0lf\t", floor(iPeople[i][6]));
-        printf("%f\n", iPeople[i][7]);
+        printf("%.0lf\t", floor(PEOPLE[i][0]));
+        printf("%.0lf\t", floor(PEOPLE[i][1]));
+        printf("%.0lf\t\t", floor(PEOPLE[i][2]));
+        printf("%.0lf\t", floor(PEOPLE[i][3]));
+        printf("%.0lf\t", floor(PEOPLE[i][4]));
+        printf("%.0lf\t\t", floor(PEOPLE[i][5]));
+        printf("%.0lf\t", floor(PEOPLE[i][6]));
+        printf("%f\n", PEOPLE[i][7]);
     }
 }
 
