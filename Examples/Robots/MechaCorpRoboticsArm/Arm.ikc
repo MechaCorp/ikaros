@@ -96,14 +96,14 @@
     <connection
         sourcemodule    = "HeadPoseTracker"
         source          = "HEADS"
-        targetmodule    = "GazeDirector"
+        targetmodule    = "PeopleTracker"
         target          = "HEADS"
     />
 
     <connection
-        sourcemodule    = "HeadPoseTracker"
-        source          = "HEADS"
-        targetmodule    = "PeopleTracker"
+        sourcemodule    = "PeopleTracker"
+        source          = "PEOPLE"
+        targetmodule    = "GazeDirector"
         target          = "HEADS"
     />
 
