@@ -50,6 +50,11 @@
           name     = "GazeDirector"
       />
 
+      <module
+           class    = "PeopleTracker"
+           name     = "PeopleTracker"
+       />
+
 
 	<!-- Order is important -->
 
@@ -92,6 +97,13 @@
         sourcemodule    = "HeadPoseTracker"
         source          = "HEADS"
         targetmodule    = "GazeDirector"
+        target          = "HEADS"
+    />
+
+    <connection
+        sourcemodule    = "HeadPoseTracker"
+        source          = "HEADS"
+        targetmodule    = "PeopleTracker"
         target          = "HEADS"
     />
 

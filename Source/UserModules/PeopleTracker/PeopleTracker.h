@@ -44,7 +44,7 @@ public:
 
     // Outputs
 
-    float *     PEOPLE;
+    float **    PEOPLE;
     int         PEOPLE_SIZE_X;
     int         PEOPLE_SIZE_Y;
 };

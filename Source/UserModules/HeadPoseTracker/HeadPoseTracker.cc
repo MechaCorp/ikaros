@@ -17,7 +17,7 @@ using namespace cv;
 //input 3D image
   Mat g_im3D;
 //maximum distance form the sensor - used to segment the person
-  int g_max_z = 2500;
+  int g_max_z = 2000;
 //head threshold - to classify a cluster of votes as a head
   int g_th = 300;
 //threshold for the probability of a patch to belong to a head
@@ -152,7 +152,8 @@ void HeadPoseTracker::Tick(){
     );
 
     if( g_means.size() > 0 ){
-      //cout << "Estimated: " << floor(g_means[0][0]) << "\t" << floor(g_means[0][1]) << "\t" << floor(g_means[0][2]) << "\t" << floor(g_means[0][3]) << "\t" << floor(g_means[0][4]) << "\t" << floor(g_means[0][5]) <<endl;
+      //cout << "1: Estimated: " << floor(g_means[0][0]) << "\t" << floor(g_means[0][1]) << "\t" << floor(g_means[0][2]) << "\t" << floor(g_means[0][3]) << "\t" << floor(g_means[0][4]) << "\t" << floor(g_means[0][5]) <<endl;
+      //cout << "2: Estimated: " << floor(g_means[1][0]) << "\t" << floor(g_means[1][1]) << "\t" << floor(g_means[1][2]) << "\t" << floor(g_means[1][3]) << "\t" << floor(g_means[1][4]) << "\t" << floor(g_means[1][5]) <<endl;
 
       // XYZ
       HEADS[0][0] = g_means[0][0];
