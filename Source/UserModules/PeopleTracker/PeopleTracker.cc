@@ -21,14 +21,13 @@
 //
 
 #include "PeopleTracker.h"
-#include "CalcDampedSimpleHarmonicMotion.cpp"
-#include <cmath>
 
 // use the ikaros namespace to access the math library
 // this is preferred to using math.h
 
 using namespace ikaros;
 
+float ** people;
 
 void PeopleTracker::Init() {
     // Inputs
@@ -46,6 +45,11 @@ void PeopleTracker::Init() {
     // Init
 
     set_matrix(PEOPLE, 0.0, PEOPLE_SIZE_X, PEOPLE_SIZE_Y);
+
+    // Save people as a hash with key sqrt(x*x + y*y + z*z)?
+
+    // arcsin(x/d) = vinkeln (d = avståndet till personen)
+    people = create_matrix(4, 3);
 }
 
 PeopleTracker::~PeopleTracker() {
@@ -56,7 +60,17 @@ PeopleTracker::~PeopleTracker() {
 }
 
 void PeopleTracker::Tick() {
+    for (int i = 0; i < HEADS_SIZE_Y; ++i) {
+        // HEADS
+        PEOPLE[i] = HEADS[i];
+        PEOPLE[i][7] = asin( PEOPLE[i][6] / PEOPLE[i][0] );
+        // Compare all xyz and update corresponding perons gaze direction and position
+    }
 
+    for (int i = 0; i < PEOPLE_SIZE_Y; ++i) {
+        printf("%i: ", i);
+        printf("%f\n", PEOPLE[i][7]);
+    }
 }
 
 // Install the module. This code is executed during start-up.

@@ -15,7 +15,7 @@
 
   <input name="DEPTH" description="A matrix of depth data from a Kinect" />
 
-  <output name="HEADS" description="A matrix with tracked heads (x, y, z, pitch, yaw, roll)" size_x="6" size_y="3" />
+  <output name="HEADS" description="A matrix with tracked heads (x, y, z, pitch, yaw, roll, distance)" size_x="7" size_y="3" />
 
   <module class="HeadPoseTracker" />
 
