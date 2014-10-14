@@ -41,18 +41,22 @@
     <module
          class    = "HeadPoseTracker"
          name     = "HeadPoseTracker"
-         period   = "3"
-         phase    = "1"
+         period   = "2"
+         phase    = "0"
      />
 
      <module
           class    = "GazeDirector"
           name     = "GazeDirector"
+          period   = "2"
+          phase    = "0"
       />
 
       <module
            class    = "PeopleTracker"
            name     = "PeopleTracker"
+           period   = "2"
+           phase    = "0"
        />
 
 

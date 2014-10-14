@@ -5,6 +5,7 @@
 #include <iostream>
 #include <vector>
 #include <stdint.h>
+#include <cmath>
 
 
 using namespace ikaros;
@@ -27,21 +28,34 @@ GazeDirector::~GazeDirector() {
     // kernel with GetInputArray, GetInputMatrix etc.
 }
 
-float CalculateRotation(float distance1, float distance2, float angle, float maxLength) {
-  float h;
-  float H;
-  float C;
-  float B;
+float const maxLength = 3.0f;
 
-  B = atan( distance1 / distance2 );
-  h = abs( sqrt( distance1 * distance1 + distance2 * distance2 ) );
+float CalculateRotation(float coord, float z, float alpha, bool vertical) {
+  float Y;
+  float gamma;
+  float beta;
 
-  H = asin( ( h * sin(angle) ) / maxLength );
-  C = 180 - (H + angle);
-  return C + B;
+  float distance = ::sqrt(coord * coord + z * z);
+  float l2 = maxLength * maxLength;
+  float d2 = distance * distance;
+
+  Y = sqrt(l2 + d2 - 2.0 * maxLength * distance * ::cos(alpha));
+
+  float temp1 = (d2 - l2 - (Y * Y));
+  float temp2 = (- 2.0 * Y * maxLength);
+  float temp3 = temp1 / temp2;
+  gamma = ::acos( temp3 );
+  //gamma = acos(- (d2 - l2 - Y * Y) / (2.0 * Y * maxLength) );
+
+  if(vertical) {
+    beta = ::asin(z / distance);
+  }
+  else {
+    beta = ::asin(coord / distance);
+  }
+
+  return (pi - (alpha + gamma + beta))*(180.0/pi);
 }
-
-float const r = 3000.0f;
 
 float x;
 float y;
@@ -51,16 +65,22 @@ float alphaX;
 float alphaY;
 
 void GazeDirector::Tick() {
-  x      = HEADS[0][0];
-  y      = HEADS[0][1];
-  z      = HEADS[0][2];
+  // In meters
+  x      = HEADS[0][0]/1000.0;
+  y      = HEADS[0][1]/1000.0;
+  z      = HEADS[0][2]/1000.0;
+  
+  // In radians
+  alphaX = HEADS[0][4] * (pi/180.0);
+  alphaY = HEADS[0][3] * (pi/180.0);
 
-  alphaX = -HEADS[0][4];
-  alphaY = -HEADS[0][3];
-
-  TARGET_POSITION[0] = CalculateRotation(x, z, alphaX, r);
-  TARGET_POSITION[1] = 90 + CalculateRotation(y, z, alphaY, r);
+  TARGET_POSITION[0] = CalculateRotation(x, z, alphaX, false);
+  TARGET_POSITION[1] = CalculateRotation(y, z, alphaY, true);
   TARGET_POSITION[2] = 180.0;
+
+  printf("%f\t", TARGET_POSITION[0]);
+  printf("%f\t\n", TARGET_POSITION[1]);
+
 }
 
 static InitClass init("GazeDirector", &GazeDirector::Create, "Source/UserModules/GazeDirector/");
