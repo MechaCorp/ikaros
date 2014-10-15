@@ -37,12 +37,13 @@ void StaringDetector::Init() {
 
     // Outputs
 
-    STARING         = GetOutputArray("STARING");
-    STARING_SIZE    = GetOutputSize("STARING");
+    STARING           = GetOutputMatrix("STARING");
+    STARING_SIZE_X    = GetOutputSizeX("STARING");
+    STARING_SIZE_Y    = GetOutputSizeY("STARING");
 
     // Init
 
-    set_array(STARING, 0.0, STARING_SIZE, PEOPLE_SIZE);
+    set_matrix(STARING, 0.0, PEOPLE_SIZE_Y, STARING_SIZE_X);
 }
 
 StaringDetector::~StaringDetector() {
@@ -54,6 +55,29 @@ StaringDetector::~StaringDetector() {
 }
 
 void StaringDetector::Tick() {
+
+    for (int i = 0; i < PEOPLE_SIZE_Y; ++i) {
+        float alphaX = abs(PEOPLE[i][4]);
+        float alphaY = abs(PEOPLE[i][3]);
+
+        // STARING[i][0] = 180 + alphaX;
+        // STARING[i][1] = 270 + alphaY;
+
+        STARING[i][0] = 180.0 - std::atan(PEOPLE[i][0]/PEOPLE[i][2]) * (180/pi);
+        STARING[i][1] = 270.0 + std::atan(PEOPLE[i][1]/PEOPLE[i][2]) * (180/pi);
+
+        if(alphaX <= 15.0 && alphaY <= 15.0) {
+            STARING[i][2] = 1.0 - ( ( (alphaY + alphaX) / 2.0) / 15.0 );
+        }
+        else {
+            STARING[i][2] = 0.0;
+        }
+
+        printf("Person %i ", i);
+        printf("%f\n", STARING[i][2]);
+    }
+
+    printf("\n");
 
 }
 

@@ -53,6 +53,13 @@
       />
 
       <module
+           class    = "StaringDetector"
+           name     = "StaringDetector"
+           period   = "2"
+           phase    = "0"
+       />
+
+      <module
            class    = "PeopleTracker"
            name     = "PeopleTracker"
            period   = "2"
@@ -104,11 +111,32 @@
         target          = "HEADS"
     />
 
-    <connection
+    <!-- <connection
         sourcemodule    = "PeopleTracker"
         source          = "PEOPLE"
         targetmodule    = "GazeDirector"
         target          = "HEADS"
+    /> -->
+
+    <!--<connection
+        sourcemodule    = "GazeDirector"
+        source          = "TARGET_POSITION"
+        targetmodule    = "SmoothMovement"
+        target          = "GOAL_POSITION"
+    /> -->
+
+    <connection
+        sourcemodule    = "HeadPoseTracker"
+        source          = "HEADS"
+        targetmodule    = "GazeDirector"
+        target          = "HEADS"
+    />
+
+    <connection
+        sourcemodule    = "PeopleTracker"
+        source          = "PEOPLE"
+        targetmodule    = "StaringDetector"
+        target          = "PEOPLE"
     />
 
     <connection
@@ -117,7 +145,6 @@
         targetmodule    = "SmoothMovement"
         target          = "GOAL_POSITION"
     />
-
 
 	<view name = "MechaCorp Robotic Arm" object_size = "50" >
 

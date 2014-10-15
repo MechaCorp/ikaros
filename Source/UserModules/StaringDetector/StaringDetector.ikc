@@ -15,7 +15,7 @@
 
 	<input name="PEOPLE" description="A matrix of tracked people in the room" />
 
-	<output name="STARING" description="An array of stimuli priority (0 to 1) for the different people (by index)" size="3" />
+	<output name="STARING" description="A matrix with stimuli priority (0 to 1) and the position of the stimuli in degrees for the different people (by index)" size_x="3" size_y="3" />
 
 	<module class="StaringDetector" />
 

@@ -5,7 +5,7 @@
 #include <iostream>
 #include <vector>
 #include <stdint.h>
-#include <cmath>
+#include "GazeDetection.cpp"
 
 
 using namespace ikaros;
@@ -28,34 +28,7 @@ GazeDirector::~GazeDirector() {
     // kernel with GetInputArray, GetInputMatrix etc.
 }
 
-float const maxLength = 3.0f;
-
-float CalculateRotation(float coord, float z, float alpha, bool vertical) {
-  float Y;
-  float gamma;
-  float beta;
-
-  float distance = ::sqrt(coord * coord + z * z);
-  float l2 = maxLength * maxLength;
-  float d2 = distance * distance;
-
-  Y = sqrt(l2 + d2 - 2.0 * maxLength * distance * ::cos(alpha));
-
-  float temp1 = (d2 - l2 - (Y * Y));
-  float temp2 = (- 2.0 * Y * maxLength);
-  float temp3 = temp1 / temp2;
-  gamma = ::acos( temp3 );
-  //gamma = acos(- (d2 - l2 - Y * Y) / (2.0 * Y * maxLength) );
-
-  if(vertical) {
-    beta = ::asin(z / distance);
-  }
-  else {
-    beta = ::asin(coord / distance);
-  }
-
-  return (pi - (alpha + gamma + beta))*(180.0/pi);
-}
+float const maxLength = 2.0f;
 
 float x;
 float y;
@@ -65,22 +38,16 @@ float alphaX;
 float alphaY;
 
 void GazeDirector::Tick() {
-  // In meters
-  x      = HEADS[0][0]/1000.0;
-  y      = HEADS[0][1]/1000.0;
-  z      = HEADS[0][2]/1000.0;
-  
-  // In radians
-  alphaX = HEADS[0][4] * (pi/180.0);
-  alphaY = HEADS[0][3] * (pi/180.0);
+  x      = HEADS[0][0];
+  y      = HEADS[0][1];
+  z      = HEADS[0][2];
 
-  TARGET_POSITION[0] = CalculateRotation(x, z, alphaX, false);
-  TARGET_POSITION[1] = CalculateRotation(y, z, alphaY, true);
+  alphaX = HEADS[0][4];
+  alphaY = HEADS[0][3];
+
+  TARGET_POSITION[0] = ::CalculateRotationAfterGaze(x, z, alphaX, maxLength, false);
+  TARGET_POSITION[1] = 180.0 + ::CalculateRotationAfterGaze(y, z, alphaY, maxLength, true);
   TARGET_POSITION[2] = 180.0;
-
-  printf("%f\t", TARGET_POSITION[0]);
-  printf("%f\t\n", TARGET_POSITION[1]);
-
 }
 
 static InitClass init("GazeDirector", &GazeDirector::Create, "Source/UserModules/GazeDirector/");

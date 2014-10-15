@@ -44,8 +44,9 @@ public:
 
     // Outputs
 
-    float *     STARING;
-    int         STARING_SIZE;
+    float **    STARING;
+    int         STARING_SIZE_X;
+    int         STARING_SIZE_Y;
 };
 
 #endif
