@@ -1,3 +1,4 @@
+#include "GazeDetection.h"
 #include <cmath>
 
 float CalculateRotationAfterGaze(float coord, float z, float alpha, float maxLength, bool vertical) {

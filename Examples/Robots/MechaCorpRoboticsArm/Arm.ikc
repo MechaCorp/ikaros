@@ -18,9 +18,14 @@
 	/>
 
     <module
-         class    = "Brain"
-         name     = "Brain"
-     />
+     class    = "Brain"
+     name     = "Brain"
+    />
+
+    <module
+      class    = "PersonOfInterestDetector"
+      name     = "PersonOfInterestDetector"
+    />
 
     <module
         class          = "SmoothMovement"
@@ -145,10 +150,24 @@
     />
 
     <connection
+        sourcemodule    = "PeopleTracker"
+        source          = "PEOPLE"
+        targetmodule    = "PersonOfInterestDetector"
+        target          = "PEOPLE"
+    />
+
+    <connection
         sourcemodule    = "StaringDetector"
         source          = "STARING"
         targetmodule    = "Brain"
         target          = "STARING"
+    />
+
+    <connection
+        sourcemodule    = "PersonOfInterestDetector"
+        source          = "ACTION"
+        targetmodule    = "Brain"
+        target          = "PERSONOFINTEREST"
     />
 
    <!--  <connection

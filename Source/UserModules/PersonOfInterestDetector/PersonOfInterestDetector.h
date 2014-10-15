@@ -1,5 +1,5 @@
 //
-//	Brain.h		This file is a part of the IKAROS project
+//	PersonOfInterestDetector.h		This file is a part of the IKAROS project
 //
 //    Copyright (C) 2012 <Author Name>
 //
@@ -20,35 +20,33 @@
 //    See http://www.ikaros-project.org/ for more information.
 //
 
-#ifndef Brain_
-#define Brain_
+#ifndef PersonOfInterestDetector_
+#define PersonOfInterestDetector_
 
 #include "IKAROS.h"
 
-class Brain: public Module
+class PersonOfInterestDetector: public Module
 {
 public:
-    static Module * Create(Parameter * p) { return new Brain(p); }
+    static Module * Create(Parameter * p) { return new PersonOfInterestDetector(p); }
 
-    Brain(Parameter * p) : Module(p) {}
-    virtual ~Brain();
+    PersonOfInterestDetector(Parameter * p) : Module(p) {}
+    virtual ~PersonOfInterestDetector();
 
     void 		Init();
     void 		Tick();
 
     // Inputs
 
-    float **    STARING;
-    int         STARING_SIZE_X;
-    int         STARING_SIZE_Y;
-
-    float *     PERSONOFINTEREST;
-    int         PERSONOFINTEREST_SIZE;
+    float **    PEOPLE;
+    int         PEOPLE_SIZE_X;
+    int         PEOPLE_SIZE_Y;
 
     // Outputs
 
     float *     ACTION;
     int         ACTION_SIZE;
+
 };
 
 #endif

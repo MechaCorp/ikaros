@@ -5,7 +5,7 @@
 #include <iostream>
 #include <vector>
 #include <stdint.h>
-#include "GazeDetection.cpp"
+#include "GazeDetection.h"
 
 
 using namespace ikaros;
@@ -45,8 +45,8 @@ void GazeDirector::Tick() {
   alphaX = HEADS[0][4];
   alphaY = HEADS[0][3];
 
-  TARGET_POSITION[0] = ::CalculateRotationAfterGaze(x, z, alphaX, maxLength, false);
-  TARGET_POSITION[1] = 180.0 + ::CalculateRotationAfterGaze(y, z, alphaY, maxLength, true);
+  TARGET_POSITION[0] = CalculateRotationAfterGaze(x, z, alphaX, maxLength, false);
+  TARGET_POSITION[1] = 180.0 + CalculateRotationAfterGaze(y, z, alphaY, maxLength, true);
   TARGET_POSITION[2] = 180.0;
 }
 

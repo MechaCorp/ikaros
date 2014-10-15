@@ -14,6 +14,7 @@
 	</example>
 
 	<input name="STARING" description="A matrix of people and staring" />
+  <input name="PERSONOFINTEREST" description="An array of the interesting person" />
 
 	<output name="ACTION" description="Three degrees (x, y, z) for the robot to move to" size="3" />
 

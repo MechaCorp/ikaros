@@ -111,17 +111,17 @@ void PeopleTracker::Tick() {
         }
     }
 
-    for (int i = 0; i < PEOPLE_SIZE_Y; ++i) {
-        //printf("%i\t", i);
-        //printf("%.0lf\t", floor(PEOPLE[i][0]));
-        //printf("%.0lf\t", floor(PEOPLE[i][1]));
-        //printf("%.0lf\t\t", floor(PEOPLE[i][2]));
-        //printf("%.0lf\t", floor(PEOPLE[i][3]));
-        //printf("%.0lf\t", floor(PEOPLE[i][4]));
-        //printf("%.0lf\t\t", floor(PEOPLE[i][5]));
-        //printf("%.0lf\t", floor(PEOPLE[i][6]));
-        //printf("%f\n", PEOPLE[i][7]);
-    }
+    // for (int i = 0; i < PEOPLE_SIZE_Y; ++i) {
+    //     printf("%i\t", i);
+    //     printf("%.0lf\t", floor(PEOPLE[i][0]));
+    //     printf("%.0lf\t", floor(PEOPLE[i][1]));
+    //     printf("%.0lf\t\t", floor(PEOPLE[i][2]));
+    //     printf("%.0lf\t", floor(PEOPLE[i][3]));
+    //     printf("%.0lf\t", floor(PEOPLE[i][4]));
+    //     printf("%.0lf\t\t", floor(PEOPLE[i][5]));
+    //     printf("%.0lf\t", floor(PEOPLE[i][6]));
+    //     printf("%f\n", PEOPLE[i][7]);
+    // }
 }
 
 // Install the module. This code is executed during start-up.

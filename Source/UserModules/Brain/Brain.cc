@@ -35,6 +35,9 @@ void Brain::Init() {
     STARING_SIZE_X  = GetInputSizeX("STARING");
     STARING_SIZE_Y  = GetInputSizeY("STARING");
 
+    PERSONOFINTEREST         = GetInputArray("PERSONOFINTEREST");
+    PERSONOFINTEREST_SIZE    = GetInputSize("PERSONOFINTEREST");
+
     // Outputs
 
     ACTION           = GetOutputArray("ACTION");
@@ -59,11 +62,13 @@ void Brain::Tick() {
         if(STARING[i][0] > 0.0 && STARING[i][2] > 0.6) {
             ACTION[0] = STARING[i][0];
             ACTION[1] = STARING[i][1];
+            printf("\n\nStaring at %i\n", i);
         }
-//        printf("Person %i ", i);
-//        printf("%f\t", ACTION[0]);
-//        printf("%f\t", ACTION[1]);
-//        printf("%f\n", STARING[i][2]);
+    }
+
+    if(PERSONOFINTEREST[2] > 0.5) {
+        ACTION[0] = PERSONOFINTEREST[0];
+        ACTION[1] = PERSONOFINTEREST[1];
     }
 
 }

@@ -1,5 +1,5 @@
 //
-//	Brain.h		This file is a part of the IKAROS project
+//  GazeDetection.h    This file is a part of the IKAROS project
 //
 //    Copyright (C) 2012 <Author Name>
 //
@@ -20,35 +20,9 @@
 //    See http://www.ikaros-project.org/ for more information.
 //
 
-#ifndef Brain_
-#define Brain_
+#ifndef GazeDetection_
+#define GazeDetection_
 
-#include "IKAROS.h"
-
-class Brain: public Module
-{
-public:
-    static Module * Create(Parameter * p) { return new Brain(p); }
-
-    Brain(Parameter * p) : Module(p) {}
-    virtual ~Brain();
-
-    void 		Init();
-    void 		Tick();
-
-    // Inputs
-
-    float **    STARING;
-    int         STARING_SIZE_X;
-    int         STARING_SIZE_Y;
-
-    float *     PERSONOFINTEREST;
-    int         PERSONOFINTEREST_SIZE;
-
-    // Outputs
-
-    float *     ACTION;
-    int         ACTION_SIZE;
-};
+    float CalculateRotationAfterGaze(float coord, float z, float alpha, float maxLength, bool vertical);
 
 #endif
