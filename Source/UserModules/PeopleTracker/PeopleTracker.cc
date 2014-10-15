@@ -87,7 +87,7 @@ void PeopleTracker::Tick() {
 
                 // Update person if within boundaries
                 if( PEOPLE[j][2] > 10.0 && PEOPLE[j][7] >= (angle - 0.14) && PEOPLE[j][7] <= (angle + 0.14) ) {
-                    printf("Update person %i\n", j);
+                    //printf("Update person %i\n", j);
                     updatePerson(PEOPLE[j], HEADS[i]);
                     updated = true;
                     break;
@@ -102,7 +102,7 @@ void PeopleTracker::Tick() {
                     if(PEOPLE[k][2] < 10.0) {
                         // Add new head to PEOPLE
                         updatePerson(PEOPLE[k], HEADS[i]);
-                        printf("New person %i!\n", k);
+                        //printf("New person %i!\n", k);
                         break;
                     }
 
@@ -111,17 +111,17 @@ void PeopleTracker::Tick() {
         }
     }
 
-    // for (int i = 0; i < PEOPLE_SIZE_Y; ++i) {
-    //     printf("%i\t", i);
-    //     printf("%.0lf\t", floor(PEOPLE[i][0]));
-    //     printf("%.0lf\t", floor(PEOPLE[i][1]));
-    //     printf("%.0lf\t\t", floor(PEOPLE[i][2]));
-    //     printf("%.0lf\t", floor(PEOPLE[i][3]));
-    //     printf("%.0lf\t", floor(PEOPLE[i][4]));
-    //     printf("%.0lf\t\t", floor(PEOPLE[i][5]));
-    //     printf("%.0lf\t", floor(PEOPLE[i][6]));
-    //     printf("%f\n", PEOPLE[i][7]);
-    // }
+    for (int i = 0; i < PEOPLE_SIZE_Y; ++i) {
+        //printf("%i\t", i);
+        //printf("%.0lf\t", floor(PEOPLE[i][0]));
+        //printf("%.0lf\t", floor(PEOPLE[i][1]));
+        //printf("%.0lf\t\t", floor(PEOPLE[i][2]));
+        //printf("%.0lf\t", floor(PEOPLE[i][3]));
+        //printf("%.0lf\t", floor(PEOPLE[i][4]));
+        //printf("%.0lf\t\t", floor(PEOPLE[i][5]));
+        //printf("%.0lf\t", floor(PEOPLE[i][6]));
+        //printf("%f\n", PEOPLE[i][7]);
+    }
 }
 
 // Install the module. This code is executed during start-up.

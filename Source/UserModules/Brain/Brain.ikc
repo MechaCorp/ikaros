@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+
+<group name="Brain" description="Is brain">
+
+	<description type="text">
+		Is brain
+	</description>
+
+	<example description="A simple example">
+		<module
+			class = "Brain"
+			name = "Brain"
+		/>
+	</example>
+
+	<input name="STARING" description="A matrix of people and staring" />
+
+	<output name="ACTION" description="Three degrees (x, y, z) for the robot to move to" size="3" />
+
+	<module class="Brain" />
+
+	<author>
+		<name>MechaCorp</name>
+		<email>mechacorp@lucs.lu.se</email>
+		<affiliation>Lund University Cognitive Science</affiliation>
+		<homepage>http://www.lucs.lu.se/</homepage>
+	</author>
+
+   <files>
+   		<file>Brain.h</file>
+   		<file>Brain.cc</file>
+   		<file>Brain.ikc</file>
+   </files>
+
+</group>
+

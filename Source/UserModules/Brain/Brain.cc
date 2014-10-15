@@ -1,5 +1,5 @@
 //
-//	StaringDetector.cc		This file is a part of the IKAROS project
+//	Brain.cc		This file is a part of the IKAROS project
 //
 //    Copyright (C) 2012 <Author Name>
 //
@@ -20,7 +20,7 @@
 //    See http://www.ikaros-project.org/ for more information.
 //
 
-#include "StaringDetector.h"
+#include "Brain.h"
 #include <cmath>
 
 // use the ikaros namespace to access the math library
@@ -28,25 +28,24 @@
 
 using namespace ikaros;
 
-void StaringDetector::Init() {
+void Brain::Init() {
     // Inputs
 
-    PEOPLE         = GetInputMatrix("PEOPLE");
-    PEOPLE_SIZE_X  = GetInputSizeX("PEOPLE");
-    PEOPLE_SIZE_Y  = GetInputSizeY("PEOPLE");
+    STARING         = GetInputMatrix("STARING");
+    STARING_SIZE_X  = GetInputSizeX("STARING");
+    STARING_SIZE_Y  = GetInputSizeY("STARING");
 
     // Outputs
 
-    STARING           = GetOutputMatrix("STARING");
-    STARING_SIZE_X    = GetOutputSizeX("STARING");
-    STARING_SIZE_Y    = GetOutputSizeY("STARING");
+    ACTION           = GetOutputArray("ACTION");
+    ACTION_SIZE      = GetOutputSize("ACTION");
 
     // Init
 
-    set_matrix(STARING, 0.0, PEOPLE_SIZE_Y, STARING_SIZE_X);
+    set_array(ACTION, 180.0, ACTION_SIZE);
 }
 
-StaringDetector::~StaringDetector() {
+Brain::~Brain() {
     // Destroy data structures that you allocated in Init.
     // destroy_array("starting_position");
     // Do NOT destroy data structures that you got from the
@@ -54,35 +53,23 @@ StaringDetector::~StaringDetector() {
     // destroy_matrix("PEOPLE");
 }
 
-void StaringDetector::Tick() {
+void Brain::Tick() {
 
-    for (int i = 0; i < PEOPLE_SIZE_Y; ++i) {
-        float alphaX = abs(PEOPLE[i][4]);
-        float alphaY = abs(PEOPLE[i][3]);
-
-        // STARING[i][0] = 180 + alphaX;
-        // STARING[i][1] = 270 + alphaY;
-
-        STARING[i][0] = 180.0 - std::atan(PEOPLE[i][0]/PEOPLE[i][2]) * (180/pi);
-        STARING[i][1] = 270.0 + std::atan(PEOPLE[i][1]/PEOPLE[i][2]) * (180/pi);
-
-        if(alphaX <= 15.0 && alphaY <= 15.0) {
-            STARING[i][2] = 1.0 - ( ( (alphaY + alphaX) / 2.0) / 15.0 );
+    for (int i = 0; i < STARING_SIZE_Y; ++i) {
+        if(STARING[i][0] > 0.0 && STARING[i][2] > 0.6) {
+            ACTION[0] = STARING[i][0];
+            ACTION[1] = STARING[i][1];
         }
-        else {
-            STARING[i][2] = 0.0;
-        }
-
-        // printf("Person %i ", i);
-        // printf("%f\n", STARING[i][2]);
+//        printf("Person %i ", i);
+//        printf("%f\t", ACTION[0]);
+//        printf("%f\t", ACTION[1]);
+//        printf("%f\n", STARING[i][2]);
     }
-
-    // printf("\n");
 
 }
 
 // Install the module. This code is executed during start-up.
 
-static InitClass init("StaringDetector", &StaringDetector::Create, "Source/UserModules/StaringDetector/");
+static InitClass init("Brain", &Brain::Create, "Source/UserModules/Brain/");
 
 

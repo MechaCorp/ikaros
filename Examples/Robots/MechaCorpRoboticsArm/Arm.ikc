@@ -18,6 +18,11 @@
 	/>
 
     <module
+         class    = "Brain"
+         name     = "Brain"
+     />
+
+    <module
         class          = "SmoothMovement"
         name           = "SmoothMovement"
         debug          = "false"
@@ -140,8 +145,22 @@
     />
 
     <connection
+        sourcemodule    = "StaringDetector"
+        source          = "STARING"
+        targetmodule    = "Brain"
+        target          = "STARING"
+    />
+
+   <!--  <connection
         sourcemodule    = "GazeDirector"
         source          = "TARGET_POSITION"
+        targetmodule    = "SmoothMovement"
+        target          = "GOAL_POSITION"
+    /> -->
+
+    <connection
+        sourcemodule    = "Brain"
+        source          = "ACTION"
         targetmodule    = "SmoothMovement"
         target          = "GOAL_POSITION"
     />
