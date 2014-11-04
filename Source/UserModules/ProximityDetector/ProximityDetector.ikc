@@ -1,0 +1,36 @@
+<?xml version="1.0"?>
+
+<group name="ProximityDetector" description="Detects if something is too close to a kinect">
+
+	<description type="text">
+		Detects if something is too close to a kinect
+	</description>
+
+	<example description="A simple example">
+		<module
+			class = "ProximityDetector"
+			name = "ProximityDetector"
+		/>
+	</example>
+
+	<input name="DEPTH" description="A matrix of Kinect depth data" />
+
+	<output name="PROXIMITY" description="A matrix with stimuli priority (0 to 1) and the goal position of the robot arm to move to when startled" size_x="4" size_y="1" />
+
+	<module class="ProximityDetector" />
+
+	<author>
+		<name>MechaCorp</name>
+		<email>mechacorp@lucs.lu.se</email>
+		<affiliation>Lund University Cognitive Science</affiliation>
+		<homepage>http://www.lucs.lu.se/</homepage>
+	</author>
+
+   <files>
+   		<file>ProximityDetector.h</file>
+   		<file>ProximityDetector.cc</file>
+   		<file>ProximityDetector.ikc</file>
+   </files>
+
+</group>
+

@@ -1,0 +1,205 @@
+<?xml version = "1.0"?>
+
+<group title = "Reflex example">
+
+    <description>
+        This will run the reflex module of the MechaCorpRobotics Advanced Nonhumanoid Robot Head Simulation Device
+    </description>
+
+    <module
+        class          = "Dynamixel"
+        name           = "Dynamixel"
+        device         = "/dev/cu.usbserial-A40129WB"
+        index_mode     = "indirect"
+        servo_id       = "1 2 3"
+        angle_unit     = "degrees"
+        start_up_delay = "10"
+  />
+
+    <module
+        class       = "SmoothMovement"
+        name        = "SmoothMovement"
+        debug       = "false"
+        phase       = "0"
+        period      = "1"
+    />
+
+    <module
+        class       = "Kinect"
+        name        = "Kinect"
+        mode        = "mm"
+   />
+
+   <module
+       class        = "Scale"
+       name         = "Scale"
+       factor       = "0.00048851978505"
+       comment      = "This module could be removed if Image-object allowed scaling."
+   />
+
+    <module
+        class    = "ProximityDetector"
+        name     = "ProximityDetector"
+    />
+
+    <module
+     class    = "Brain"
+     name     = "Brain"
+    />
+
+  <!-- Order is important -->
+
+
+    <!-- Movements -->
+
+    <connection
+        sourcemodule = "Dynamixel"
+        source       = "FEEDBACK_PRESENT_POSITION"
+        targetmodule = "SmoothMovement"
+        target       = "CURRENT_POSITION"
+    />
+
+    <connection
+        sourcemodule = "SmoothMovement"
+        source       = "VELOCITY"
+        targetmodule = "Dynamixel"
+        target       = "MOVING_SPEED"
+    />
+
+    <connection
+        sourcemodule = "SmoothMovement"
+        source       = "POSITION_OUT"
+        targetmodule = "Dynamixel"
+        target       = "GOAL_POSITION"
+    />
+
+    <!-- Kinect and tracking -->
+
+    <connection
+        sourcemodule    = "Kinect"
+        source          = "DEPTH"
+        targetmodule    = "Scale"
+        target          = "INPUT"
+    />
+
+    <connection
+        sourcemodule    = "Kinect"
+        source          = "DEPTH"
+        targetmodule    = "ProximityDetector"
+        target          = "DEPTH"
+    />
+
+    <!-- The good stuff -->
+
+    <connection
+        sourcemodule    = "ProximityDetector"
+        source          = "PROXIMITY"
+        targetmodule    = "Brain"
+        target          = "PROXIMITY"
+    />
+
+    <connection
+        sourcemodule    = "Brain"
+        source          = "ACTION"
+        targetmodule    = "SmoothMovement"
+        target          = "GOAL_POSITION"
+    />
+
+    <!-- <connection
+        sourcemodule    = "ProximityDetector"
+        source          = "PROXIMITY"
+        targetmodule    = "SmoothMovement"
+        target          = "GOAL_POSITION"
+    /> -->
+
+
+  <view name = "MechaCorp Robotic Arm" object_size = "50" >
+
+        <object
+            class  = "Plot"
+            title  = "Velocity output from smoothing"
+            module = "SmoothMovement"
+            source = "VELOCITY"
+            min    = "0"
+            max    = "1"
+            x      = "6"  y = "0"
+            w      = "4"  h = "4"
+            color  = "red, yellow, blue"
+            select = "0,1,2"
+        />
+
+        <object
+            class  = "Plot"
+            title  = "Position output from smoothing"
+            module = "SmoothMovement"
+            source = "POSITION_OUT"
+            min    = "0"
+            max    = "360"
+            x      = "6"    y = "4"
+            w      = "4"    h = "4"
+            color  = "red, yellow, blue"
+            select = "0,1,2"
+        />
+
+        <object
+            class  = "Plot"
+            title  = "Actual Positions"
+            module = "Dynamixel"
+            source = "FEEDBACK_PRESENT_POSITION"
+            x      = "0"  y = "0"
+            w      = "2"  h = "2"
+            color  = "red, green, blue"
+            select = "0,1,2"
+            max    = "360"
+
+        />
+
+        <object
+            class  = "Plot"
+            title  = "Speed"
+            module = "Dynamixel"
+            source = "FEEDBACK_PRESENT_SPEED"
+            x      = "2"  y = "0"
+            w      = "2"  h = "2"
+            color  = "red, green, blue"
+            select = "0,1,2"
+            min    = "-1"
+            max    = "1"
+
+        />
+
+        <object
+            class  = "Plot"
+            title  = "Temperature (C)"
+            module = "Dynamixel"
+            source = "FEEDBACK_PRESENT_TEMPERATURE"
+            x      = "4" y = "0"
+            w      = "2" h = "2"
+            color  = "red, green, blue"
+            select = "0,1,2"
+            max    = "80"
+        />
+
+        <object
+            class    = "Image"
+            title    = " "
+            dragarea = "no"
+            type     = "file"
+            file     = "Arm.jpg"
+            x        = "0" y = "2"
+            w        = "4" h  = "4"
+      />
+
+        <object
+            class  = "Image"
+            title  = "Kinect camera"
+            type   = "rgb"
+            module = "Kinect"
+            source = "RED+GREEN+BLUE"
+            x      = "0" y = "6"
+            w      = "6" h = "5"
+        />
+
+    </view>
+</group>
+
