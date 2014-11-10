@@ -28,15 +28,31 @@
 
 using namespace ikaros;
 
+Brain::Brain(Parameter * p) : Module(p) {
+
+    no_of_inputs    = GetIntValue("no_of_inputs");
+
+    PLAN_INDEX      = new char * [no_of_inputs];
+    STRENGTH_INDEX  = new char * [no_of_inputs];
+
+    PLAN            = new float * [no_of_inputs];
+    STRENGTH        = new float * [no_of_inputs];
+
+    for( int i = 0; i < no_of_inputs; i++ ) {
+        AddInput( PLAN_INDEX[i] = create_formatted_string("PLAN_%d", i+1) );
+        AddInput( STRENGTH_INDEX[i] = create_formatted_string("STRENGTH_%d", i+1) );
+    }
+
+    AddOutput("ACTION");
+}
+
 void Brain::Init() {
     // Inputs
 
-    STARING         = GetInputMatrix("STARING");
-    STARING_SIZE_X  = GetInputSizeX("STARING");
-    STARING_SIZE_Y  = GetInputSizeY("STARING");
-
-    PERSONOFINTEREST         = GetInputArray("PERSONOFINTEREST");
-    PERSONOFINTEREST_SIZE    = GetInputSize("PERSONOFINTEREST");
+    for(int i = 0; i < no_of_inputs; i++) {
+        PLAN[i]     = GetInputArray(PLAN_INDEX[i]);
+        STRENGTH[i] = GetInputArray(STRENGTH_INDEX[i], false);
+    }
 
     // Outputs
 
@@ -54,23 +70,47 @@ Brain::~Brain() {
     // Do NOT destroy data structures that you got from the
     // kernel with GetInputArray, GetInputMatrix etc.
     // destroy_matrix("PEOPLE");
+
+    for (int i = 0; i < no_of_inputs; i++) {
+        destroy_string(PLAN_INDEX[i]);
+        destroy_string(STRENGTH_INDEX[i]);
+    }
+
+    delete [] PLAN_INDEX;
+    delete [] STRENGTH_INDEX;
+
+    delete [] PLAN;
+    delete [] STRENGTH;
+}
+
+void Brain::SetSizes() {
+    SetOutputSize("ACTION", 3);
 }
 
 void Brain::Tick() {
+    int highestStimuliIndex = 100;
+    float highestStimuli = 0.0;
 
-    for (int i = 0; i < STARING_SIZE_Y; ++i) {
-        if(STARING[i][0] > 0.0 && STARING[i][2] > 0.6) {
-            ACTION[0] = STARING[i][0];
-            ACTION[1] = STARING[i][1];
-            printf("\n\nStaring at %i\n", i);
+    for (int i = 0; i < no_of_inputs; ++i) {
+
+        if(*STRENGTH[i] > highestStimuli) {
+            highestStimuli = *STRENGTH[i];
+            highestStimuliIndex = i;
         }
+
+        printf("%i\t", i);
+        printf("%f\t", *STRENGTH[i]);
+        printf("%f\t", PLAN[i][0]);
+        printf("%f\t", PLAN[i][1]);
+        printf("%f\n", PLAN[i][2]);
     }
 
-    if(PERSONOFINTEREST[2] > 0.5) {
-        ACTION[0] = PERSONOFINTEREST[0];
-        ACTION[1] = PERSONOFINTEREST[1];
+    if( highestStimuliIndex != 100 ) {
+        printf("Action %i\n\n", highestStimuliIndex);
+        ACTION[0] = PLAN[highestStimuliIndex][0];
+        ACTION[1] = PLAN[highestStimuliIndex][1];
+        ACTION[2] = PLAN[highestStimuliIndex][2];
     }
-
 }
 
 // Install the module. This code is executed during start-up.

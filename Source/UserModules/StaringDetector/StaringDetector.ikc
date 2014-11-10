@@ -15,7 +15,8 @@
 
 	<input name="PEOPLE" description="A matrix of tracked people in the room" />
 
-	<output name="STARING" description="A matrix with stimuli priority (0 to 1) and the position of the stimuli in degrees for the different people (by index)" size_x="3" size_y="3" />
+  <output name="PLAN" description="An array of movement instructions for three servos, each instruction is specified in degrees." size="3" />
+  <output name="STRENGTH" description="A number between 1.0 and 0.0 which specifies the strength of the action plan, 1.0 being the highest." size="1" />
 
 	<module class="StaringDetector" />
 

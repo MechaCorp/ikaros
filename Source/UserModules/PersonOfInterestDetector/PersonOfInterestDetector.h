@@ -44,8 +44,11 @@ public:
 
     // Outputs
 
-    float *     ACTION;
-    int         ACTION_SIZE;
+    float *     PLAN;
+    int         PLAN_SIZE;
+
+    float *     STRENGTH;
+    int         STRENGTH_SIZE;
 
 };
 

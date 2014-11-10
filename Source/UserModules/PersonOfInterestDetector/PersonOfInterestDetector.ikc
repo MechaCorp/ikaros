@@ -3,7 +3,7 @@
 <group name="PersonOfInterestDetector" description="Detects if two people are looking at a third person">
 
 	<description type="text">
-		Detects if two people are looking at a third person
+		Detects if two people are looking at a third person and instructs a robot arm to attend to this third person.
 	</description>
 
 	<example description="A simple example">
@@ -15,7 +15,8 @@
 
 	<input name="PEOPLE" description="A matrix of people and gaze data" />
 
-	<output name="ACTION" description="Three degrees (x, y, z) for the robot to move to" size="3" />
+  <output name="PLAN" description="An array of movement instructions for three servos, each instruction is specified in degrees." size="3" />
+  <output name="STRENGTH" description="A number between 1.0 and 0.0 which specifies the strength of the action plan, 1.0 being the highest." size="1" />
 
 	<module class="PersonOfInterestDetector" />
 

@@ -32,19 +32,21 @@ using namespace ikaros;
 void ProximityDetector::Init() {
     // Inputs
 
-    DEPTH         = GetInputMatrix("DEPTH");
-    DEPTH_SIZE_X  = GetInputSizeX("DEPTH");
-    DEPTH_SIZE_Y  = GetInputSizeY("DEPTH");
+    DEPTH               = GetInputMatrix("DEPTH");
+    DEPTH_SIZE_X        = GetInputSizeX("DEPTH");
+    DEPTH_SIZE_Y        = GetInputSizeY("DEPTH");
 
     // Outputs
 
-    PROXIMITY           = GetOutputMatrix("PROXIMITY");
-    PROXIMITY_SIZE_X    = GetOutputSizeX("PROXIMITY");
-    PROXIMITY_SIZE_Y    = GetOutputSizeY("PROXIMITY");
+    PLAN                = GetOutputArray("PLAN");
+    PLAN_SIZE           = GetOutputSize("PLAN");
+
+    STRENGTH            = GetOutputArray("STRENGTH");
+    STRENGTH_SIZE       = GetOutputSize("STRENGTH");
 
     // Init
 
-    set_matrix(PROXIMITY, 0.0, PROXIMITY_SIZE_Y, PROXIMITY_SIZE_X);
+    set_array(PLAN, 180.0, PLAN_SIZE);
 }
 
 ProximityDetector::~ProximityDetector() {
@@ -55,25 +57,28 @@ ProximityDetector::~ProximityDetector() {
     // destroy_matrix("PEOPLE");
 }
 
+
+
 void ProximityDetector::Tick() {
-    float minimum = 1000.0;
+    float minimum = 2000.0;
 
     for(int x = 0; x < DEPTH_SIZE_X; x++) {
         for(int y = 0; y < DEPTH_SIZE_Y; y++) {
-            minimum = std::min(DEPTH[x][y], minimum);
-            printf("%f\n", minimum);
+            if(DEPTH[y][x] > 0.0) {
+                minimum = std::min(DEPTH[y][x], minimum);
+            }
         }
     }
 
-    if(minimum < 500.0) {
-        printf("To close!\n");
-        PROXIMITY[0][0] = 1.0f;
-        PROXIMITY[0][1] = 90.0f;
-        PROXIMITY[0][2] = 180.0f;
-        PROXIMITY[0][3] = 90.0f;
+    if(minimum < 550.0) {
+        //printf("Too close!\n");
+        STRENGTH[0] = 1.0f;
+        PLAN[0] = 120.0f;
+        PLAN[1] = 120.0f;
+        PLAN[2] = 120.0f;
     }
     else {
-        PROXIMITY[0][0] = 0.0f;
+        STRENGTH[0] = 0.0f;
     }
 
 }

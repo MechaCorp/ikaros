@@ -31,19 +31,21 @@ using namespace ikaros;
 void StaringDetector::Init() {
     // Inputs
 
-    PEOPLE         = GetInputMatrix("PEOPLE");
-    PEOPLE_SIZE_X  = GetInputSizeX("PEOPLE");
-    PEOPLE_SIZE_Y  = GetInputSizeY("PEOPLE");
+    PEOPLE              = GetInputMatrix("PEOPLE");
+    PEOPLE_SIZE_X       = GetInputSizeX("PEOPLE");
+    PEOPLE_SIZE_Y       = GetInputSizeY("PEOPLE");
 
     // Outputs
 
-    STARING           = GetOutputMatrix("STARING");
-    STARING_SIZE_X    = GetOutputSizeX("STARING");
-    STARING_SIZE_Y    = GetOutputSizeY("STARING");
+    PLAN                = GetOutputArray("PLAN");
+    PLAN_SIZE           = GetOutputSize("PLAN");
+
+    STRENGTH            = GetOutputArray("STRENGTH");
+    STRENGTH_SIZE       = GetOutputSize("STRENGTH");
 
     // Init
 
-    set_matrix(STARING, 0.0, PEOPLE_SIZE_Y, STARING_SIZE_X);
+    set_array(PLAN, 180.0, PLAN_SIZE);
 }
 
 StaringDetector::~StaringDetector() {
@@ -55,30 +57,28 @@ StaringDetector::~StaringDetector() {
 }
 
 void StaringDetector::Tick() {
-
     for (int i = 0; i < PEOPLE_SIZE_Y; ++i) {
-        float alphaX = abs(PEOPLE[i][4]);
-        float alphaY = abs(PEOPLE[i][3]);
+        if(PEOPLE[i][2] > 100.0)  {
 
-        // STARING[i][0] = 180 + alphaX;
-        // STARING[i][1] = 270 + alphaY;
+            float alphaX = abs(PEOPLE[i][4]);
+            float alphaY = abs(PEOPLE[i][3]);
 
-        STARING[i][0] = 180.0 - std::atan(PEOPLE[i][0]/PEOPLE[i][2]) * (180/pi);
-        STARING[i][1] = 270.0 + std::atan(PEOPLE[i][1]/PEOPLE[i][2]) * (180/pi);
-
-        if(alphaX <= 15.0 && alphaY <= 15.0) {
-            STARING[i][2] = 1.0 - ( ( (alphaY + alphaX) / 2.0) / 15.0 );
+            if(alphaX <= 15.0 && alphaY <= 15.0) {
+                STRENGTH[0] = 1.0 - ( ( (alphaY + alphaX) / 2.0) / 15.0 );
+                PLAN[0] = 180.0 - std::atan(PEOPLE[i][0]/PEOPLE[i][2]) * (180/pi);
+                PLAN[1] = 270.0 + std::atan(PEOPLE[i][1]/PEOPLE[i][2]) * (180/pi);
+                PLAN[2] = 180.0;
+                printf("Staring %i \t", i);
+                printf("%f\t", STRENGTH[0]);
+                printf("%f\t", alphaX);
+                printf("%f\n\n", alphaY);
+                return;
+            }
+            else {
+                STRENGTH[0] = 0.0;
+            }
         }
-        else {
-            STARING[i][2] = 0.0;
-        }
-
-        // printf("Person %i ", i);
-        // printf("%f\n", STARING[i][2]);
     }
-
-    // printf("\n");
-
 }
 
 // Install the module. This code is executed during start-up.

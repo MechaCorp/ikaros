@@ -44,9 +44,11 @@ public:
 
     // Outputs
 
-    float **    STARING;
-    int         STARING_SIZE_X;
-    int         STARING_SIZE_Y;
+    float *     PLAN;
+    int         PLAN_SIZE;
+
+    float *     STRENGTH;
+    int         STRENGTH_SIZE;
 };
 
 #endif

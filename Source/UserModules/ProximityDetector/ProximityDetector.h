@@ -44,9 +44,11 @@ public:
 
     // Outputs
 
-    float **    PROXIMITY;
-    int         PROXIMITY_SIZE_X;
-    int         PROXIMITY_SIZE_Y;
+    float *     PLAN;
+    int         PLAN_SIZE;
+
+    float *     STRENGTH;
+    int         STRENGTH_SIZE;
 };
 
 #endif

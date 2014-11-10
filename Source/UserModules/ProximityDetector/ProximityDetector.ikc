@@ -15,7 +15,8 @@
 
 	<input name="DEPTH" description="A matrix of Kinect depth data" />
 
-	<output name="PROXIMITY" description="A matrix with stimuli priority (0 to 1) and the goal position of the robot arm to move to when startled" size_x="4" size_y="1" />
+	<output name="PLAN" description="An array of movement instructions for three servos, each instruction is specified in degrees." size="3" />
+  <output name="STRENGTH" description="A number between 1.0 and 0.0 which specifies the strength of the action plan, 1.0 being the highest." size="1" />
 
 	<module class="ProximityDetector" />
 

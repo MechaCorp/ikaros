@@ -1,33 +1,31 @@
 <?xml version = "1.0"?>
 
-<group title = "Reflex example">
+<group title = "Robot Arm Example">
 
     <description>
-        This will run the reflex module of the MechaCorpRobotics Advanced Nonhumanoid Robot Head Simulation Device
+        This is an example file for using the MechaCorp Robotics arm in ikaros.
     </description>
 
     <module
-        class          = "Dynamixel"
-        name           = "Dynamixel"
-        device         = "/dev/cu.usbserial-A40129WB"
-        index_mode     = "indirect"
-        servo_id       = "1 2 3"
-        angle_unit     = "degrees"
+        class = "Dynamixel"
+        name = "Dynamixel"
+        device = "/dev/cu.usbserial-A40129WB"
+        index_mode = "indirect"
+        servo_id = "1 2 3"
+        angle_unit = "degrees"
         start_up_delay = "10"
   />
 
     <module
-        class       = "SmoothMovement"
-        name        = "SmoothMovement"
-        debug       = "false"
-        phase       = "0"
-        period      = "1"
+        class          = "SmoothMovement"
+        name           = "SmoothMovement"
+        debug          = "false"
     />
 
     <module
-        class       = "Kinect"
-        name        = "Kinect"
-        mode        = "mm"
+        class   = "Kinect"
+        name    = "Kinect"
+        mode    = "mm"
    />
 
    <module
@@ -37,40 +35,22 @@
        comment      = "This module could be removed if Image-object allowed scaling."
    />
 
-   <module
-        class    = "HeadPoseTracker"
-        name     = "HeadPoseTracker"
-        period   = "2"
-        phase    = "0"
-    />
-
     <module
-      class    = "PeopleTracker"
-      name     = "PeopleTracker"
-      period   = "2"
-      phase    = "0"
-    />
+         class    = "HeadPoseTracker"
+         name     = "HeadPoseTracker"
+         period   = "2"
+         phase    = "0"
+     />
 
-    <module
-      class    = "StaringDetector"
-      name     = "StaringDetector"
-    />
+     <module
+          class    = "GazeDirector"
+          name     = "GazeDirector"
+          period   = "2"
+          phase    = "0"
+      />
 
-    <module
-        class    = "ProximityDetector"
-        name     = "ProximityDetector"
-    />
-
-    <module
-        class    = "Brain"
-        name     = "Brain"
-        no_of_inputs = "2"
-    />
 
   <!-- Order is important -->
-
-
-    <!-- Movements -->
 
     <connection
         sourcemodule = "Dynamixel"
@@ -93,20 +73,11 @@
         target       = "GOAL_POSITION"
     />
 
-    <!-- Kinect and tracking -->
-
     <connection
         sourcemodule    = "Kinect"
         source          = "DEPTH"
         targetmodule    = "Scale"
         target          = "INPUT"
-    />
-
-    <connection
-        sourcemodule    = "Kinect"
-        source          = "DEPTH"
-        targetmodule    = "ProximityDetector"
-        target          = "DEPTH"
     />
 
     <connection
@@ -119,65 +90,16 @@
     <connection
         sourcemodule    = "HeadPoseTracker"
         source          = "HEADS"
-        targetmodule    = "PeopleTracker"
+        targetmodule    = "GazeDirector"
         target          = "HEADS"
     />
 
-    <!-- The good stuff -->
-
     <connection
-        sourcemodule    = "PeopleTracker"
-        source          = "PEOPLE"
-        targetmodule    = "StaringDetector"
-        target          = "PEOPLE"
-    />
-
-    <connection
-        sourcemodule    = "ProximityDetector"
-        source          = "PLAN"
-        targetmodule    = "Brain"
-        target          = "PLAN_1"
-        delay           = "0"
-    />
-
-    <connection
-        sourcemodule    = "ProximityDetector"
-        source          = "STRENGTH"
-        targetmodule    = "Brain"
-        target          = "STRENGTH_1"
-        delay           = "0"
-    />
-
-    <connection
-        sourcemodule    = "StaringDetector"
-        source          = "PLAN"
-        targetmodule    = "Brain"
-        target          = "PLAN_2"
-        delay           = "0"
-    />
-
-    <connection
-        sourcemodule    = "StaringDetector"
-        source          = "STRENGTH"
-        targetmodule    = "Brain"
-        target          = "STRENGTH_2"
-        delay           = "0"
-    />
-
-    <connection
-        sourcemodule    = "Brain"
-        source          = "ACTION"
+        sourcemodule    = "GazeDirector"
+        source          = "TARGET_POSITION"
         targetmodule    = "SmoothMovement"
         target          = "GOAL_POSITION"
     />
-
-    <!-- <connection
-        sourcemodule    = "ProximityDetector"
-        source          = "PROXIMITY"
-        targetmodule    = "SmoothMovement"
-        target          = "GOAL_POSITION"
-    /> -->
-
 
   <view name = "MechaCorp Robotic Arm" object_size = "50" >
 

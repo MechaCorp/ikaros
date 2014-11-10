@@ -1,0 +1,40 @@
+<?xml version="1.0"?>
+
+<group name="ActionPlanPrioritizer" description="Is ActionPlanPrioritizer">
+
+	<description type="text">
+		Is ActionPlanPrioritizer
+	</description>
+
+	<example description="A simple example">
+		<module
+			class = "ActionPlanPrioritizer"
+			name = "ActionPlanPrioritizer"
+		/>
+	</example>
+
+	<!-- <input name="STARING" description="A matrix of people and staring" />
+  <input name="PERSONOFINTEREST" description="An array of the interesting person" />
+  <input name="PROXIMITY" description="A matrix of proximity information" /> -->
+
+  <input name="STIMULI" description="A matrix of stimuli information" />
+
+	<output name="ACTION" description="Three degrees (x, y, z) for the robot to move to" size="3" />
+
+	<module class="ActionPlanPrioritizer" />
+
+	<author>
+		<name>MechaCorp</name>
+		<email>mechacorp@lucs.lu.se</email>
+		<affiliation>Lund University Cognitive Science</affiliation>
+		<homepage>http://www.lucs.lu.se/</homepage>
+	</author>
+
+   <files>
+   		<file>ActionPlanPrioritizer.h</file>
+   		<file>ActionPlanPrioritizer.cc</file>
+   		<file>ActionPlanPrioritizer.ikc</file>
+   </files>
+
+</group>
+

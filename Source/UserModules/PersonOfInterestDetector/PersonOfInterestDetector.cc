@@ -39,12 +39,15 @@ void PersonOfInterestDetector::Init() {
 
     // Outputs
 
-    ACTION           = GetOutputArray("ACTION");
-    ACTION_SIZE      = GetOutputSize("ACTION");
+    PLAN                = GetOutputArray("PLAN");
+    PLAN_SIZE           = GetOutputSize("PLAN");
+
+    STRENGTH            = GetOutputArray("STRENGTH");
+    STRENGTH_SIZE       = GetOutputSize("STRENGTH");
 
     // Init
 
-    set_array(ACTION, 180.0, ACTION_SIZE);
+    set_array(PLAN, 180.0, PLAN_SIZE);
     set_matrix(targets, 0.0, 2, 3);
 
 }
@@ -57,6 +60,7 @@ PersonOfInterestDetector::~PersonOfInterestDetector() {
     // destroy_matrix("PEOPLE");
 }
 float const sensitivity = 30.0;
+
 bool isClose(float degree1x, float degree1y, float degree2x, float degree2y) {
     if( abs(degree1x - degree2x) < sensitivity && abs(degree1y - degree2y) < sensitivity ) {
         return true;
@@ -77,22 +81,22 @@ void PersonOfInterestDetector::Tick() {
 
     if(targets[0][0] > 0.0 && targets[1][0] > 0.0 && targets[2][0] > 0.0) {
         if( isClose(targets[0][0], targets[0][1], targets[1][0], targets[1][1]) ) {
-            ACTION[0] = 180.0 - std::atan(PEOPLE[2][0]/PEOPLE[2][2]) * (180/pi);
-            ACTION[1] = 270.0 + std::atan(PEOPLE[2][1]/PEOPLE[2][2]) * (180/pi);
-            ACTION[2] = 1.0;
+            PLAN[0] = 180.0 - std::atan(PEOPLE[2][0]/PEOPLE[2][2]) * (180/pi);
+            PLAN[1] = 270.0 + std::atan(PEOPLE[2][1]/PEOPLE[2][2]) * (180/pi);
+            STRENGTH[0] = 1.0;
             printf("\n\nLooking at %i\n\n", 2);
         }
 
         if( isClose(targets[0][0], targets[0][1], targets[2][0], targets[2][1]) ) {
-            ACTION[0] = 180.0 - std::atan(PEOPLE[1][0]/PEOPLE[1][2]) * (180/pi);
-            ACTION[1] = 270.0 + std::atan(PEOPLE[1][1]/PEOPLE[1][2]) * (180/pi);
-            ACTION[2] = 1.0;
+            PLAN[0] = 180.0 - std::atan(PEOPLE[1][0]/PEOPLE[1][2]) * (180/pi);
+            PLAN[1] = 270.0 + std::atan(PEOPLE[1][1]/PEOPLE[1][2]) * (180/pi);
+            STRENGTH[0] = 1.0;
             printf("\n\nLooking at %i\n\n", 1);
         }
         if( isClose(targets[1][0], targets[1][1], targets[2][0], targets[2][1]) ) {
-            ACTION[0] = 180.0 - std::atan(PEOPLE[0][0]/PEOPLE[0][2]) * (180/pi);
-            ACTION[1] = 270.0 + std::atan(PEOPLE[0][1]/PEOPLE[0][2]) * (180/pi);
-            ACTION[2] = 1.0;
+            PLAN[0] = 180.0 - std::atan(PEOPLE[0][0]/PEOPLE[0][2]) * (180/pi);
+            PLAN[1] = 270.0 + std::atan(PEOPLE[0][1]/PEOPLE[0][2]) * (180/pi);
+            STRENGTH[0] = 1.0;
             printf("\n\nLooking at %i\n\n", 0);
         }
     }

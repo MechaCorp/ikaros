@@ -13,8 +13,10 @@
 		/>
 	</example>
 
-	<input name="STARING" description="A matrix of people and staring" />
-  <input name="PERSONOFINTEREST" description="An array of the interesting person" />
+
+  <parameter name="no_of_inputs" type="int" default="2" description="The number of inputs"/>
+
+  <input name="*" description="A number of inputs named INPUT_1 and VALUE_1 etc" />
 
 	<output name="ACTION" description="Three degrees (x, y, z) for the robot to move to" size="3" />
 

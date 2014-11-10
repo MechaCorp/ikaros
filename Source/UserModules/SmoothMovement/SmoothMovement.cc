@@ -71,21 +71,29 @@ SmoothMovement::~SmoothMovement() {
     // kernel with GetInputArray, GetInputMatrix etc.
 }
 
-float percent = 0.0;
-float percent2 = 0.0;
+// float percent = 0.0;
+float * percent = create_array(3);
+// float percent2 = 0.0;
 
 void SmoothMovement::Tick() {
     // Calculate how much we have to move between two positions from 0 to 1
     // where 1 means that we are there and 0 means that we have 300 (max) degrees to move
 
-    if(GOAL_POSITION[0] > 0.0 && GOAL_POSITION[1] > 0.0) {
-        percent = 1 - fabs(CURRENT_POSITION[0] - GOAL_POSITION[0]) / (300);
-        percent2 = 1 - fabs(CURRENT_POSITION[1] - GOAL_POSITION[1]) / (300);
-
-        // Change position and speed
-        ::CalcDampedSimpleHarmonicMotion(&POSITION_OUT[0], &VELOCITY[0], GOAL_POSITION[0], percent, 1.0, 1.0);
-        ::CalcDampedSimpleHarmonicMotion(&POSITION_OUT[1], &VELOCITY[1], GOAL_POSITION[1], percent2, 1.0, 1.0);
+    for (int i = 0; i < 3; ++i) {
+        if(GOAL_POSITION[i] > 0.0) {
+            percent[i] = 1 - fabs(CURRENT_POSITION[i] - GOAL_POSITION[i]) / (300);
+            ::CalcDampedSimpleHarmonicMotion(&POSITION_OUT[i], &VELOCITY[i], GOAL_POSITION[i], percent[i], 1.0, 1.0);
+        }
     }
+
+    // if(GOAL_POSITION[0] > 0.0 && GOAL_POSITION[1] > 0.0) {
+    //     percent = 1 - fabs(CURRENT_POSITION[0] - GOAL_POSITION[0]) / (300);
+    //     percent2 = 1 - fabs(CURRENT_POSITION[1] - GOAL_POSITION[1]) / (300);
+
+    //     // Change position and speed
+    //     ::CalcDampedSimpleHarmonicMotion(&POSITION_OUT[0], &VELOCITY[0], GOAL_POSITION[0], percent, 1.0, 1.0);
+    //     ::CalcDampedSimpleHarmonicMotion(&POSITION_OUT[1], &VELOCITY[1], GOAL_POSITION[1], percent2, 1.0, 1.0);
+    // }
 
     // Debug log
     if(debug) {
@@ -93,15 +101,9 @@ void SmoothMovement::Tick() {
 
         printf("%f\t", CURRENT_POSITION[0]);
         printf("%f\t", GOAL_POSITION[0]);
-        printf("%f\t", percent);
+        printf("%f\t", percent[0]);
         printf("%f\t", POSITION_OUT[0]);
         printf("%f\n", VELOCITY[0]);
-
-        printf("%f\t", CURRENT_POSITION[1]);
-        printf("%f\t", GOAL_POSITION[1]);
-        printf("%f\t", percent2);
-        printf("%f\t", POSITION_OUT[1]);
-        printf("%f", VELOCITY[1]);
 
         printf("\n");
     }

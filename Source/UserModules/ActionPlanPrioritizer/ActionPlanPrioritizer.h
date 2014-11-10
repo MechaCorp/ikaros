@@ -1,5 +1,5 @@
 //
-//	Brain.h		This file is a part of the IKAROS project
+//	ActionPlanPrioritizer.h		This file is a part of the IKAROS project
 //
 //    Copyright (C) 2012 <Author Name>
 //
@@ -20,34 +20,38 @@
 //    See http://www.ikaros-project.org/ for more information.
 //
 
-#ifndef Brain_
-#define Brain_
+#ifndef ActionPlanPrioritizer_
+#define ActionPlanPrioritizer_
 
 #include "IKAROS.h"
 
-class Brain: public Module
+class ActionPlanPrioritizer: public Module
 {
 public:
-    static Module * Create(Parameter * p) { return new Brain(p); }
+    static Module * Create(Parameter * p) { return new ActionPlanPrioritizer(p); }
 
-    Brain(Parameter * p);
-    virtual ~Brain();
+    ActionPlanPrioritizer(Parameter * p) : Module(p) {}
+    virtual ~ActionPlanPrioritizer();
 
-    void        SetSizes();
     void 		Init();
     void 		Tick();
 
     // Inputs
-    // Magic
 
-    char **     PLAN_INDEX;
-    char **     STRENGTH_INDEX;
+    // float **    STARING;
+    // int         STARING_SIZE_X;
+    // int         STARING_SIZE_Y;
 
-    float **    PLAN;
-    float **    STRENGTH;
+    // float **    PROXIMITY;
+    // int         PROXIMITY_SIZE_X;
+    // int         PROXIMITY_SIZE_Y;
 
-    int         no_of_inputs;
-    //int         size;
+    // float *     PERSONOFINTEREST;
+    // int         PERSONOFINTEREST_SIZE;
+
+    float **    STIMULI;
+    int         STIMULI_SIZE_X;
+    int         STIMULI_SIZE_Y;
 
     // Outputs
 

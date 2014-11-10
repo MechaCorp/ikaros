@@ -55,12 +55,12 @@
          phase    = "0"
      />
 
-     <module
+     <!-- <module
           class    = "GazeDirector"
           name     = "GazeDirector"
           period   = "2"
           phase    = "0"
-      />
+      /> -->
 
       <module
            class    = "StaringDetector"
@@ -135,12 +135,12 @@
         target          = "GOAL_POSITION"
     /> -->
 
-    <connection
+    <!-- <connection
         sourcemodule    = "HeadPoseTracker"
         source          = "HEADS"
         targetmodule    = "GazeDirector"
         target          = "HEADS"
-    />
+    /> -->
 
     <connection
         sourcemodule    = "PeopleTracker"

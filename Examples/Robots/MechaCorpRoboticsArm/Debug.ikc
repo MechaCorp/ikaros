@@ -171,27 +171,33 @@
         target          = "GOAL_POSITION"
     />
 
-    <!-- <connection
-        sourcemodule    = "ProximityDetector"
-        source          = "PROXIMITY"
-        targetmodule    = "SmoothMovement"
-        target          = "GOAL_POSITION"
-    /> -->
-
 
   <view name = "MechaCorp Robotic Arm" object_size = "50" >
 
         <object
             class  = "Plot"
-            title  = "Velocity output from smoothing"
-            module = "SmoothMovement"
-            source = "VELOCITY"
+            title  = "Strength of Staring"
+            module = "StaringDetector"
+            source = "STRENGTH"
             min    = "0"
             max    = "1"
-            x      = "6"  y = "0"
+            x      = "0"  y = "0"
             w      = "4"  h = "4"
-            color  = "red, yellow, blue"
-            select = "0,1,2"
+            color  = "yellow"
+            select = "0"
+        />
+
+        <object
+            class  = "Plot"
+            title  = "Strength of Proximity"
+            module = "ProximityDetector"
+            source = "STRENGTH"
+            min    = "0"
+            max    = "1"
+            x      = "0"  y = "4"
+            w      = "4"  h = "4"
+            color  = "green"
+            select = "0"
         />
 
         <object
@@ -201,7 +207,7 @@
             source = "POSITION_OUT"
             min    = "0"
             max    = "360"
-            x      = "6"    y = "4"
+            x      = "4"    y = "4"
             w      = "4"    h = "4"
             color  = "red, yellow, blue"
             select = "0,1,2"
@@ -212,7 +218,7 @@
             title  = "Actual Positions"
             module = "Dynamixel"
             source = "FEEDBACK_PRESENT_POSITION"
-            x      = "0"  y = "0"
+            x      = "4"  y = "0"
             w      = "2"  h = "2"
             color  = "red, green, blue"
             select = "0,1,2"
@@ -225,7 +231,7 @@
             title  = "Speed"
             module = "Dynamixel"
             source = "FEEDBACK_PRESENT_SPEED"
-            x      = "2"  y = "0"
+            x      = "2"  y = "8"
             w      = "2"  h = "2"
             color  = "red, green, blue"
             select = "0,1,2"
@@ -239,7 +245,7 @@
             title  = "Temperature (C)"
             module = "Dynamixel"
             source = "FEEDBACK_PRESENT_TEMPERATURE"
-            x      = "4" y = "0"
+            x      = "4" y = "8"
             w      = "2" h = "2"
             color  = "red, green, blue"
             select = "0,1,2"
@@ -252,10 +258,10 @@
             dragarea = "no"
             type     = "file"
             file     = "Arm.jpg"
-            x        = "0" y = "2"
+            x        = "0" y = "8"
             w        = "4" h  = "4"
       />
-
+<!--
         <object
             class  = "Image"
             title  = "Kinect camera"
@@ -264,7 +270,7 @@
             source = "RED+GREEN+BLUE"
             x      = "0" y = "6"
             w      = "6" h = "5"
-        />
+        /> -->
 
     </view>
 </group>
