@@ -151,39 +151,25 @@ void HeadPoseTracker::Tick(){
                          g_th
     );
 
+    set_matrix(HEADS, 0, HEADS_SIZE_X, HEADS_SIZE_Y);
+
     if( g_means.size() > 0 ){
-      //cout << "1: Estimated: " << floor(g_means[0][0]) << "\t" << floor(g_means[0][1]) << "\t" << floor(g_means[0][2]) << "\t" << floor(g_means[0][3]) << "\t" << floor(g_means[0][4]) << "\t" << floor(g_means[0][5]) <<endl;
-      //cout << "2: Estimated: " << floor(g_means[1][0]) << "\t" << floor(g_means[1][1]) << "\t" << floor(g_means[1][2]) << "\t" << floor(g_means[1][3]) << "\t" << floor(g_means[1][4]) << "\t" << floor(g_means[1][5]) <<endl;
 
-      // XYZ
-      HEADS[0][0] = g_means[0][0];
-      HEADS[0][1] = g_means[0][1];
-      HEADS[0][2] = g_means[0][2];
+      for (int i = 0; i < g_means.size(); ++i) {
+        // XYZ
+        HEADS[i][0] = g_means[i][0];
+        HEADS[i][1] = g_means[i][1];
+        HEADS[i][2] = g_means[i][2];
 
-      // Pitch, yaw, roll
-      HEADS[0][3] = g_means[0][3];
-      HEADS[0][4] = g_means[0][4];
-      HEADS[0][5] = g_means[0][5];
+        // Pitch, yaw, roll
+        HEADS[i][3] = g_means[i][3];
+        HEADS[i][4] = g_means[i][4];
+        HEADS[i][5] = g_means[i][5];
 
-      // Distance
-      HEADS[0][6] = std::sqrt( g_means[0][0]*g_means[0][0] + g_means[0][1]*g_means[0][1] + g_means[0][2]*g_means[0][2] );
+        // Distance
+        HEADS[i][6] = std::sqrt( g_means[i][0]*g_means[i][0] + g_means[i][1]*g_means[i][1] + g_means[i][2]*g_means[i][2] );
+      }
 
-      // HEAD 2
-
-      // XYZ
-      HEADS[1][0] = g_means[1][0];
-      HEADS[1][1] = g_means[1][1];
-      HEADS[1][2] = g_means[1][2];
-
-      // Pitch, yaw, roll
-      HEADS[1][3] = g_means[1][3];
-      HEADS[1][4] = g_means[1][4];
-      HEADS[1][5] = g_means[1][5];
-
-      // Distance
-      HEADS[1][6] = std::sqrt( g_means[1][0]*g_means[1][0] + g_means[1][1]*g_means[1][1] + g_means[1][2]*g_means[1][2] );
-
-      //::copy_matrix(HEADS, g_means, HEADS_SIZE_X, HEADS_SIZE_Y);
     }
 
   }

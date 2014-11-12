@@ -21,12 +21,20 @@
 //
 
 #include "PeopleTracker.h"
-#include <cmath>
+#include <iostream>
+#include <iomanip>
 
 // use the ikaros namespace to access the math library
 // this is preferred to using math.h
 
 using namespace ikaros;
+
+float ** oldPeople;
+float * peopleInactivity;
+
+float tick = 0.0;
+
+float maxInactivityCounter = 2.0;
 
 void PeopleTracker::Init() {
     // Inputs
@@ -43,7 +51,12 @@ void PeopleTracker::Init() {
 
     // Init
 
+    oldPeople = create_matrix(PEOPLE_SIZE_X, PEOPLE_SIZE_Y);
+    peopleInactivity = create_array(PEOPLE_SIZE_Y);
+
     set_matrix(PEOPLE, 0.0, PEOPLE_SIZE_X, PEOPLE_SIZE_Y);
+    set_matrix(oldPeople, 0.0, PEOPLE_SIZE_X, PEOPLE_SIZE_Y);
+    set_array(peopleInactivity, 0.0, PEOPLE_SIZE_Y);
 }
 
 PeopleTracker::~PeopleTracker() {
@@ -53,6 +66,8 @@ PeopleTracker::~PeopleTracker() {
     // kernel with GetInputArray, GetInputMatrix etc.
     // destroy_matrix("PEOPLE");
 }
+
+
 
 void updatePerson(float * oldPerson, float * newPerson) {
     // XYZ
@@ -70,6 +85,8 @@ void updatePerson(float * oldPerson, float * newPerson) {
 }
 
 void PeopleTracker::Tick() {
+    // Increase tick counter
+    tick = tick + 1.0;
     // Angle of person to the kinect
     float angle;
     // Loop through input HEADS
@@ -109,19 +126,86 @@ void PeopleTracker::Tick() {
                 }
             }
         }
+
+        // Save values
+        oldPeople[i][0] = oldPeople[i][0] == 0.0 ? PEOPLE[i][0] : oldPeople[i][0];
+        oldPeople[i][1] = oldPeople[i][1] == 0.0 ? PEOPLE[i][1] : oldPeople[i][1];
+        oldPeople[i][2] = oldPeople[i][2] == 0.0 ? PEOPLE[i][2] : oldPeople[i][2];
+        oldPeople[i][3] = oldPeople[i][3] == 0.0 ? PEOPLE[i][3] : oldPeople[i][3];
+        oldPeople[i][4] = oldPeople[i][4] == 0.0 ? PEOPLE[i][4] : oldPeople[i][4];
+        oldPeople[i][5] = oldPeople[i][5] == 0.0 ? PEOPLE[i][5] : oldPeople[i][5];
+        oldPeople[i][6] = oldPeople[i][6] == 0.0 ? PEOPLE[i][6] : oldPeople[i][6];
+        oldPeople[i][7] = oldPeople[i][7] == 0.0 ? PEOPLE[i][7] : oldPeople[i][7];
     }
 
-    // for (int i = 0; i < PEOPLE_SIZE_Y; ++i) {
-    //     printf("%i\t", i);
-    //     printf("%.0lf\t", floor(PEOPLE[i][0]));
-    //     printf("%.0lf\t", floor(PEOPLE[i][1]));
-    //     printf("%.0lf\t\t", floor(PEOPLE[i][2]));
-    //     printf("%.0lf\t", floor(PEOPLE[i][3]));
-    //     printf("%.0lf\t", floor(PEOPLE[i][4]));
-    //     printf("%.0lf\t\t", floor(PEOPLE[i][5]));
-    //     printf("%.0lf\t", floor(PEOPLE[i][6]));
-    //     printf("%f\n", PEOPLE[i][7]);
-    // }
+
+    for (int i = 0; i < HEADS_SIZE_Y; ++i) {
+        // Calculate inter-tick delta
+        float diff = PEOPLE[i][3] - oldPeople[i][3];
+
+        // Check if coordinates have not changed
+        if(diff == 0.0) {
+            // If so increase inactivity counter
+            peopleInactivity[i] = peopleInactivity[i] + 1.0;
+        }
+        else {
+            // If not, zero it
+            peopleInactivity[i] = 0.0;
+        }
+
+        // If inactivity counter is over 20, remove person
+        if(peopleInactivity[i] > maxInactivityCounter) {
+            PEOPLE[i][0] = 0.0;
+            PEOPLE[i][1] = 0.0;
+            PEOPLE[i][2] = 0.0;
+            PEOPLE[i][3] = 0.0;
+            PEOPLE[i][4] = 0.0;
+            PEOPLE[i][5] = 0.0;
+            PEOPLE[i][6] = 0.0;
+            PEOPLE[i][7] = 0.0;
+
+            oldPeople[i][0] = 0.0;
+            oldPeople[i][1] = 0.0;
+            oldPeople[i][2] = 0.0;
+            oldPeople[i][3] = 0.0;
+            oldPeople[i][4] = 0.0;
+            oldPeople[i][5] = 0.0;
+            oldPeople[i][6] = 0.0;
+            oldPeople[i][7] = 0.0;
+
+            peopleInactivity[i] = 0.0;
+        }
+
+        // Clear all oldPeople values every nth-tick
+        if(tick >= maxInactivityCounter) {
+            oldPeople[i][0] = 0.0;
+            oldPeople[i][1] = 0.0;
+            oldPeople[i][2] = 0.0;
+            oldPeople[i][3] = 0.0;
+            oldPeople[i][4] = 0.0;
+            oldPeople[i][5] = 0.0;
+            oldPeople[i][6] = 0.0;
+            oldPeople[i][7] = 0.0;
+        }
+    }
+
+    // Reset tick counter ecery nth-tick
+    if(tick >= maxInactivityCounter) {
+        tick = 0.0;
+    }
+
+
+    for (int i = 0; i < PEOPLE_SIZE_Y; ++i) {
+        printf("%i\t", i);
+        printf("%f\t", PEOPLE[i][0]);
+        printf("%f\t", PEOPLE[i][1]);
+        printf("%f\t|\t", PEOPLE[i][2]);
+        printf("%f\t", PEOPLE[i][3]);
+        printf("%f\t", PEOPLE[i][4]);
+        printf("%f\n", peopleInactivity[i]);
+    }
+
+    printf("\n");
 }
 
 // Install the module. This code is executed during start-up.

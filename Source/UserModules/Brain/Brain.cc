@@ -98,15 +98,15 @@ void Brain::Tick() {
             highestStimuliIndex = i;
         }
 
-        printf("%i\t", i);
-        printf("%f\t", *STRENGTH[i]);
-        printf("%f\t", PLAN[i][0]);
-        printf("%f\t", PLAN[i][1]);
-        printf("%f\n", PLAN[i][2]);
+        // printf("%i\t", i);
+        // printf("%f\t", *STRENGTH[i]);
+        // printf("%f\t", PLAN[i][0]);
+        // printf("%f\t", PLAN[i][1]);
+        // printf("%f\n", PLAN[i][2]);
     }
 
     if( highestStimuliIndex != 100 ) {
-        printf("Action %i\n\n", highestStimuliIndex);
+        //printf("Action %i\n\n", highestStimuliIndex);
         ACTION[0] = PLAN[highestStimuliIndex][0];
         ACTION[1] = PLAN[highestStimuliIndex][1];
         ACTION[2] = PLAN[highestStimuliIndex][2];
