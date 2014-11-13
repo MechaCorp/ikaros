@@ -42,10 +42,10 @@ float CalculateRotationAfterGaze(float coord, float z, float alpha, float maxLen
   // printf("%f\t\n", Y);
   // printf("%f\n", (3.1416 - (-alpha + gamma + beta))*(180.0/3.1416));
 
-   if(flip && !vertical) {
-     return 360 - (3.1416 - (-alpha + gamma + beta))*(180.0/3.1416);
-   }
-   else {
+  if(flip && !vertical) {
+    return 360 - (3.1416 - (-alpha + gamma + beta))*(180.0/3.1416);
+  }
+  else {
     return (3.1416 - (-alpha + gamma + beta))*(180.0/3.1416);
   }
 }

@@ -67,6 +67,24 @@
     />
 
     <module
+      class    = "SmoothOutput"
+      name     = "StaringStrength"
+      alpha    = "0.05"
+    />
+
+    <module
+      class    = "SmoothOutput"
+      name     = "JointAttentionStrength"
+      alpha    = "0.4"
+    />
+
+    <module
+      class    = "SmoothOutput"
+      name     = "ProximityStrength"
+      alpha    = "0.9"
+    />
+
+    <module
         class    = "Brain"
         name     = "Brain"
         no_of_inputs = "3"
@@ -130,74 +148,107 @@
 
     <!-- The good stuff -->
 
-    <connection
-        sourcemodule    = "PeopleTracker"
-        source          = "PEOPLE"
-        targetmodule    = "StaringDetector"
-        target          = "PEOPLE"
-    />
+    <!-- Tracking -->
+        <connection
+            sourcemodule    = "PeopleTracker"
+            source          = "PEOPLE"
+            targetmodule    = "StaringDetector"
+            target          = "PEOPLE"
+        />
 
-    <connection
-        sourcemodule    = "PeopleTracker"
-        source          = "PEOPLE"
-        targetmodule    = "JointAttention"
-        target          = "HEADS"
-    />
+        <connection
+            sourcemodule    = "PeopleTracker"
+            source          = "PEOPLE"
+            targetmodule    = "JointAttention"
+            target          = "HEADS"
+        />
 
-    <connection
-        sourcemodule    = "ProximityDetector"
-        source          = "PLAN"
-        targetmodule    = "Brain"
-        target          = "PLAN_1"
-        delay           = "0"
-    />
+    <!-- PROXIMITY MODULE -->
 
-    <connection
-        sourcemodule    = "ProximityDetector"
-        source          = "STRENGTH"
-        targetmodule    = "Brain"
-        target          = "STRENGTH_1"
-        delay           = "0"
-    />
+        <connection
+            sourcemodule    = "ProximityDetector"
+            source          = "PLAN"
+            targetmodule    = "Brain"
+            target          = "PLAN_1"
+            delay           = "0"
+        />
 
-    <connection
-        sourcemodule    = "StaringDetector"
-        source          = "PLAN"
-        targetmodule    = "Brain"
-        target          = "PLAN_2"
-        delay           = "0"
-    />
+        <connection
+            sourcemodule    = "ProximityDetector"
+            source          = "STRENGTH"
+            targetmodule    = "ProximityStrength"
+            target          = "INPUT"
+            delay           = "0"
+        />
 
-    <connection
-        sourcemodule    = "StaringDetector"
-        source          = "STRENGTH"
-        targetmodule    = "Brain"
-        target          = "STRENGTH_2"
-        delay           = "0"
-    />
+        <connection
+            sourcemodule    = "ProximityStrength"
+            source          = "OUTPUT"
+            targetmodule    = "Brain"
+            target          = "STRENGTH_1"
+            delay           = "0"
+        />
 
-    <connection
-        sourcemodule    = "JointAttention"
-        source          = "PLAN"
-        targetmodule    = "Brain"
-        target          = "PLAN_3"
-        delay           = "0"
-    />
+    <!-- STARING MODULE -->
 
-    <connection
-        sourcemodule    = "JointAttention"
-        source          = "STRENGTH"
-        targetmodule    = "Brain"
-        target          = "STRENGTH_3"
-        delay           = "0"
-    />
+        <connection
+            sourcemodule    = "StaringDetector"
+            source          = "PLAN"
+            targetmodule    = "Brain"
+            target          = "PLAN_2"
+            delay           = "0"
+        />
 
-    <connection
-        sourcemodule    = "Brain"
-        source          = "ACTION"
-        targetmodule    = "SmoothMovement"
-        target          = "GOAL_POSITION"
-    />
+        <connection
+            sourcemodule    = "StaringDetector"
+            source          = "STRENGTH"
+            targetmodule    = "StaringStrength"
+            target          = "INPUT"
+            delay           = "0"
+        />
+
+        <connection
+            sourcemodule    = "StaringStrength"
+            source          = "OUTPUT"
+            targetmodule    = "Brain"
+            target          = "STRENGTH_2"
+            delay           = "0"
+        />
+
+    <!-- JOINT ATTENTION MODULE -->
+
+        <connection
+            sourcemodule    = "JointAttention"
+            source          = "PLAN"
+            targetmodule    = "Brain"
+            target          = "PLAN_3"
+            delay           = "0"
+        />
+
+        <connection
+            sourcemodule    = "JointAttention"
+            source          = "STRENGTH"
+            targetmodule    = "JointAttentionStrength"
+            target          = "INPUT"
+            delay           = "0"
+        />
+
+        <connection
+            sourcemodule    = "JointAttentionStrength"
+            source          = "OUTPUT"
+            targetmodule    = "Brain"
+            target          = "STRENGTH_3"
+            delay           = "0"
+        />
+
+    <!-- BRAIN -->
+
+        <connection
+            sourcemodule    = "Brain"
+            source          = "ACTION"
+            targetmodule    = "SmoothMovement"
+            target          = "GOAL_POSITION"
+        />
 
 
   <view name = "MechaCorp Robotic Arm" object_size = "50" >
@@ -205,8 +256,8 @@
         <object
             class  = "Plot"
             title  = "Strength of Staring"
-            module = "StaringDetector"
-            source = "STRENGTH"
+            module = "StaringStrength"
+            source = "OUTPUT"
             min    = "0"
             max    = "1"
             x      = "0"  y = "0"
@@ -218,8 +269,8 @@
         <object
             class  = "Plot"
             title  = "Strength of Proximity"
-            module = "ProximityDetector"
-            source = "STRENGTH"
+            module = "ProximityStrength"
+            source = "OUTPUT"
             min    = "0"
             max    = "1"
             x      = "4"  y = "0"
@@ -231,8 +282,8 @@
         <object
             class  = "Plot"
             title  = "Strength of Joint Attention"
-            module = "JointAttention"
-            source = "STRENGTH"
+            module = "JointAttentionStrength"
+            source = "OUTPUT"
             min    = "0"
             max    = "1"
             x      = "8"  y = "0"

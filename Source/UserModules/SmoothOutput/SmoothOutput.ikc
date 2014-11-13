@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+
+<group name="SmoothOutput" description="Smooth numbers using exponential moving average">
+
+	<description type="text">
+		This module smooths numbers using exponential moving average
+	</description>
+
+	<example description="A simple example">
+		<module
+			class = "SmoothOutput"
+			name = "SmoothOutput"
+			alpha = "0.2"
+		/>
+	</example>
+
+	<parameter name="alpha" type="float" default="0.5" description="This determins the window of ticks for which the moving average is calculated (should be a float between 0 and 1)" />
+	<input name="INPUT" description="The input to smooth" />
+	<output name="OUTPUT" description="The result of the calculation" size="1" />
+
+	<module class="SmoothOutput" />
+
+	<author>
+		<name>MechaCorp</name>
+		<email>mechacorp@lucs.lu.se</email>
+		<affiliation>Lund University Cognitive Science</affiliation>
+		<homepage>http://www.lucs.lu.se/</homepage>
+	</author>
+
+   <files>
+   		<file>SmoothOutput.h</file>
+   		<file>SmoothOutput.cc</file>
+   		<file>SmoothOutput.ikc</file>
+   </files>
+
+</group>
+

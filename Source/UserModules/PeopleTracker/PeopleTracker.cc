@@ -195,17 +195,17 @@ void PeopleTracker::Tick() {
     }
 
 
-    for (int i = 0; i < PEOPLE_SIZE_Y; ++i) {
-        printf("%i\t", i);
-        printf("%f\t", PEOPLE[i][0]);
-        printf("%f\t", PEOPLE[i][1]);
-        printf("%f\t|\t", PEOPLE[i][2]);
-        printf("%f\t", PEOPLE[i][3]);
-        printf("%f\t", PEOPLE[i][4]);
-        printf("%f\n", peopleInactivity[i]);
-    }
+    // for (int i = 0; i < PEOPLE_SIZE_Y; ++i) {
+    //     printf("%i\t", i);
+    //     printf("%f\t", PEOPLE[i][0]);
+    //     printf("%f\t", PEOPLE[i][1]);
+    //     printf("%f\t|\t", PEOPLE[i][2]);
+    //     printf("%f\t", PEOPLE[i][3]);
+    //     printf("%f\t", PEOPLE[i][4]);
+    //     printf("%f\n", peopleInactivity[i]);
+    // }
 
-    printf("\n");
+    // printf("\n");
 }
 
 // Install the module. This code is executed during start-up.

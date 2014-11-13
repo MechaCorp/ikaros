@@ -68,10 +68,10 @@ void StaringDetector::Tick() {
                 PLAN[0] = 180.0 - std::atan(PEOPLE[i][0]/PEOPLE[i][2]) * (180/pi);
                 PLAN[1] = 270.0 + std::atan(PEOPLE[i][1]/PEOPLE[i][2]) * (180/pi);
                 PLAN[2] = 180.0;
-                printf("Staring %i \t", i);
-                printf("%f\t", STRENGTH[0]);
-                printf("%f\t", alphaX);
-                printf("%f\n\n", alphaY);
+                // printf("Staring %i \t", i);
+                // printf("%f\t", STRENGTH[0]);
+                // printf("%f\t", alphaX);
+                // printf("%f\n\n", alphaY);
                 return;
             }
             else {

@@ -1,5 +1,5 @@
 //
-//	ProximityDetector.cc		This file is a part of the IKAROS project
+//	SmoothOutput.cc		This file is a part of the IKAROS project
 //
 //    Copyright (C) 2012 <Author Name>
 //
@@ -20,71 +20,54 @@
 //    See http://www.ikaros-project.org/ for more information.
 //
 
-#include "ProximityDetector.h"
+#include "SmoothOutput.h"
 #include <cmath>
-#include <algorithm>
 
 // use the ikaros namespace to access the math library
 // this is preferred to using math.h
 
 using namespace ikaros;
 
-void ProximityDetector::Init() {
+
+void SmoothOutput::Init() {
+    // To get the parameters from the IKC file, use the Bind
+    // function for each parameter. The parameters are initialized
+    // from the IKC and can optionally be changed from the
+    // user interface while Ikaros is running. If the parameter is not
+    // set, the default value will be used instead.
+
+    // Parameter
+
+    Bind(alpha, "alpha");
+
     // Inputs
 
-    DEPTH               = GetInputMatrix("DEPTH");
-    DEPTH_SIZE_X        = GetInputSizeX("DEPTH");
-    DEPTH_SIZE_Y        = GetInputSizeY("DEPTH");
+    INPUT              = GetInputArray("INPUT");
+    INPUT_SIZE         = GetInputSize("INPUT");
 
     // Outputs
 
-    PLAN                = GetOutputArray("PLAN");
-    PLAN_SIZE           = GetOutputSize("PLAN");
-
-    STRENGTH            = GetOutputArray("STRENGTH");
-    STRENGTH_SIZE       = GetOutputSize("STRENGTH");
+    OUTPUT             = GetOutputArray("OUTPUT");
+    OUTPUT_SIZE        = GetOutputSize("OUTPUT");
 
     // Init
 
-    set_array(PLAN, 180.0, PLAN_SIZE);
+    set_array(OUTPUT, 0.0, OUTPUT_SIZE);
 }
 
-ProximityDetector::~ProximityDetector() {
+SmoothOutput::~SmoothOutput() {
     // Destroy data structures that you allocated in Init.
     // destroy_array("starting_position");
     // Do NOT destroy data structures that you got from the
     // kernel with GetInputArray, GetInputMatrix etc.
-    // destroy_matrix("PEOPLE");
 }
 
-
-
-void ProximityDetector::Tick() {
-    float minimum = 2000.0;
-
-    for(int x = 0; x < DEPTH_SIZE_X; x++) {
-        for(int y = 0; y < DEPTH_SIZE_Y; y++) {
-            if(DEPTH[y][x] > 0.0) {
-                minimum = std::min(DEPTH[y][x], minimum);
-            }
-        }
-    }
-
-    if(minimum < 550.0) {
-        //printf("Too close!\n");
-        STRENGTH[0] = 0.2f;
-        PLAN[0] = 120.0f;
-        PLAN[1] = 120.0f;
-        PLAN[2] = 120.0f;
-    }
-    else {
-        STRENGTH[0] = 0.0f;
-    }
-
+void SmoothOutput::Tick() {
+    OUTPUT[0] = (alpha * INPUT[0]) + (1.0 - alpha) * OUTPUT[0];
 }
 
 // Install the module. This code is executed during start-up.
 
-static InitClass init("ProximityDetector", &ProximityDetector::Create, "Source/UserModules/ProximityDetector/");
+static InitClass init("SmoothOutput", &SmoothOutput::Create, "Source/UserModules/SmoothOutput/");
 
 

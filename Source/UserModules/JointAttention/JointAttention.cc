@@ -13,7 +13,7 @@ float ** attendTable;
 float const ceilingDistance = 2.0f;
 float const tableDistance = 0.5f;
 
-float const ceilingFactor = 0.005f;
+float const ceilingFactor = 0.015f;
 float const tableFactor = 0.005f;
 
 float peopleAttendingCeiling;
@@ -35,14 +35,14 @@ void JointAttention::Init() {
 
   set_array(PLAN, 180.0, PLAN_SIZE);
 
-  attendCeiling = create_matrix(3, HEADS_SIZE_Y);
-  attendTable   = create_matrix(3, HEADS_SIZE_Y);
+  attendCeiling           = create_matrix(3, HEADS_SIZE_Y);
+  attendTable             = create_matrix(3, HEADS_SIZE_Y);
 
   peopleAttendingCeiling  = 0.0;
   peopleAttendingTable    = 0.0;
 
-  ceilingSaliency  = 0.0;
-  tableSaliency    = 0.0;
+  ceilingSaliency         = 0.0;
+  tableSaliency           = 0.0;
 
   set_matrix(attendCeiling, 0.0, 3, HEADS_SIZE_Y);
   set_matrix(attendTable, 0.0, 3, HEADS_SIZE_Y);
@@ -80,13 +80,13 @@ void JointAttention::Tick() {
     }
 
     // If someone looks down
-    if(HEADS[i][3] > 10.0) {
+    if(HEADS[i][3] > 0.0) {
       // Increase counter for people looking at table
       peopleAttendingTable = peopleAttendingTable + 1.0;
       // Calculate instructions for following gaze
       attendTable[i][0] = CalculateRotationAfterGaze(HEADS[i][0], HEADS[i][2], HEADS[i][4], tableDistance, false);
-      attendTable[i][1] = 180.0 + CalculateRotationAfterGaze(HEADS[i][1], HEADS[i][2], HEADS[i][3], tableDistance, true);
-      attendTable[i][2] = 180.0;
+      attendTable[i][1] = CalculateRotationAfterGaze(HEADS[i][1], HEADS[i][2], HEADS[i][3], tableDistance, true);
+      attendTable[i][2] = 200.0;
     }
 
   }
