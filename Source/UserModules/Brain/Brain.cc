@@ -23,6 +23,7 @@
 #include "Brain.h"
 #include <cmath>
 #include <cstdlib>
+#include <ctime>
 
 // use the ikaros namespace to access the math library
 // this is preferred to using math.h
@@ -63,7 +64,7 @@ void Brain::Init() {
     // Init
 
     set_array(ACTION, 180.0, ACTION_SIZE);
-    srand (static_cast <unsigned> (123012301));
+    srand (static_cast <unsigned> (21031203));
 }
 
 Brain::~Brain() {
@@ -95,6 +96,8 @@ void Brain::Tick() {
     int highestStimuliIndex = 100;
     float highestStimuli = 0.0;
 
+    // Find strongest action plan
+
     for (int i = 0; i < no_of_inputs; ++i) {
 
         if(*STRENGTH[i] > highestStimuli) {
@@ -109,6 +112,9 @@ void Brain::Tick() {
         // printf("%f\n", PLAN[i][2]);
     }
 
+
+    // Execute action plan
+
     if( highestStimuliIndex != 100 && highestStimuli > 0.1 ) {
         //printf("Action %i\n\n", highestStimuliIndex);
         ACTION[0] = PLAN[highestStimuliIndex][0];
@@ -122,17 +128,23 @@ void Brain::Tick() {
         idleTicks = 0;
     }
 
-    if(  highestStimuliIndex != 100 || highestStimuli < 0.1 ) {
+    // Idle
+
+    if( highestStimuliIndex != 100 || highestStimuli < 0.1 ) {
         idleTicks = idleTicks + 1;
-        printf("Idle %i\n", idleTicks);
     }
 
+    // Execute Idle behavior
+
     if(idleTicks >= 50) {
-        printf("idle\n");
-        ACTION[0] = 180.0 + static_cast <float> (rand() % 100);
-        ACTION[1] = 180.0 + static_cast <float> (rand() % 100);
-        ACTION[2] = 180.0 + static_cast <float> (rand() % 100);
+        printf("Idle %i\n", idleTicks);
+
+        ACTION[0] = 180.0 + static_cast <float> (rand() % 150);
+        ACTION[1] = 180.0 + static_cast <float> (rand() % 150);
+        ACTION[2] = 180.0 + static_cast <float> (rand() % 150);
+
     }
+
 }
 
 // Install the module. This code is executed during start-up.

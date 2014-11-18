@@ -67,6 +67,11 @@
     />
 
     <module
+      class    = "PersonOfInterestDetector"
+      name     = "PersonOfInterestDetector"
+    />
+
+    <module
       class    = "SmoothOutput"
       name     = "StaringStrength"
       alpha    = "0.05"
@@ -85,9 +90,15 @@
     />
 
     <module
+      class    = "SmoothOutput"
+      name     = "PersonOfInterestStrength"
+      alpha    = "0.1"
+    />
+
+    <module
         class    = "Brain"
         name     = "Brain"
-        no_of_inputs = "3"
+        no_of_inputs = "4"
     />
 
   <!-- Order is important -->
@@ -161,6 +172,13 @@
             source          = "PEOPLE"
             targetmodule    = "JointAttention"
             target          = "HEADS"
+        />
+
+        <connection
+            sourcemodule    = "PeopleTracker"
+            source          = "PEOPLE"
+            targetmodule    = "PersonOfInterestDetector"
+            target          = "PEOPLE"
         />
 
     <!-- PROXIMITY MODULE -->
@@ -241,6 +259,32 @@
             delay           = "0"
         />
 
+        <!-- PERSON OF INTERET MODULE -->
+
+            <connection
+                sourcemodule    = "PersonOfInterestDetector"
+                source          = "PLAN"
+                targetmodule    = "Brain"
+                target          = "PLAN_4"
+                delay           = "0"
+            />
+
+            <connection
+                sourcemodule    = "PersonOfInterestDetector"
+                source          = "STRENGTH"
+                targetmodule    = "PersonOfInterestStrength"
+                target          = "INPUT"
+                delay           = "0"
+            />
+
+            <connection
+                sourcemodule    = "PersonOfInterestStrength"
+                source          = "OUTPUT"
+                targetmodule    = "Brain"
+                target          = "STRENGTH_4"
+                delay           = "0"
+            />
+
     <!-- BRAIN -->
 
         <connection
@@ -294,6 +338,19 @@
 
         <object
             class  = "Plot"
+            title  = "Strength of Person of Interest"
+            module = "PersonOfInterestStrength"
+            source = "OUTPUT"
+            min    = "0"
+            max    = "1"
+            x      = "12"  y = "0"
+            w      = "4"  h = "4"
+            color  = "purple"
+            select = "0"
+        />
+
+        <object
+            class  = "Plot"
             title  = "Position output from smoothing"
             module = "SmoothMovement"
             source = "POSITION_OUT"
@@ -312,7 +369,7 @@
             source = "FEEDBACK_PRESENT_POSITION"
             x      = "0"  y = "4"
             w      = "4"  h = "4"
-            color  = "red, green, blue"
+            color  = "red, yellow, blue"
             select = "0,1,2"
             max    = "360"
 
@@ -353,16 +410,16 @@
             x        = "0" y = "8"
             w        = "4" h  = "4"
       />
-<!--
+
         <object
             class  = "Image"
             title  = "Kinect camera"
             type   = "rgb"
             module = "Kinect"
             source = "RED+GREEN+BLUE"
-            x      = "0" y = "6"
+            x      = "8" y = "4"
             w      = "6" h = "5"
-        /> -->
+        />
 
     </view>
 </group>

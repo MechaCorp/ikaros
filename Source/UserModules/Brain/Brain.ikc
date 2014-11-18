@@ -1,9 +1,10 @@
 <?xml version="1.0"?>
 
-<group name="Brain" description="Is brain">
+<group name="Brain" description="Takes action plan coordinates and matching action plan strength and outputs the action plan with highest strength">
 
 	<description type="text">
-		Is brain
+		Takes action plan coordinates and matching action plan strength and outputs the action plan with highest strength
+    The connection order in the .ikc file determines the priority of action plans.
 	</description>
 
 	<example description="A simple example">
@@ -16,7 +17,7 @@
 
   <parameter name="no_of_inputs" type="int" default="2" description="The number of inputs"/>
 
-  <input name="*" description="A number of inputs named INPUT_1 and VALUE_1 etc" />
+  <input name="*" description="A number of inputs named PLAN_1 (array with coordinates for robot arm movement, one for each servo) and STRENGTH_1 (array with one number betweem 0.0 and 1.0) etc" />
 
 	<output name="ACTION" description="Three degrees (x, y, z) for the robot to move to" size="3" />
 
