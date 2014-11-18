@@ -1,0 +1,37 @@
+<?xml version="1.0"?>
+
+<group name="RandomPerson" description="Randomly looks at a person">
+
+	<description type="text">
+		Randomly looks at a person
+	</description>
+
+	<example description="A simple example">
+		<module
+			class = "RandomPerson"
+			name = "RandomPerson"
+		/>
+	</example>
+
+	<input name="PEOPLE" description="A matrix of tracked people in the room" />
+
+  <output name="PLAN" description="An array of movement instructions for three servos, each instruction is specified in degrees." size="3" />
+  <output name="STRENGTH" description="A number between 1.0 and 0.0 which specifies the strength of the action plan, 1.0 being the highest." size="1" />
+
+	<module class="RandomPerson" />
+
+	<author>
+		<name>MechaCorp</name>
+		<email>mechacorp@lucs.lu.se</email>
+		<affiliation>Lund University Cognitive Science</affiliation>
+		<homepage>http://www.lucs.lu.se/</homepage>
+	</author>
+
+   <files>
+   		<file>RandomPerson.h</file>
+   		<file>RandomPerson.cc</file>
+   		<file>RandomPerson.ikc</file>
+   </files>
+
+</group>
+

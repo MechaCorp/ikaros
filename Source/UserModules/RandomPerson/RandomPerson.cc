@@ -1,5 +1,5 @@
 //
-//	ProximityDetector.cc		This file is a part of the IKAROS project
+//	RandomPerson.cc		This file is a part of the IKAROS project
 //
 //    Copyright (C) 2012 <Author Name>
 //
@@ -20,21 +20,22 @@
 //    See http://www.ikaros-project.org/ for more information.
 //
 
-#include "ProximityDetector.h"
+#include "RandomPerson.h"
 #include <cmath>
-#include <algorithm>
+#include <cstdlib>
+#include <ctime>
 
 // use the ikaros namespace to access the math library
 // this is preferred to using math.h
 
 using namespace ikaros;
 
-void ProximityDetector::Init() {
+void RandomPerson::Init() {
     // Inputs
 
-    DEPTH               = GetInputMatrix("DEPTH");
-    DEPTH_SIZE_X        = GetInputSizeX("DEPTH");
-    DEPTH_SIZE_Y        = GetInputSizeY("DEPTH");
+    PEOPLE              = GetInputMatrix("PEOPLE");
+    PEOPLE_SIZE_X       = GetInputSizeX("PEOPLE");
+    PEOPLE_SIZE_Y       = GetInputSizeY("PEOPLE");
 
     // Outputs
 
@@ -47,9 +48,11 @@ void ProximityDetector::Init() {
     // Init
 
     set_array(PLAN, 180.0, PLAN_SIZE);
+
+    srand (static_cast <unsigned> (90212039912));
 }
 
-ProximityDetector::~ProximityDetector() {
+RandomPerson::~RandomPerson() {
     // Destroy data structures that you allocated in Init.
     // destroy_array("starting_position");
     // Do NOT destroy data structures that you got from the
@@ -57,34 +60,30 @@ ProximityDetector::~ProximityDetector() {
     // destroy_matrix("PEOPLE");
 }
 
+int forTicks = 50;
+int i = 0;
 
+void RandomPerson::Tick() {
+    forTicks = forTicks - 1;
 
-void ProximityDetector::Tick() {
-    float minimum = 2000.0;
+    printf("Randomly looking at %i\n", i);
 
-    for(int x = 0; x < DEPTH_SIZE_X; x++) {
-        for(int y = 0; y < DEPTH_SIZE_Y; y++) {
-            if(DEPTH[y][x] > 0.0) {
-                minimum = std::min(DEPTH[y][x], minimum);
-            }
-        }
+    if( PEOPLE[i][2] > 10.0 ) {
+        PLAN[0] = 180.0 - std::atan(PEOPLE[i][0]/PEOPLE[i][2]) * (180/pi);
+        PLAN[1] = 270.0 + std::atan(PEOPLE[i][1]/PEOPLE[i][2]) * (180/pi);
+        PLAN[2] = 180.0;
+        STRENGTH[0] = 0.3;
     }
 
-    if(minimum < 550.0) {
-        //printf("Too close!\n");
-        STRENGTH[0] = 0.35f;
-        PLAN[0] = 120.0f;
-        PLAN[1] = 120.0f;
-        PLAN[2] = 120.0f;
-    }
-    else {
-        STRENGTH[0] = 0.0f;
+    if(PEOPLE[i][2] < 10.0 || forTicks <= 0) {
+        forTicks = (rand() % 20 + 5);
+        i = (rand() % 3);
     }
 
 }
 
 // Install the module. This code is executed during start-up.
 
-static InitClass init("ProximityDetector", &ProximityDetector::Create, "Source/UserModules/ProximityDetector/");
+static InitClass init("RandomPerson", &RandomPerson::Create, "Source/UserModules/RandomPerson/");
 
 

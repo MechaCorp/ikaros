@@ -72,6 +72,11 @@
     />
 
     <module
+      class    = "RandomPerson"
+      name     = "RandomPerson"
+    />
+
+    <module
       class    = "SmoothOutput"
       name     = "StaringStrength"
       alpha    = "0.05"
@@ -96,9 +101,15 @@
     />
 
     <module
+      class    = "SmoothOutput"
+      name     = "RandomPersonStrength"
+      alpha    = "0.2"
+    />
+
+    <module
         class    = "Brain"
         name     = "Brain"
-        no_of_inputs = "4"
+        no_of_inputs = "5"
     />
 
   <!-- Order is important -->
@@ -157,6 +168,8 @@
         target          = "HEADS"
     />
 
+
+
     <!-- The good stuff -->
 
     <!-- Tracking -->
@@ -178,6 +191,13 @@
             sourcemodule    = "PeopleTracker"
             source          = "PEOPLE"
             targetmodule    = "PersonOfInterestDetector"
+            target          = "PEOPLE"
+        />
+
+        <connection
+            sourcemodule    = "PeopleTracker"
+            source          = "PEOPLE"
+            targetmodule    = "RandomPerson"
             target          = "PEOPLE"
         />
 
@@ -206,6 +226,32 @@
             target          = "STRENGTH_1"
             delay           = "0"
         />
+
+        <!-- RANDOM PERSON MODULE -->
+
+            <connection
+                sourcemodule    = "RandomPerson"
+                source          = "PLAN"
+                targetmodule    = "Brain"
+                target          = "PLAN_5"
+                delay           = "0"
+            />
+
+            <connection
+                sourcemodule    = "RandomPerson"
+                source          = "STRENGTH"
+                targetmodule    = "RandomPersonStrength"
+                target          = "INPUT"
+                delay           = "0"
+            />
+
+            <connection
+                sourcemodule    = "RandomPersonStrength"
+                source          = "OUTPUT"
+                targetmodule    = "Brain"
+                target          = "STRENGTH_5"
+                delay           = "0"
+            />
 
     <!-- STARING MODULE -->
 
@@ -346,6 +392,19 @@
             x      = "12"  y = "0"
             w      = "4"  h = "4"
             color  = "purple"
+            select = "0"
+        />
+
+        <object
+            class  = "Plot"
+            title  = "Strength of Random Person"
+            module = "RandomPersonStrength"
+            source = "OUTPUT"
+            min    = "0"
+            max    = "1"
+            x      = "16"  y = "0"
+            w      = "4"  h = "4"
+            color  = "orange"
             select = "0"
         />
 

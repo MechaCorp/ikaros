@@ -70,7 +70,7 @@ void JointAttention::Tick() {
     attendTable[i][2] = 0.0;
 
     // If someone looks up
-    if(HEADS[i][3] < -20.0) {
+    if(HEADS[i][3] < -30.0) {
       // Increase counter for people looking up
       peopleAttendingCeiling = peopleAttendingCeiling + 1.0;
       // Calculate instructions for following gaze
@@ -80,7 +80,7 @@ void JointAttention::Tick() {
     }
 
     // If someone looks down
-    if(HEADS[i][3] > 0.0) {
+    if(HEADS[i][3] > 30.0) {
       // Increase counter for people looking at table
       peopleAttendingTable = peopleAttendingTable + 1.0;
       // Calculate instructions for following gaze
