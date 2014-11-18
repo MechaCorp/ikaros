@@ -23,12 +23,12 @@
 #include "PersonOfInterestDetector.h"
 #include "GazeDetection.h"
 #include <cmath>
+#include <vector>
 
 // use the ikaros namespace to access the math library
 // this is preferred to using math.h
 
 using namespace ikaros;
-float ** targets = create_matrix(2, 3);
 
 void PersonOfInterestDetector::Init() {
     // Inputs
@@ -48,8 +48,6 @@ void PersonOfInterestDetector::Init() {
     // Init
 
     set_array(PLAN, 180.0, PLAN_SIZE);
-    set_matrix(targets, 0.0, 2, 3);
-
 }
 
 PersonOfInterestDetector::~PersonOfInterestDetector() {
@@ -59,47 +57,132 @@ PersonOfInterestDetector::~PersonOfInterestDetector() {
     // kernel with GetInputArray, GetInputMatrix etc.
     // destroy_matrix("PEOPLE");
 }
-float const sensitivity = 30.0;
 
-bool isClose(float degree1x, float degree1y, float degree2x, float degree2y) {
-    if( abs(degree1x - degree2x) < sensitivity && abs(degree1y - degree2y) < sensitivity ) {
-        return true;
-    }
-    return false;
-}
+std::vector< int > lefties;
+std::vector< int > righties;
 
-float const maxLength = 1.0f;
+float angleLimit = 20.0;
+float centerLimit = 150.0;
 
 void PersonOfInterestDetector::Tick() {
 
+    // Check if people are looking left or right
+    // Figure out where the people are seated (lrc)
+    // Look at the person towards most others are looking
+    int toTheRight;
+    int toTheLeft;
+    int toTheCenter;
+    int numberOfPeople = 0;
+
     for (int i = 0; i < PEOPLE_SIZE_Y; ++i) {
-        if(PEOPLE[i][2] > 0.0) {
-          targets[i][0] = CalculateRotationAfterGaze(PEOPLE[i][0], PEOPLE[i][2], PEOPLE[i][4], maxLength, false);
-          targets[i][1] = CalculateRotationAfterGaze(PEOPLE[i][1], PEOPLE[i][2], PEOPLE[i][3], maxLength, true);
+        // Add yaw here to filter out people looking up or down
+        if( PEOPLE[i][2] > 0.0 ) {
+
+            numberOfPeople = numberOfPeople + 1;
+
+            bool lookingLeft = false;
+            bool lookingRight = false;
+            bool lookingForward = false;
+            bool seatedRight = false;
+            bool seatedLeft = false;
+            bool seatedCenter = false;
+
+            if( PEOPLE[i][4] < -angleLimit ) {
+                // Looking left
+                lookingLeft = true;
+            }
+
+            if( PEOPLE[i][4] > angleLimit ) {
+                // Looking right
+                lookingRight = true;
+            }
+
+            if( (PEOPLE[i][4] >= -angleLimit) && (PEOPLE[i][4] <= angleLimit) ) {
+                // Looking forward
+                lookingForward = true;
+            }
+
+            if( PEOPLE[i][0] < -centerLimit ) {
+                // Seated to the right
+                seatedRight = true;
+                toTheRight = i;
+            }
+
+            if( PEOPLE[i][0] > centerLimit ) {
+                // Seated to the left
+                seatedLeft = true;
+                toTheLeft = i;
+            }
+
+            if( (PEOPLE[i][0] >= -centerLimit) && (PEOPLE[i][0] <= centerLimit) ) {
+                // Seated to the center
+                seatedCenter = true;
+                toTheCenter = i;
+            }
+
+
+            // Looking left and seated right
+            // Looking left and seated center
+            if( (lookingLeft && seatedRight) || (lookingLeft && seatedCenter) ) {
+                lefties.push_back(i);
+            }
+
+            // Looking right and seated left
+            // Looking right and seated center
+            if( (lookingRight && seatedLeft) || (lookingRight && seatedCenter) ) {
+                righties.push_back(i);
+            }
         }
     }
 
-    if(targets[0][0] > 0.0 && targets[1][0] > 0.0 && targets[2][0] > 0.0) {
-        if( isClose(targets[0][0], targets[0][1], targets[1][0], targets[1][1]) ) {
-            PLAN[0] = 180.0 - std::atan(PEOPLE[2][0]/PEOPLE[2][2]) * (180/pi);
-            PLAN[1] = 270.0 + std::atan(PEOPLE[2][1]/PEOPLE[2][2]) * (180/pi);
+    // printf("%i\n", numberOfPeople);
+    // printf("Righties: ");
+    // for (int i = 0; i < righties.size(); ++i) {
+    //     printf("%i", righties[i]);
+    // }
+    // printf("\n");
+
+    // printf("Lefties: ");
+    // for (int i = 0; i < lefties.size(); ++i) {
+    //     printf("%i", lefties[i]);
+    // }
+    // printf("\n");
+
+    STRENGTH[0] = 0.0;
+
+    if( numberOfPeople == 3 ) {
+
+        if( lefties.size() == righties.size() && toTheCenter < 4 ) {
+            // Look at center
+            PLAN[0] = 180.0 - std::atan(PEOPLE[toTheCenter][0]/PEOPLE[toTheCenter][2]) * (180/pi);
+            PLAN[1] = 270.0 + std::atan(PEOPLE[toTheCenter][1]/PEOPLE[toTheCenter][2]) * (180/pi);
+            PLAN[2] = 180.0;
             STRENGTH[0] = 1.0;
-            printf("\n\nLooking at %i\n\n", 2);
+            printf("\n\nLooking forwards at %i\n\n", toTheCenter);
         }
 
-        if( isClose(targets[0][0], targets[0][1], targets[2][0], targets[2][1]) ) {
-            PLAN[0] = 180.0 - std::atan(PEOPLE[1][0]/PEOPLE[1][2]) * (180/pi);
-            PLAN[1] = 270.0 + std::atan(PEOPLE[1][1]/PEOPLE[1][2]) * (180/pi);
+        if( lefties.size() > righties.size() ) {
+            // Look at right
+            PLAN[0] = 180.0 - std::atan(PEOPLE[toTheRight][0]/PEOPLE[toTheRight][2]) * (180/pi);
+            PLAN[1] = 270.0 + std::atan(PEOPLE[toTheRight][1]/PEOPLE[toTheRight][2]) * (180/pi);
+            PLAN[2] = 180.0;
             STRENGTH[0] = 1.0;
-            printf("\n\nLooking at %i\n\n", 1);
+            printf("\n\nLooking to the right at %i\n\n", toTheRight);
         }
-        if( isClose(targets[1][0], targets[1][1], targets[2][0], targets[2][1]) ) {
-            PLAN[0] = 180.0 - std::atan(PEOPLE[0][0]/PEOPLE[0][2]) * (180/pi);
-            PLAN[1] = 270.0 + std::atan(PEOPLE[0][1]/PEOPLE[0][2]) * (180/pi);
+
+        if( righties.size() > lefties.size() ){
+            // Look at left
+            PLAN[0] = 180.0 - std::atan(PEOPLE[toTheLeft][0]/PEOPLE[toTheLeft][2]) * (180/pi);
+            PLAN[1] = 270.0 + std::atan(PEOPLE[toTheLeft][1]/PEOPLE[toTheLeft][2]) * (180/pi);
+            PLAN[2] = 180.0;
             STRENGTH[0] = 1.0;
-            printf("\n\nLooking at %i\n\n", 0);
+            printf("\n\nLooking to the left at %i\n\n", toTheLeft);
         }
+
     }
+
+    lefties.clear();
+    righties.clear();
 
 }
 

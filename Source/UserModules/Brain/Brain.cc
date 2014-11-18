@@ -121,9 +121,9 @@ void Brain::Tick() {
         ACTION[1] = PLAN[highestStimuliIndex][1];
         ACTION[2] = PLAN[highestStimuliIndex][2];
 
-        printf("%f\t", ACTION[0]);
-        printf("%f\t", ACTION[1]);
-        printf("%f\n", ACTION[2]);
+        // printf("%f\t", ACTION[0]);
+        // printf("%f\t", ACTION[1]);
+        // printf("%f\n", ACTION[2]);
 
         idleTicks = 0;
     }
