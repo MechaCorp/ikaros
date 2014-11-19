@@ -1,9 +1,9 @@
 <?xml version = "1.0"?>
 
-<group title = "Reflex example">
+<group title = "Debug mode">
 
     <description>
-        This will run the reflex module of the MechaCorpRobotics Advanced Nonhumanoid Robot Head Simulation Device
+        This will run the MechaCorpRobotics Advanced Nonhumanoid Robot Head Simulation Device in debug mode
     </description>
 
     <module
@@ -77,6 +77,11 @@
     />
 
     <module
+      class    = "NewPersonDetector"
+      name     = "NewPersonDetector"
+    />
+
+    <module
       class    = "SmoothOutput"
       name     = "StaringStrength"
       alpha    = "0.05"
@@ -107,9 +112,15 @@
     />
 
     <module
+      class    = "SmoothOutput"
+      name     = "NewPersonDetectorStrength"
+      alpha    = "0.2"
+    />
+
+    <module
         class    = "Brain"
         name     = "Brain"
-        no_of_inputs = "5"
+        no_of_inputs = "6"
     />
 
   <!-- Order is important -->
@@ -201,6 +212,20 @@
             target          = "PEOPLE"
         />
 
+        <connection
+            sourcemodule    = "PeopleTracker"
+            source          = "PEOPLE"
+            targetmodule    = "NewPersonDetector"
+            target          = "PEOPLE"
+        />
+
+        <connection
+            sourcemodule    = "PeopleTracker"
+            source          = "NPEOPLE"
+            targetmodule    = "NewPersonDetector"
+            target          = "NPEOPLE"
+        />
+
     <!-- PROXIMITY MODULE -->
 
         <connection
@@ -227,31 +252,57 @@
             delay           = "0"
         />
 
-        <!-- RANDOM PERSON MODULE -->
+    <!-- RANDOM PERSON MODULE -->
 
-            <connection
-                sourcemodule    = "RandomPerson"
-                source          = "PLAN"
-                targetmodule    = "Brain"
-                target          = "PLAN_5"
-                delay           = "0"
-            />
+        <connection
+            sourcemodule    = "RandomPerson"
+            source          = "PLAN"
+            targetmodule    = "Brain"
+            target          = "PLAN_5"
+            delay           = "0"
+        />
 
-            <connection
-                sourcemodule    = "RandomPerson"
-                source          = "STRENGTH"
-                targetmodule    = "RandomPersonStrength"
-                target          = "INPUT"
-                delay           = "0"
-            />
+        <connection
+            sourcemodule    = "RandomPerson"
+            source          = "STRENGTH"
+            targetmodule    = "RandomPersonStrength"
+            target          = "INPUT"
+            delay           = "0"
+        />
 
-            <connection
-                sourcemodule    = "RandomPersonStrength"
-                source          = "OUTPUT"
-                targetmodule    = "Brain"
-                target          = "STRENGTH_5"
-                delay           = "0"
-            />
+        <connection
+            sourcemodule    = "RandomPersonStrength"
+            source          = "OUTPUT"
+            targetmodule    = "Brain"
+            target          = "STRENGTH_5"
+            delay           = "0"
+        />
+
+    <!-- NEW PERSON MODULE -->
+
+        <connection
+            sourcemodule    = "NewPersonDetector"
+            source          = "PLAN"
+            targetmodule    = "Brain"
+            target          = "PLAN_6"
+            delay           = "0"
+        />
+
+        <connection
+            sourcemodule    = "NewPersonDetector"
+            source          = "STRENGTH"
+            targetmodule    = "NewPersonDetectorStrength"
+            target          = "INPUT"
+            delay           = "0"
+        />
+
+        <connection
+            sourcemodule    = "NewPersonDetectorStrength"
+            source          = "OUTPUT"
+            targetmodule    = "Brain"
+            target          = "STRENGTH_6"
+            delay           = "0"
+        />
 
     <!-- STARING MODULE -->
 
@@ -305,31 +356,31 @@
             delay           = "0"
         />
 
-        <!-- PERSON OF INTERET MODULE -->
+    <!-- PERSON OF INTERET MODULE -->
 
-            <connection
-                sourcemodule    = "PersonOfInterestDetector"
-                source          = "PLAN"
-                targetmodule    = "Brain"
-                target          = "PLAN_4"
-                delay           = "0"
-            />
+        <connection
+            sourcemodule    = "PersonOfInterestDetector"
+            source          = "PLAN"
+            targetmodule    = "Brain"
+            target          = "PLAN_4"
+            delay           = "0"
+        />
 
-            <connection
-                sourcemodule    = "PersonOfInterestDetector"
-                source          = "STRENGTH"
-                targetmodule    = "PersonOfInterestStrength"
-                target          = "INPUT"
-                delay           = "0"
-            />
+        <connection
+            sourcemodule    = "PersonOfInterestDetector"
+            source          = "STRENGTH"
+            targetmodule    = "PersonOfInterestStrength"
+            target          = "INPUT"
+            delay           = "0"
+        />
 
-            <connection
-                sourcemodule    = "PersonOfInterestStrength"
-                source          = "OUTPUT"
-                targetmodule    = "Brain"
-                target          = "STRENGTH_4"
-                delay           = "0"
-            />
+        <connection
+            sourcemodule    = "PersonOfInterestStrength"
+            source          = "OUTPUT"
+            targetmodule    = "Brain"
+            target          = "STRENGTH_4"
+            delay           = "0"
+        />
 
     <!-- BRAIN -->
 
@@ -478,6 +529,29 @@
             source = "RED+GREEN+BLUE"
             x      = "8" y = "4"
             w      = "6" h = "5"
+        />
+
+        <object
+           class = "BarGraph"
+           title = "People tracked"
+           module = "PeopleTracker"
+           source = "NPEOPLE"
+           x = "14" y = "4"
+           w = "2" h = "2"
+           min = "0" max="4"
+        />
+
+        <object
+            class  = "Plot"
+            title  = "Strength of New Person"
+            module = "NewPersonDetectorStrength"
+            source = "OUTPUT"
+            min    = "0"
+            max    = "1"
+            x      = "16"  y = "4"
+            w      = "4"  h = "4"
+            color  = "green"
+            select = "0"
         />
 
     </view>

@@ -61,7 +61,7 @@ PersonOfInterestDetector::~PersonOfInterestDetector() {
 std::vector< int > lefties;
 std::vector< int > righties;
 
-float angleLimit = 20.0;
+float angleLimit = 30.0;
 float centerLimit = 150.0;
 
 void PersonOfInterestDetector::Tick() {
@@ -157,26 +157,26 @@ void PersonOfInterestDetector::Tick() {
             PLAN[0] = 180.0 - std::atan(PEOPLE[toTheCenter][0]/PEOPLE[toTheCenter][2]) * (180/pi);
             PLAN[1] = 270.0 + std::atan(PEOPLE[toTheCenter][1]/PEOPLE[toTheCenter][2]) * (180/pi);
             PLAN[2] = 180.0;
-            STRENGTH[0] = 1.0;
+            STRENGTH[0] = 0.0;
             printf("\n\nLooking forwards at %i\n\n", toTheCenter);
         }
 
         if( lefties.size() > righties.size() ) {
-            // Look at right
-            PLAN[0] = 180.0 - std::atan(PEOPLE[toTheRight][0]/PEOPLE[toTheRight][2]) * (180/pi);
-            PLAN[1] = 270.0 + std::atan(PEOPLE[toTheRight][1]/PEOPLE[toTheRight][2]) * (180/pi);
-            PLAN[2] = 180.0;
-            STRENGTH[0] = 1.0;
-            printf("\n\nLooking to the right at %i\n\n", toTheRight);
-        }
-
-        if( righties.size() > lefties.size() ){
             // Look at left
             PLAN[0] = 180.0 - std::atan(PEOPLE[toTheLeft][0]/PEOPLE[toTheLeft][2]) * (180/pi);
             PLAN[1] = 270.0 + std::atan(PEOPLE[toTheLeft][1]/PEOPLE[toTheLeft][2]) * (180/pi);
             PLAN[2] = 180.0;
             STRENGTH[0] = 1.0;
-            printf("\n\nLooking to the left at %i\n\n", toTheLeft);
+            printf("\n\nLooking to the right at %i\n\n", toTheLeft);
+        }
+
+        if( righties.size() > lefties.size() ){
+            // Look at right
+            PLAN[0] = 180.0 - std::atan(PEOPLE[toTheRight][0]/PEOPLE[toTheRight][2]) * (180/pi);
+            PLAN[1] = 270.0 + std::atan(PEOPLE[toTheRight][1]/PEOPLE[toTheRight][2]) * (180/pi);
+            PLAN[2] = 180.0;
+            STRENGTH[0] = 1.0;
+            printf("\n\nLooking to the left at %i\n\n", toTheRight);
         }
 
     }

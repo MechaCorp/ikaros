@@ -31,10 +31,12 @@ using namespace ikaros;
 
 float ** oldPeople;
 float * peopleInactivity;
+float * newPersonTicks;
 
 float tick = 0.0;
 
-float maxInactivityCounter = 10.0;
+const float maxInactivityCounter = 40.0;
+const float circleSector = 0.20;
 
 void PeopleTracker::Init() {
     // Inputs
@@ -49,14 +51,21 @@ void PeopleTracker::Init() {
     PEOPLE_SIZE_X  = GetOutputSizeX("PEOPLE");
     PEOPLE_SIZE_Y  = GetOutputSizeY("PEOPLE");
 
+    NPEOPLE        = GetOutputArray("NPEOPLE");
+    NPEOPLE_SIZE   = GetOutputSize("NPEOPLE");
+
     // Init
 
-    oldPeople = create_matrix(PEOPLE_SIZE_X, PEOPLE_SIZE_Y);
-    peopleInactivity = create_array(PEOPLE_SIZE_Y);
+    oldPeople           = create_matrix(PEOPLE_SIZE_X, PEOPLE_SIZE_Y);
+    peopleInactivity    = create_array(PEOPLE_SIZE_Y);
+    newPersonTicks      = create_array(PEOPLE_SIZE_Y);
 
     set_matrix(PEOPLE, 0.0, PEOPLE_SIZE_X, PEOPLE_SIZE_Y);
     set_matrix(oldPeople, 0.0, PEOPLE_SIZE_X, PEOPLE_SIZE_Y);
+
     set_array(peopleInactivity, 0.0, PEOPLE_SIZE_Y);
+    set_array(newPersonTicks, 0.0, PEOPLE_SIZE_Y);
+    set_array(NPEOPLE, 0.0, NPEOPLE_SIZE);
 }
 
 PeopleTracker::~PeopleTracker() {
@@ -84,6 +93,17 @@ void updatePerson(float * oldPerson, float * newPerson) {
     oldPerson[7] = asin( newPerson[0] / newPerson[6] );
 }
 
+
+
+void newPerson(int id, float * oldPerson, float * newPerson) {
+    newPersonTicks[id] = newPersonTicks[id] + 1;
+
+    if(newPersonTicks[id] > 5) {
+        printf("Adding new person %i\n", id);
+        updatePerson(oldPerson, newPerson);
+    }
+}
+
 void PeopleTracker::Tick() {
     // Increase tick counter
     tick = tick + 1.0;
@@ -103,7 +123,7 @@ void PeopleTracker::Tick() {
             for (int j = 0; j < HEADS_SIZE_Y; ++j) {
 
                 // Update person if within boundaries
-                if( PEOPLE[j][2] > 10.0 && PEOPLE[j][7] >= (angle - 0.14) && PEOPLE[j][7] <= (angle + 0.14) ) {
+                if( PEOPLE[j][2] > 10.0 && PEOPLE[j][7] >= (angle - circleSector) && PEOPLE[j][7] <= (angle + circleSector) ) {
                     //printf("Update person %i\n", j);
                     updatePerson(PEOPLE[j], HEADS[i]);
                     updated = true;
@@ -118,7 +138,7 @@ void PeopleTracker::Tick() {
                     // Find empty spot
                     if(PEOPLE[k][2] < 10.0) {
                         // Add new head to PEOPLE
-                        updatePerson(PEOPLE[k], HEADS[i]);
+                        newPerson(i, PEOPLE[k], HEADS[i]);
                         //printf("New person %i!\n", k);
                         break;
                     }
@@ -153,7 +173,7 @@ void PeopleTracker::Tick() {
             peopleInactivity[i] = 0.0;
         }
 
-        // If inactivity counter is over 20, remove person
+        // If inactivity counter is over max, remove person
         if(peopleInactivity[i] > maxInactivityCounter) {
             PEOPLE[i][0] = 0.0;
             PEOPLE[i][1] = 0.0;
@@ -189,23 +209,31 @@ void PeopleTracker::Tick() {
         }
     }
 
-    // Reset tick counter ecery nth-tick
+    // Reset tick counter every nth-tick
     if(tick >= maxInactivityCounter) {
         tick = 0.0;
     }
 
+    // Number of tracked people
+    float nrOfPeople = 0.0;
 
     for (int i = 0; i < PEOPLE_SIZE_Y; ++i) {
-        printf("%i\t", i);
-        printf("%f\t", PEOPLE[i][0]);
-        printf("%f\t", PEOPLE[i][1]);
-        printf("%f\t|\t", PEOPLE[i][2]);
-        printf("%f\t", PEOPLE[i][3]);
-        printf("%f\t", PEOPLE[i][4]);
-        printf("%f\n", peopleInactivity[i]);
+
+        // Increase people tracker
+        if(PEOPLE[i][2] > 0.0) {
+            nrOfPeople = nrOfPeople + 1.0;
+        }
+
+        // printf("%i\t", i);
+        // printf("%f\t", PEOPLE[i][0]);
+        // printf("%f\t", PEOPLE[i][1]);
+        // printf("%f\t|\t", PEOPLE[i][2]);
+        // printf("%f\t", PEOPLE[i][3]);
+        // printf("%f\t", PEOPLE[i][4]);
+        // printf("%f\n", peopleInactivity[i]);
     }
 
-    printf("\n");
+    NPEOPLE[0] = nrOfPeople;
 }
 
 // Install the module. This code is executed during start-up.

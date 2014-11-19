@@ -16,6 +16,7 @@
 	<input name="HEADS" description="A matrix of tracked heads" />
 
 	<output name="PEOPLE" description="Coordinates of the people in the room" size_x="8" size_y="3" />
+  <output name="NPEOPLE" description="Number of people currently being tracked" size="1" />
 
 	<module class="PeopleTracker" />
 

@@ -91,6 +91,8 @@ void Brain::SetSizes() {
 }
 
 int idleTicks = 0;
+int sameStimuliTicks = 0;
+int oldStimuli = 0;
 
 void Brain::Tick() {
     int highestStimuliIndex = 100;
@@ -115,7 +117,7 @@ void Brain::Tick() {
 
     // Execute action plan
 
-    if( highestStimuliIndex != 100 && highestStimuli > 0.1 ) {
+    if( idleTicks == 0 && highestStimuliIndex != 100 && highestStimuli > 0.1 ) {
         //printf("Action %i\n\n", highestStimuliIndex);
         ACTION[0] = PLAN[highestStimuliIndex][0];
         ACTION[1] = PLAN[highestStimuliIndex][1];
@@ -125,25 +127,51 @@ void Brain::Tick() {
         // printf("%f\t", ACTION[1]);
         // printf("%f\n", ACTION[2]);
 
-        idleTicks = 0;
+        // idleTicks = 0;
     }
 
-    // Idle
+    // IDLE
 
-    if( highestStimuliIndex != 100 || highestStimuli < 0.1 ) {
-        idleTicks = idleTicks + 1;
+    if(oldStimuli == highestStimuliIndex) {
+        // Increaste sameStimuliTicks if the same stimuli is active this tick
+        sameStimuliTicks = sameStimuliTicks + 1;
+        printf("Same stimuli %i\n", sameStimuliTicks);
+    }
+    else {
+        // Reset sameStimuliTicks if a new stimuli is active
+        sameStimuliTicks = 0;
     }
 
-    // Execute Idle behavior
+    // If the same stimuli has run for 20 ticks and we're not in idle mode, engage idle mode
+    if(sameStimuliTicks > 100 && idleTicks == 0) {
+        idleTicks = (rand() % 30+5);
+    }
 
-    if(idleTicks >= 50) {
+    // If in idle mode, be idle
+    if( idleTicks > 0 ) {
+        idleTicks = idleTicks - 1;
+
         printf("Idle %i\n", idleTicks);
 
-        ACTION[0] = 180.0 + static_cast <float> (rand() % 150);
-        ACTION[1] = 180.0 + static_cast <float> (rand() % 150);
-        ACTION[2] = 180.0 + static_cast <float> (rand() % 150);
+        if(idleTicks > 15) {
+            ACTION[0] = 79.0;
+            ACTION[1] = 220.0;
+            ACTION[2] = 200.0;
+        }
+        else {
+            ACTION[0] = 60.0;
+            ACTION[1] = 290.0;
+            ACTION[2] = 100.0;
+        }
 
+
+        if(idleTicks == 0) {
+            sameStimuliTicks = 0;
+        }
     }
+
+    // Update old stimuli with current stimuli
+    oldStimuli = highestStimuliIndex;
 
 }
 

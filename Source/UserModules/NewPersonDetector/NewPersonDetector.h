@@ -1,5 +1,5 @@
 //
-//	PeopleTracker.h		This file is a part of the IKAROS project
+//	NewPersonDetector.h		This file is a part of the IKAROS project
 //
 //    Copyright (C) 2012 <Author Name>
 //
@@ -20,29 +20,23 @@
 //    See http://www.ikaros-project.org/ for more information.
 //
 
-#ifndef PeopleTracker_
-#define PeopleTracker_
+#ifndef NewPersonDetector_
+#define NewPersonDetector_
 
 #include "IKAROS.h"
 
-class PeopleTracker: public Module
+class NewPersonDetector: public Module
 {
 public:
-    static Module * Create(Parameter * p) { return new PeopleTracker(p); }
+    static Module * Create(Parameter * p) { return new NewPersonDetector(p); }
 
-    PeopleTracker(Parameter * p) : Module(p) {}
-    virtual ~PeopleTracker();
+    NewPersonDetector(Parameter * p) : Module(p) {}
+    virtual ~NewPersonDetector();
 
     void 		Init();
     void 		Tick();
 
     // Inputs
-
-    float **    HEADS;
-    int         HEADS_SIZE_X;
-    int         HEADS_SIZE_Y;
-
-    // Outputs
 
     float **    PEOPLE;
     int         PEOPLE_SIZE_X;
@@ -50,6 +44,14 @@ public:
 
     float *     NPEOPLE;
     int         NPEOPLE_SIZE;
+
+    // Outputs
+
+    float *     PLAN;
+    int         PLAN_SIZE;
+
+    float *     STRENGTH;
+    int         STRENGTH_SIZE;
 };
 
 #endif

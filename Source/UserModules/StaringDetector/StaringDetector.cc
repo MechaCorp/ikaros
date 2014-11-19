@@ -56,29 +56,40 @@ StaringDetector::~StaringDetector() {
     // destroy_matrix("PEOPLE");
 }
 
+const float staringAngle = 10.50;
+
 void StaringDetector::Tick() {
+    int maxStaringIndex = 100;
+    float maxStaringStrength = 0.0;
+
     for (int i = 0; i < PEOPLE_SIZE_Y; ++i) {
         if(PEOPLE[i][2] > 100.0)  {
 
             float alphaX = abs(PEOPLE[i][4]);
             float alphaY = abs(PEOPLE[i][3]);
 
-            if(alphaX <= 15.0 && alphaY <= 15.0) {
-                STRENGTH[0] = 1.0 - ( ( (alphaY + alphaX) / 2.0) / 15.0 );
-                PLAN[0] = 180.0 - std::atan(PEOPLE[i][0]/PEOPLE[i][2]) * (180/pi);
-                PLAN[1] = 270.0 + std::atan(PEOPLE[i][1]/PEOPLE[i][2]) * (180/pi);
-                PLAN[2] = 180.0;
-                // printf("Staring %i \t", i);
-                // printf("%f\t", STRENGTH[0]);
-                // printf("%f\t", alphaX);
-                // printf("%f\n\n", alphaY);
-                return;
-            }
-            else {
-                STRENGTH[0] = 0.0;
+            if(alphaX <= staringAngle && alphaX >= -staringAngle && alphaY <= staringAngle && alphaY >= -staringAngle) {
+                float strength = 1.0 - ( ( (alphaY + alphaX) / 2.0) / staringAngle );
+
+                if(strength > maxStaringStrength) {
+                    maxStaringIndex = i;
+                    maxStaringStrength = strength;
+                }
+
             }
         }
     }
+
+    if(maxStaringIndex < 100) {
+        STRENGTH[0] = maxStaringStrength;
+        PLAN[0] = 180.0 - std::atan(PEOPLE[maxStaringIndex][0]/PEOPLE[maxStaringIndex][2]) * (180/pi);
+        PLAN[1] = 270.0 + std::atan(PEOPLE[maxStaringIndex][1]/PEOPLE[maxStaringIndex][2]) * (180/pi);
+        PLAN[2] = 180.0;
+    }
+    else {
+        STRENGTH[0] = 0.0;
+    }
+
 }
 
 // Install the module. This code is executed during start-up.
